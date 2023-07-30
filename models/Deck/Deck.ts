@@ -1,11 +1,12 @@
 import { Card } from "../Card/Card";
+import { DeckInterface } from "../../interfaces/DeckInterface/DeckInterface";
 
-export class Deck {
+export class Deck implements DeckInterface {
+  private gameType: string;
   private cards: Card[];
-  private joker: boolean;
   private suits: string[];
   private ranks: string[];
-  private gameType: string;
+  private joker: boolean;
 
   constructor(gameType: string) {
     this.gameType = gameType;
@@ -13,13 +14,8 @@ export class Deck {
     this.initialize();
   }
 
-  public print(): void {
-    console.log(this.cards);
-  }
-
   public initialize(): void {
     this.cards = [];
-    this.joker = true;
     this.suits = ["H", "D", "C", "D"];
     this.ranks = [
       "A",
@@ -36,8 +32,18 @@ export class Deck {
       "Q",
       "K",
     ];
+    this.joker = true;
 
     this.setDeck();
+  }
+
+  public setJokerToDeck(): void {
+    // 条件が後に増える
+    if (this.gameType === "blackjack") {
+      this.joker = false;
+    } else {
+      this.cards.push(new Card("Joker", "Joker"));
+    }
   }
 
   public setDeck(): void {
@@ -47,18 +53,13 @@ export class Deck {
       }
     }
 
-    if (this.gameType == "blackjack") {
-      this.joker = false;
-    } else {
-      this.cards.push(new Card("Joker", "Joker"));
-    }
-
+    this.setJokerToDeck();
     this.shuffle();
   }
 
   public shuffle(): void {
-    for (let i = this.cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+    for (let i: number = this.cards.length - 1; i > 0; i--) {
+      const j: number = Math.floor(Math.random() * (i + 1));
       [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
     }
   }
@@ -69,16 +70,37 @@ export class Deck {
   }
 
   public drawOne(): Card | undefined {
+    // 仮の戻り値undefined
     if (this.cards.length <= 0) return undefined;
 
     return this.cards.pop();
   }
 
-  public getRemainingCards(): number {
+  public getCurrentDeckLength(): number {
     return this.cards.length;
   }
 
-  public get isEmpty(): boolean {
+  public isEmpty(): boolean {
     return this.cards.length <= 0;
   }
+
+  public print(): void {
+    console.log("This game type : " + this.gameType);
+    console.log("This cards : " + this.cards);
+    console.log("This suits : " + this.suits);
+    console.log("This ranks  : " + this.ranks);
+    console.log("This joker  : " + this.joker);
+  }
 }
+
+// const deck: Deck = new Deck("blackjack");
+
+// console.log(deck.getCurrentDeckLength());
+
+// const card = deck.drawOne();
+// console.log(card!.getCardSuit());
+// console.log(card!.getCardRank());
+// console.log(card!.getCardRankNumber());
+// console.log(card!.getCardRankNumberBlackjack());
+
+// console.log(deck.getCurrentDeckLength());

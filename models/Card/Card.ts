@@ -9,22 +9,16 @@ export class Card implements CardInterface {
     this.rank = rank;
   }
 
-  public print(): void {
-    console.log("This suit : " + this.suit);
-    console.log("This rank : " + this.rank);
-    console.log("This card rank  : " + this.cardRankNumber);
-  }
-
-  public get cardSuit(): string {
+  public getCardSuit(): string {
     return this.suit;
   }
 
-  public get cardRank(): string {
+  public getCardRank(): string {
     return this.rank;
   }
 
-  public get cardRankNumber(): number {
-    switch (this.rank) {
+  public getCardRankNumber(): number {
+    switch (this.getCardRank()) {
       case "A":
         return 1;
       case "J":
@@ -36,14 +30,12 @@ export class Card implements CardInterface {
       case "Joker":
         return 0;
       default:
-        return Number(this.rank);
+        return Number(this.getCardRank());
     }
   }
 
-  // 以下特定のゲームのカードのランクを返す
-
-  public get cardRankNumberBlackjack(): number {
-    switch (this.rank) {
+  public getCardRankNumberBlackjack(): number {
+    switch (this.getCardRank()) {
       case "A":
         return 1;
       case "J":
@@ -51,7 +43,19 @@ export class Card implements CardInterface {
       case "K":
         return 10;
       default:
-        return Number(this.rank);
+        return Number(this.getCardRank());
     }
   }
+
+  public print(): void {
+    console.log("This suit : " + this.suit);
+    console.log("This rank : " + this.rank);
+    console.log("This card rank  : " + this.getCardRankNumber());
+  }
 }
+
+// const card: Card = new Card("H", "J");
+// console.log(card.getCardSuit());
+// console.log(card.getCardRank());
+// console.log(card.getCardRankNumber());
+// console.log(card.getCardRankNumberBlackjack());
