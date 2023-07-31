@@ -23,6 +23,7 @@ var Player = /** @class */ (function () {
         this.playerName = playerName;
         this.playerType = playerType;
         this.gameType = gameType;
+        this.initialize();
     }
     Player.prototype.initialize = function () {
         this.winAmounts = 0;
@@ -72,7 +73,9 @@ var BlackjackPlayer = /** @class */ (function (_super) {
         return _this;
     }
     BlackjackPlayer.prototype.initialize = function () {
-        this.chips = 400;
+        // プレイヤーの種類がディーラーの場合はchipsを無限にする
+        var currentPlayerType = _super.prototype.getCurrentPlayerType.call(this);
+        this.chips = currentPlayerType === "dealer" ? Infinity : 400;
         this.bets = 0;
         _super.prototype.setPlayerStatus.call(this, "betting");
         this.checkBlackjack();
@@ -82,7 +85,7 @@ var BlackjackPlayer = /** @class */ (function (_super) {
         var ranks = [];
         for (var _i = 0, currentHands_1 = currentHands; _i < currentHands_1.length; _i++) {
             var hand = currentHands_1[_i];
-            ranks.push(hand.cardRank);
+            ranks.push(hand.getCardRank());
         }
         if ((ranks.includes("A") && ranks.includes("10")) ||
             ranks.includes("J") ||
@@ -114,49 +117,60 @@ var BlackjackPlayer = /** @class */ (function (_super) {
     };
     BlackjackPlayer.prototype.hit = function (card) {
         _super.prototype.addHand.call(this, card);
+        if (this.isBurst()) {
+            this.burst();
+        }
     };
     BlackjackPlayer.prototype.stand = function () {
         _super.prototype.setPlayerStatus.call(this, "stand");
     };
     BlackjackPlayer.prototype.surrender = function () {
-        this.bets = Math.floor(this.bets / 2);
+        this.removeBets(Math.floor(this.bets / 2));
         _super.prototype.setPlayerStatus.call(this, "surrender");
     };
     BlackjackPlayer.prototype.double = function () {
-        this.bets *= 2;
+        this.addBets(this.bets);
         _super.prototype.setPlayerStatus.call(this, "double");
+    };
+    BlackjackPlayer.prototype.insurance = function (dealer) {
+        var dealerFirstCardRank = String(dealer.getCurrentHands()[0].getCardRank());
+        if (dealerFirstCardRank === "A") {
+            this.removeBets(Math.floor(this.getCurrentBets() / 2));
+            _super.prototype.setPlayerStatus.call(this, "insurance");
+        }
     };
     BlackjackPlayer.prototype.burst = function () {
         _super.prototype.setPlayerStatus.call(this, "burst");
     };
     BlackjackPlayer.prototype.isBlackjack = function () {
-        return _super.prototype.getCurrentStatus.call(this) === "blackjack";
+        var currentStatus = _super.prototype.getCurrentStatus.call(this);
+        return currentStatus === "blackjack";
     };
     BlackjackPlayer.prototype.isBurst = function () {
         var totalScore = this.totalCardsScore();
-        if (totalScore > 21) {
-            this.burst();
-            return true;
-        }
-        return false;
+        return totalScore > 21;
+    };
+    BlackjackPlayer.prototype.canDouble = function () {
+        var currentBets = this.getCurrentBets() * 2;
+        var currentChips = this.getCurrentChips();
+        return currentBets * 2 < currentChips;
     };
     BlackjackPlayer.prototype.haveTurn = function () {
-        return _super.prototype.getCurrentStatus.call(this) === "hit";
+        var currentStatus = _super.prototype.getCurrentStatus.call(this);
+        return currentStatus === "hit";
     };
     BlackjackPlayer.prototype.totalCardsScore = function () {
         var currentHands = _super.prototype.getCurrentHands.call(this);
         var totalScore = 0;
         for (var _i = 0, currentHands_2 = currentHands; _i < currentHands_2.length; _i++) {
             var hand = currentHands_2[_i];
-            totalScore += hand.cardRankNumberBlackjack;
+            var cardRank = hand.getCardRankNumberBlackjack();
+            totalScore += cardRank;
         }
         return totalScore;
     };
     return BlackjackPlayer;
 }(Player));
 exports.BlackjackPlayer = BlackjackPlayer;
-var player = new BlackjackPlayer("Naga", "player");
-player.addHand(new Card_1.Card("H", "1"));
-player.addHand(new Card_1.Card("D", "J"));
-player.addHand(new Card_1.Card("C", "3"));
-player.addHand(new Card_1.Card("S", "7"));
+var dealer = new BlackjackPlayer("dealer", "dealer");
+dealer.addHand(new Card_1.Card("H", "A"));

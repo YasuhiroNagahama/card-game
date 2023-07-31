@@ -1,5 +1,4 @@
 import { Card } from "../Card/Card";
-// import { Deck } from "../Deck/Deck";
 import { PlayerInterface } from "../../interfaces/PlayerInterface/PlayerInterface";
 
 export class Player implements PlayerInterface {
@@ -14,6 +13,8 @@ export class Player implements PlayerInterface {
     this.playerName = playerName;
     this.playerType = playerType;
     this.gameType = gameType;
+
+    this.initialize();
   }
 
   public initialize(): void {
@@ -77,7 +78,10 @@ export class BlackjackPlayer extends Player {
   }
 
   public initialize(): void {
-    this.chips = 400;
+    // プレイヤーの種類がディーラーの場合はchipsを無限にする
+    const currentPlayerType = super.getCurrentPlayerType();
+
+    this.chips = currentPlayerType === "dealer" ? Infinity : 400;
     this.bets = 0;
 
     super.setPlayerStatus("betting");
@@ -133,6 +137,10 @@ export class BlackjackPlayer extends Player {
 
   public hit(card: Card): void {
     super.addHand(card);
+
+    if (this.isBurst()) {
+      this.burst();
+    }
   }
 
   public stand(): void {
@@ -140,20 +148,24 @@ export class BlackjackPlayer extends Player {
   }
 
   public surrender(): void {
-    this.bets = Math.floor(this.bets / 2);
+    this.removeBets(Math.floor(this.bets / 2));
     super.setPlayerStatus("surrender");
   }
 
   public double(): void {
-    this.bets *= 2;
+    this.addBets(this.bets);
     super.setPlayerStatus("double");
   }
 
-  public insurance(): void {
-    const currentPlayerType: string = super.getCurrentPlayerType();
-    const firstCardRank: string = String(
-      super.getCurrentHands()[0].getCardRankNumberBlackjack()
+  public insurance(dealer: BlackjackPlayer): void {
+    const dealerFirstCardRank: string = String(
+      dealer.getCurrentHands()[0].getCardRank()
     );
+
+    if (dealerFirstCardRank === "A") {
+      this.removeBets(Math.floor(this.getCurrentBets() / 2));
+      super.setPlayerStatus("insurance");
+    }
   }
 
   public burst(): void {
@@ -161,22 +173,28 @@ export class BlackjackPlayer extends Player {
   }
 
   public isBlackjack(): boolean {
-    return super.getCurrentStatus() === "blackjack";
+    const currentStatus: string = super.getCurrentStatus();
+
+    return currentStatus === "blackjack";
   }
 
   public isBurst(): boolean {
     const totalScore: number = this.totalCardsScore();
 
-    if (totalScore > 21) {
-      this.burst();
-      return true;
-    }
+    return totalScore > 21;
+  }
 
-    return false;
+  public canDouble(): boolean {
+    const currentBets: number = this.getCurrentBets() * 2;
+    const currentChips: number = this.getCurrentChips();
+
+    return currentBets * 2 < currentChips;
   }
 
   public haveTurn(): boolean {
-    return super.getCurrentStatus() === "hit";
+    const currentStatus = super.getCurrentStatus();
+
+    return currentStatus === "hit";
   }
 
   public totalCardsScore(): number {
@@ -184,15 +202,11 @@ export class BlackjackPlayer extends Player {
     let totalScore: number = 0;
 
     for (const hand of currentHands) {
-      totalScore += hand.getCardRankNumberBlackjack();
+      const cardRank: number = hand.getCardRankNumberBlackjack();
+
+      totalScore += cardRank;
     }
 
     return totalScore;
   }
 }
-
-const player: BlackjackPlayer = new BlackjackPlayer("Naga", "player");
-player.addHand(new Card("H", "1"));
-player.addHand(new Card("D", "J"));
-player.addHand(new Card("C", "3"));
-player.addHand(new Card("S", "7"));
