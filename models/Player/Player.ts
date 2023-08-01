@@ -67,12 +67,13 @@ export class Player implements PlayerInterface {
   }
 }
 
+// 未完成
 export class BlackjackPlayer extends Player {
   private chips: number;
   private bets: number;
 
-  constructor(playerName: string, playerType: string) {
-    super(playerName, playerType, "blackjack");
+  constructor(playerName: string, playerType: string, gameType: string) {
+    super(playerName, playerType, gameType);
 
     this.initialize();
   }

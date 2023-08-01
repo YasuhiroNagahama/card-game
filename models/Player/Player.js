@@ -16,7 +16,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlackjackPlayer = exports.Player = void 0;
-var Card_1 = require("../Card/Card");
 var Player = /** @class */ (function () {
     function Player(playerName, playerType, gameType) {
         this.hands = new Array();
@@ -65,10 +64,11 @@ var Player = /** @class */ (function () {
     return Player;
 }());
 exports.Player = Player;
+// 未完成
 var BlackjackPlayer = /** @class */ (function (_super) {
     __extends(BlackjackPlayer, _super);
-    function BlackjackPlayer(playerName, playerType) {
-        var _this = _super.call(this, playerName, playerType, "blackjack") || this;
+    function BlackjackPlayer(playerName, playerType, gameType) {
+        var _this = _super.call(this, playerName, playerType, gameType) || this;
         _this.initialize();
         return _this;
     }
@@ -172,5 +172,3 @@ var BlackjackPlayer = /** @class */ (function (_super) {
     return BlackjackPlayer;
 }(Player));
 exports.BlackjackPlayer = BlackjackPlayer;
-var dealer = new BlackjackPlayer("dealer", "dealer");
-dealer.addHand(new Card_1.Card("H", "A"));

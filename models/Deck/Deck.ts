@@ -10,12 +10,6 @@ export class Deck implements DeckInterface {
 
   constructor(gameType: string) {
     this.gameType = gameType;
-
-    this.initialize();
-  }
-
-  public initialize(): void {
-    this.cards = [];
     this.suits = ["H", "D", "C", "D"];
     this.ranks = [
       "A",
@@ -32,6 +26,12 @@ export class Deck implements DeckInterface {
       "Q",
       "K",
     ];
+
+    this.initialize();
+  }
+
+  public initialize(): void {
+    this.cards = [];
     this.joker = true;
 
     this.setDeck();
@@ -92,15 +92,3 @@ export class Deck implements DeckInterface {
     console.log("This joker  : " + this.joker);
   }
 }
-
-// const deck: Deck = new Deck("blackjack");
-
-// console.log(deck.getCurrentDeckLength());
-
-// const card = deck.drawOne();
-// console.log(card!.getCardSuit());
-// console.log(card!.getCardRank());
-// console.log(card!.getCardRankNumber());
-// console.log(card!.getCardRankNumberBlackjack());
-
-// console.log(deck.getCurrentDeckLength());

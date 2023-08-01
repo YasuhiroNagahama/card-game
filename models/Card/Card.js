@@ -48,8 +48,3 @@ var Card = /** @class */ (function () {
     return Card;
 }());
 exports.Card = Card;
-// const card: Card = new Card("H", "J");
-// console.log(card.getCardSuit());
-// console.log(card.getCardRank());
-// console.log(card.getCardRankNumber());
-// console.log(card.getCardRankNumberBlackjack());

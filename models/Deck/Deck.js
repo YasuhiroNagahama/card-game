@@ -5,10 +5,6 @@ var Card_1 = require("../Card/Card");
 var Deck = /** @class */ (function () {
     function Deck(gameType) {
         this.gameType = gameType;
-        this.initialize();
-    }
-    Deck.prototype.initialize = function () {
-        this.cards = [];
         this.suits = ["H", "D", "C", "D"];
         this.ranks = [
             "A",
@@ -25,6 +21,10 @@ var Deck = /** @class */ (function () {
             "Q",
             "K",
         ];
+        this.initialize();
+    }
+    Deck.prototype.initialize = function () {
+        this.cards = [];
         this.joker = true;
         this.setDeck();
     };
@@ -81,11 +81,3 @@ var Deck = /** @class */ (function () {
     return Deck;
 }());
 exports.Deck = Deck;
-var deck = new Deck("blackjack");
-console.log(deck.getCurrentDeckLength());
-var card = deck.drawOne();
-console.log(card.getCardSuit());
-console.log(card.getCardRank());
-console.log(card.getCardRankNumber());
-console.log(card.getCardRankNumberBlackjack());
-console.log(deck.getCurrentDeckLength());

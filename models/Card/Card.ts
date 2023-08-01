@@ -53,9 +53,3 @@ export class Card implements CardInterface {
     console.log("This card rank  : " + this.getCardRankNumber());
   }
 }
-
-// const card: Card = new Card("H", "J");
-// console.log(card.getCardSuit());
-// console.log(card.getCardRank());
-// console.log(card.getCardRankNumber());
-// console.log(card.getCardRankNumberBlackjack());
