@@ -3,9 +3,11 @@ import { PlayerInterface } from "../../interfaces/PlayerInterface/PlayerInterfac
 
 export class Player implements PlayerInterface {
   private playerName: string;
+  // blackjack => player or ai or dealer
   private playerType: string;
   private gameType: string;
   private winAmounts: number;
+  // blackjack => 'bet', 'surrender', 'stand', 'hit', 'double', 'burst','blackjack'
   private status: string;
   private hands: Card[] = new Array();
 
@@ -87,7 +89,7 @@ export class BlackjackPlayer extends Player {
 
     super.setPlayerStatus("betting");
 
-    this.checkBlackjack();
+    // this.checkBlackjack();
   }
 
   public checkBlackjack(): void {
@@ -158,17 +160,6 @@ export class BlackjackPlayer extends Player {
     super.setPlayerStatus("double");
   }
 
-  public insurance(dealer: BlackjackPlayer): void {
-    const dealerFirstCardRank: string = String(
-      dealer.getCurrentHands()[0].getCardRank()
-    );
-
-    if (dealerFirstCardRank === "A") {
-      this.removeBets(Math.floor(this.getCurrentBets() / 2));
-      super.setPlayerStatus("insurance");
-    }
-  }
-
   public burst(): void {
     super.setPlayerStatus("burst");
   }
@@ -190,12 +181,6 @@ export class BlackjackPlayer extends Player {
     const currentChips: number = this.getCurrentChips();
 
     return currentBets * 2 < currentChips;
-  }
-
-  public haveTurn(): boolean {
-    const currentStatus = super.getCurrentStatus();
-
-    return currentStatus === "hit";
   }
 
   public totalCardsScore(): number {

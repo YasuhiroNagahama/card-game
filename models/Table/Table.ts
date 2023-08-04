@@ -7,6 +7,7 @@ export class Table implements TableInterface {
   private gameType: string;
   private deck: Deck;
   private turnCounter: number;
+  // blackjack => 'betting', 'acting', 'evaluatingWinners, gameOver'
   private gamePhase: string;
   private resultLog: string[] = new Array();
 
@@ -40,9 +41,11 @@ export class Table implements TableInterface {
 }
 
 export class BlackjackTable extends Table {
-  // single、vs AI、vs Player
+  // blackjack => 'AI', 'Player'
   private gameMode: string;
+  // blackjack => 1-3
   private playerNames: string[] = new Array();
+  // blackjack => 1-3
   private playerNumber: number;
   private players: BlackjackPlayer[] = new Array();
   private betDenominations: number[] = new Array();
@@ -69,19 +72,19 @@ export class BlackjackTable extends Table {
 
   public initializePlayers(): void {
     if (this.gameMode === "AI") {
-      this.setupAIPlayers();
+      this.setAIPlayers();
     } else {
-      this.setupHumanPlayers();
+      this.setHumanPlayers();
     }
   }
 
-  private setupAIPlayers(): void {
+  private setAIPlayers(): void {
     this.setPlayer("Player", "player");
     this.setPlayer("AI", "ai");
     this.setPlayer("AI", "ai");
   }
 
-  private setupHumanPlayers(): void {
+  private setHumanPlayers(): void {
     for (const playerName of this.playerNames) {
       this.setPlayer(playerName, "player");
     }
