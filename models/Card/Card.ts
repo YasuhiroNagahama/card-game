@@ -50,6 +50,6 @@ export class Card implements CardInterface {
   public print(): void {
     console.log("This suit : " + this.suit);
     console.log("This rank : " + this.rank);
-    console.log("This card rank  : " + this.getCardRankNumber());
+    console.log("This card rank number : " + this.getCardRankNumber());
   }
 }

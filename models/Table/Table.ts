@@ -14,10 +14,10 @@ export class Table implements TableInterface {
   constructor(gameType: string) {
     this.gameType = gameType;
 
-    this.initialize();
+    this.initializeTable();
   }
 
-  public initialize(): void {
+  public initializeTable(): void {
     this.deck = new Deck(this.gameType);
     this.turnCounter = 0;
     this.gamePhase = "";
@@ -25,6 +25,10 @@ export class Table implements TableInterface {
 
   public getCurrentGameType(): string {
     return this.gameType;
+  }
+
+  public getCurrentDeck(): Deck {
+    return this.deck;
   }
 
   public getCurrentTurnCounter(): number {
@@ -45,11 +49,9 @@ export class BlackjackTable extends Table {
   private gameMode: string;
   // blackjack => 1-3
   private playerNames: string[] = new Array();
-  // blackjack => 1-3
-  private playerNumber: number;
-  private players: BlackjackPlayer[] = new Array();
   private betDenominations: number[] = new Array();
   private dealer: BlackjackPlayer;
+  private players: BlackjackPlayer[] = new Array();
 
   // vs Playerの場合は2人または3人でプレイ可能
   constructor(gameMode: string, playerNames: string[]) {
@@ -57,17 +59,17 @@ export class BlackjackTable extends Table {
 
     this.gameMode = gameMode;
     this.playerNames = playerNames;
-    this.playerNumber = this.playerNames.length;
     this.betDenominations = [5, 25, 50, 100];
 
-    this.initialize();
+    this.initializeBlackjackTable();
   }
 
-  public initialize(): void {
+  public initializeBlackjackTable(): void {
     this.players = new Array();
 
     this.initializePlayers();
     this.setDealer();
+    this.initializePlayersHands();
   }
 
   public initializePlayers(): void {
@@ -101,4 +103,32 @@ export class BlackjackTable extends Table {
 
     this.dealer = new BlackjackPlayer("Dealer", "dealer", gameType);
   }
+
+  public initializePlayersHands(): void {
+    for (const player of this.players) {
+      for (let i = 0; i < 2; i++) {
+        this.setPlayerHands(player);
+      }
+    }
+
+    this.setPlayerHands(this.dealer);
+  }
+
+  public clearPlayersCards(): void {
+    for (const player of this.players) {
+      player.clearHands();
+    }
+  }
+
+  public setPlayerHands(player: BlackjackPlayer) {
+    const newCard: Card = super.getCurrentDeck().drawOne();
+
+    player.addHand(newCard);
+  }
 }
+
+const table: BlackjackTable = new BlackjackTable("Player", [
+  "Naga",
+  "Toshi",
+  "Sam",
+]);

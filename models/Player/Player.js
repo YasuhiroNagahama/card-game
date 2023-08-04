@@ -22,9 +22,9 @@ var Player = /** @class */ (function () {
         this.playerName = playerName;
         this.playerType = playerType;
         this.gameType = gameType;
-        this.initialize();
+        this.initializePlayer();
     }
-    Player.prototype.initialize = function () {
+    Player.prototype.initializePlayer = function () {
         this.winAmounts = 0;
         this.status = "";
     };
@@ -61,6 +61,12 @@ var Player = /** @class */ (function () {
     Player.prototype.clearHands = function () {
         this.hands = [];
     };
+    // 仮
+    Player.prototype.showPlayerCards = function () {
+        for (var i = 0; i < this.hands.length; i++) {
+            this.hands[i].print();
+        }
+    };
     return Player;
 }());
 exports.Player = Player;
@@ -69,16 +75,16 @@ var BlackjackPlayer = /** @class */ (function (_super) {
     __extends(BlackjackPlayer, _super);
     function BlackjackPlayer(playerName, playerType, gameType) {
         var _this = _super.call(this, playerName, playerType, gameType) || this;
-        _this.initialize();
+        _this.initializeBlackjackPlayer();
         return _this;
     }
-    BlackjackPlayer.prototype.initialize = function () {
-        // プレイヤーの種類がディーラーの場合はchipsを無限にする
+    BlackjackPlayer.prototype.initializeBlackjackPlayer = function () {
+        // プレイヤーの種類がディーラーの場合はchipsを0にする
         var currentPlayerType = _super.prototype.getCurrentPlayerType.call(this);
-        this.chips = currentPlayerType === "dealer" ? Infinity : 400;
+        this.chips = currentPlayerType === "dealer" ? 0 : 400;
         this.bets = 0;
         _super.prototype.setPlayerStatus.call(this, "betting");
-        this.checkBlackjack();
+        // this.checkBlackjack();
     };
     BlackjackPlayer.prototype.checkBlackjack = function () {
         var currentHands = _super.prototype.getCurrentHands.call(this);
@@ -132,13 +138,6 @@ var BlackjackPlayer = /** @class */ (function (_super) {
         this.addBets(this.bets);
         _super.prototype.setPlayerStatus.call(this, "double");
     };
-    BlackjackPlayer.prototype.insurance = function (dealer) {
-        var dealerFirstCardRank = String(dealer.getCurrentHands()[0].getCardRank());
-        if (dealerFirstCardRank === "A") {
-            this.removeBets(Math.floor(this.getCurrentBets() / 2));
-            _super.prototype.setPlayerStatus.call(this, "insurance");
-        }
-    };
     BlackjackPlayer.prototype.burst = function () {
         _super.prototype.setPlayerStatus.call(this, "burst");
     };
@@ -155,10 +154,6 @@ var BlackjackPlayer = /** @class */ (function (_super) {
         var currentChips = this.getCurrentChips();
         return currentBets * 2 < currentChips;
     };
-    BlackjackPlayer.prototype.haveTurn = function () {
-        var currentStatus = _super.prototype.getCurrentStatus.call(this);
-        return currentStatus === "hit";
-    };
     BlackjackPlayer.prototype.totalCardsScore = function () {
         var currentHands = _super.prototype.getCurrentHands.call(this);
         var totalScore = 0;
@@ -172,3 +167,4 @@ var BlackjackPlayer = /** @class */ (function (_super) {
     return BlackjackPlayer;
 }(Player));
 exports.BlackjackPlayer = BlackjackPlayer;
+var player = new BlackjackPlayer("player", "player", "blackjack");

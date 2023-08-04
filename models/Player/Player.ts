@@ -16,10 +16,10 @@ export class Player implements PlayerInterface {
     this.playerType = playerType;
     this.gameType = gameType;
 
-    this.initialize();
+    this.initializePlayer();
   }
 
-  public initialize(): void {
+  public initializePlayer(): void {
     this.winAmounts = 0;
     this.status = "";
   }
@@ -77,14 +77,14 @@ export class BlackjackPlayer extends Player {
   constructor(playerName: string, playerType: string, gameType: string) {
     super(playerName, playerType, gameType);
 
-    this.initialize();
+    this.initializeBlackjackPlayer();
   }
 
-  public initialize(): void {
-    // プレイヤーの種類がディーラーの場合はchipsを無限にする
+  public initializeBlackjackPlayer(): void {
+    // プレイヤーの種類がディーラーの場合はchipsを0にする
     const currentPlayerType = super.getCurrentPlayerType();
 
-    this.chips = currentPlayerType === "dealer" ? Infinity : 400;
+    this.chips = currentPlayerType === "dealer" ? 0 : 400;
     this.bets = 0;
 
     super.setPlayerStatus("betting");
@@ -196,3 +196,5 @@ export class BlackjackPlayer extends Player {
     return totalScore;
   }
 }
+
+const player: BlackjackPlayer = new BlackjackPlayer("player", "player", "blackjack");

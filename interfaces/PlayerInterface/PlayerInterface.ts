@@ -1,7 +1,7 @@
 import { Card } from "../../models/Card/Card";
 
 export interface PlayerInterface {
-  initialize(): void;
+  initializePlayer(): void;
   getCurrentPlayerName(): string;
   getCurrentPlayerType(): string;
   getCurrentGameType(): string;

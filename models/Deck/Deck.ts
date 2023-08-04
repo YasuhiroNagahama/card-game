@@ -69,11 +69,11 @@ export class Deck implements DeckInterface {
     this.setDeck();
   }
 
-  public drawOne(): Card | undefined {
+  public drawOne(): Card {
     // 仮の戻り値undefined
-    if (this.cards.length <= 0) return undefined;
+    if (this.cards.length <= 0) return undefined!;
 
-    return this.cards.pop();
+    return this.cards.pop()!;
   }
 
   public getCurrentDeckLength(): number {
