@@ -7,7 +7,7 @@ export class Player implements PlayerInterface {
   private playerType: string;
   private gameType: string;
   private winAmounts: number;
-  // blackjack => 'bet', 'surrender', 'stand', 'hit', 'double', 'burst','blackjack'
+  // blackjack => 'betting', 'surrender', 'stand', 'hit', 'double', 'bust','blackjack'
   private status: string;
   private hands: Card[] = new Array();
 
@@ -141,8 +141,8 @@ export class BlackjackPlayer extends Player {
   public hit(card: Card): void {
     super.addHand(card);
 
-    if (this.isBurst()) {
-      this.burst();
+    if (this.isBust()) {
+      this.bust();
     }
   }
 
@@ -160,8 +160,8 @@ export class BlackjackPlayer extends Player {
     super.setPlayerStatus("double");
   }
 
-  public burst(): void {
-    super.setPlayerStatus("burst");
+  public bust(): void {
+    super.setPlayerStatus("bust");
   }
 
   public isBlackjack(): boolean {
@@ -170,7 +170,7 @@ export class BlackjackPlayer extends Player {
     return currentStatus === "blackjack";
   }
 
-  public isBurst(): boolean {
+  public isBust(): boolean {
     const totalScore: number = this.totalCardsScore();
 
     return totalScore > 21;

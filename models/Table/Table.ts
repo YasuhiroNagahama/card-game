@@ -48,6 +48,7 @@ export class BlackjackTable extends Table {
   // blackjack => 'AI', 'Player'
   private gameMode: string;
   // blackjack => 1-3
+  private playerNumber: number = 0;
   private playerNames: string[] = new Array();
   private betDenominations: number[] = new Array();
   private dealer: BlackjackPlayer;
@@ -72,12 +73,10 @@ export class BlackjackTable extends Table {
     this.initializePlayersHands();
   }
 
-  public initializePlayers(): void {
-    if (this.gameMode === "AI") {
-      this.setAIPlayers();
-    } else {
-      this.setHumanPlayers();
-    }
+  public setPlayer(playerName: string, playerType: string): void {
+    const gameType: string = super.getCurrentGameType();
+
+    this.players.push(new BlackjackPlayer(playerName, playerType, gameType));
   }
 
   private setAIPlayers(): void {
@@ -92,16 +91,24 @@ export class BlackjackTable extends Table {
     }
   }
 
-  public setPlayer(playerName: string, playerType: string): void {
-    const gameType: string = super.getCurrentGameType();
-
-    this.players.push(new BlackjackPlayer(playerName, playerType, gameType));
+  public initializePlayers(): void {
+    if (this.gameMode === "ai") {
+      this.setAIPlayers();
+    } else {
+      this.setHumanPlayers();
+    }
   }
 
   public setDealer(): void {
     const gameType: string = super.getCurrentGameType();
 
     this.dealer = new BlackjackPlayer("Dealer", "dealer", gameType);
+  }
+
+  public setPlayerHands(player: BlackjackPlayer) {
+    const newCard: Card = super.getCurrentDeck().drawOne();
+
+    player.addHand(newCard);
   }
 
   public initializePlayersHands(): void {
@@ -111,7 +118,15 @@ export class BlackjackTable extends Table {
       }
     }
 
-    this.setPlayerHands(this.dealer);
+    for (let i = 0; i < 2; i++) {
+      this.setPlayerHands(this.dealer);
+    }
+  }
+
+  public clearPlayersBets(): void {
+    for (const player of this.players) {
+      player.clearBets();
+    }
   }
 
   public clearPlayersCards(): void {
@@ -120,14 +135,43 @@ export class BlackjackTable extends Table {
     }
   }
 
-  public setPlayerHands(player: BlackjackPlayer) {
-    const newCard: Card = super.getCurrentDeck().drawOne();
+  public allPlayerActionsResolved(): boolean {
+    for (const player of this.players) {
+      const currentPlayerStatus: string = player.getCurrentStatus();
 
-    player.addHand(newCard);
+      // doubleの時もfalseかも
+      if (currentPlayerStatus == "betting" || currentPlayerStatus == "hit")
+        return false;
+    }
+
+    return true;
+  }
+
+  public addPlayerBets(player: BlackjackPlayer, bets: number): void {
+    player.addBets(bets);
+  }
+
+  public removePlayerBets(player: BlackjackPlayer, bets: number): void {
+    player.removeBets(bets);
+  }
+
+  public addPlayerChips(player: BlackjackPlayer, chips: number): void {
+    player.addChips(chips);
+  }
+
+  public removePlayerChips(player: BlackjackPlayer, chips: number): void {
+    player.removeChips(chips);
+  }
+
+  public canUpdatePlayerBet(player: BlackjackPlayer): boolean {
+    const currentPlayerBets: number = player.getCurrentBets();
+    const currentPlayerChips: number = player.getCurrentChips();
+
+    return currentPlayerBets < currentPlayerChips;
   }
 }
 
-const table: BlackjackTable = new BlackjackTable("Player", [
+const table: BlackjackTable = new BlackjackTable("player", [
   "Naga",
   "Toshi",
   "Sam",

@@ -61,12 +61,6 @@ var Player = /** @class */ (function () {
     Player.prototype.clearHands = function () {
         this.hands = [];
     };
-    // 仮
-    Player.prototype.showPlayerCards = function () {
-        for (var i = 0; i < this.hands.length; i++) {
-            this.hands[i].print();
-        }
-    };
     return Player;
 }());
 exports.Player = Player;
@@ -123,8 +117,8 @@ var BlackjackPlayer = /** @class */ (function (_super) {
     };
     BlackjackPlayer.prototype.hit = function (card) {
         _super.prototype.addHand.call(this, card);
-        if (this.isBurst()) {
-            this.burst();
+        if (this.isBust()) {
+            this.bust();
         }
     };
     BlackjackPlayer.prototype.stand = function () {
@@ -138,14 +132,14 @@ var BlackjackPlayer = /** @class */ (function (_super) {
         this.addBets(this.bets);
         _super.prototype.setPlayerStatus.call(this, "double");
     };
-    BlackjackPlayer.prototype.burst = function () {
-        _super.prototype.setPlayerStatus.call(this, "burst");
+    BlackjackPlayer.prototype.bust = function () {
+        _super.prototype.setPlayerStatus.call(this, "bust");
     };
     BlackjackPlayer.prototype.isBlackjack = function () {
         var currentStatus = _super.prototype.getCurrentStatus.call(this);
         return currentStatus === "blackjack";
     };
-    BlackjackPlayer.prototype.isBurst = function () {
+    BlackjackPlayer.prototype.isBust = function () {
         var totalScore = this.totalCardsScore();
         return totalScore > 21;
     };

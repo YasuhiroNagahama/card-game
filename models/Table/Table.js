@@ -67,7 +67,7 @@ var BlackjackTable = /** @class */ (function (_super) {
         this.initializePlayers();
         this.setDealer();
         this.initializePlayersHands();
-        this.showPlayersCards();
+        console.log(this.allPlayerActionsResolved());
     };
     BlackjackTable.prototype.initializePlayers = function () {
         if (this.gameMode === "AI") {
@@ -103,6 +103,7 @@ var BlackjackTable = /** @class */ (function (_super) {
                 this.setPlayerHands(player);
             }
         }
+        this.setPlayerHands(this.dealer);
     };
     BlackjackTable.prototype.clearPlayersCards = function () {
         for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
@@ -114,11 +115,14 @@ var BlackjackTable = /** @class */ (function (_super) {
         var newCard = _super.prototype.getCurrentDeck.call(this).drawOne();
         player.addHand(newCard);
     };
-    BlackjackTable.prototype.showPlayersCards = function () {
-        for (var i = 0; i < this.players.length; i++) {
-            this.players[i].showPlayerCards();
-            console.log();
+    BlackjackTable.prototype.allPlayerActionsResolved = function () {
+        for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
+            var player = _a[_i];
+            var currentPlayerStatus = player.getCurrentStatus();
+            if (currentPlayerStatus == "betting" || currentPlayerStatus == "hit")
+                return false;
         }
+        return true;
     };
     return BlackjackTable;
 }(Table));
