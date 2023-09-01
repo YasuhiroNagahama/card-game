@@ -31,7 +31,7 @@ export class Table implements TableInterface {
     return this.deck;
   }
 
-  public getCurrentTurnCounter(): number {
+  public getCurrentTurn(): number {
     return this.turnCounter;
   }
 
@@ -55,10 +55,12 @@ export class BlackjackTable extends Table {
   private players: BlackjackPlayer[] = new Array();
 
   // vs Playerの場合は2人または3人でプレイ可能
+  // 1人なら vs AI1、2-3人なら vs Player
   constructor(gameMode: string, playerNames: string[]) {
     super("blackjack");
 
     this.gameMode = gameMode;
+    this.playerNumber = playerNames.length;
     this.playerNames = playerNames;
     this.betDenominations = [5, 25, 50, 100];
 
@@ -169,10 +171,56 @@ export class BlackjackTable extends Table {
 
     return currentPlayerBets < currentPlayerChips;
   }
+
+  public getCurrentGameMode(): string {
+    return this.gameMode;
+  }
+
+  public getCurrentPlayerNumber(): number {
+    return this.playerNumber;
+  }
+
+  public getCurrentPlayerNames(): string[] {
+    return this.playerNames;
+  }
+
+  public getCurrentBetDenominations(): number[] {
+    return this.betDenominations;
+  }
+
+  public print(): void {
+    console.log("----- Start Game -----");
+    console.log();
+    console.log("This game type : " + super.getCurrentGameType());
+    console.log("This game deck : " + super.getCurrentDeck());
+    console.log("This game turn : " + super.getCurrentTurn());
+    console.log("This game mode : " + this.getCurrentGameMode());
+    console.log("This game player number : " + this.getCurrentPlayerNumber());
+    console.log("This game player's names : " + this.getCurrentPlayerNames());
+    console.log(
+      "This game bet denominations : " + this.getCurrentBetDenominations()
+    );
+    console.log();
+    console.log("----- Game Players -----");
+    console.log();
+
+    let i = 1;
+
+    this.players.forEach((player) => {
+      console.log("Player_" + i);
+      console.log();
+      player.print();
+      console.log();
+      i++;
+    });
+
+    console.log("----- Dealer -----");
+    console.log();
+    this.dealer.print();
+    console.log();
+  }
 }
 
-const table: BlackjackTable = new BlackjackTable("player", [
-  "Naga",
-  "Toshi",
-  "Sam",
-]);
+const table: BlackjackTable = new BlackjackTable("player", ["Naga", "Toshi"]);
+
+table.print();

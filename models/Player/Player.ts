@@ -3,7 +3,7 @@ import { PlayerInterface } from "../../interfaces/PlayerInterface/PlayerInterfac
 
 export class Player implements PlayerInterface {
   private playerName: string;
-  // blackjack => player or ai or dealer
+  // blackjack => playerかaiかdealer
   private playerType: string;
   private gameType: string;
   private winAmounts: number;
@@ -81,15 +81,15 @@ export class BlackjackPlayer extends Player {
   }
 
   public initializeBlackjackPlayer(): void {
-    // プレイヤーの種類がディーラーの場合はchipsを0にする
     const currentPlayerType = super.getCurrentPlayerType();
 
+    // プレイヤーの種類がディーラーの場合はchipsを0にする
     this.chips = currentPlayerType === "dealer" ? 0 : 400;
     this.bets = 0;
 
     super.setPlayerStatus("betting");
 
-    // this.checkBlackjack();
+    this.checkBlackjack();
   }
 
   public checkBlackjack(): void {
@@ -171,7 +171,7 @@ export class BlackjackPlayer extends Player {
   }
 
   public isBust(): boolean {
-    const totalScore: number = this.totalCardsScore();
+    const totalScore: number = this.getTotalHandsScore();
 
     return totalScore > 21;
   }
@@ -183,7 +183,7 @@ export class BlackjackPlayer extends Player {
     return currentBets * 2 < currentChips;
   }
 
-  public totalCardsScore(): number {
+  public getTotalHandsScore(): number {
     const currentHands: Card[] = super.getCurrentHands();
     let totalScore: number = 0;
 
@@ -195,6 +195,20 @@ export class BlackjackPlayer extends Player {
 
     return totalScore;
   }
-}
 
-const player: BlackjackPlayer = new BlackjackPlayer("player", "player", "blackjack");
+  public print(): void {
+    const hands = this.getCurrentHands();
+    console.log("This player name : " + this.getCurrentPlayerName());
+    console.log("This player type : " + this.getCurrentPlayerType());
+    console.log("This player win amounts : " + this.getCurrentWinAmounts());
+    console.log("This player status : " + this.getCurrentStatus());
+    console.log("This player hands");
+    hands.forEach((hand) => {
+      console.log(hand);
+    });
+    console.log("This player chips : " + this.getCurrentChips());
+    console.log("This player bets : " + this.getCurrentBets());
+    console.log("This player total score : " + this.getTotalHandsScore());
+    console.log("This player is blackjack : " + this.isBlackjack());
+  }
+}

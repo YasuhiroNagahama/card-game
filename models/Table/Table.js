@@ -35,7 +35,7 @@ var Table = /** @class */ (function () {
     Table.prototype.getCurrentDeck = function () {
         return this.deck;
     };
-    Table.prototype.getCurrentTurnCounter = function () {
+    Table.prototype.getCurrentTurn = function () {
         return this.turnCounter;
     };
     Table.prototype.getCurrentGamePhase = function () {
@@ -50,13 +50,16 @@ exports.Table = Table;
 var BlackjackTable = /** @class */ (function (_super) {
     __extends(BlackjackTable, _super);
     // vs Playerの場合は2人または3人でプレイ可能
+    // 1人なら vs AI1、2-3人なら vs Player
     function BlackjackTable(gameMode, playerNames) {
         var _this = _super.call(this, "blackjack") || this;
         // blackjack => 1-3
+        _this.playerNumber = 0;
         _this.playerNames = new Array();
         _this.betDenominations = new Array();
         _this.players = new Array();
         _this.gameMode = gameMode;
+        _this.playerNumber = playerNames.length;
         _this.playerNames = playerNames;
         _this.betDenominations = [5, 25, 50, 100];
         _this.initializeBlackjackTable();
@@ -67,15 +70,10 @@ var BlackjackTable = /** @class */ (function (_super) {
         this.initializePlayers();
         this.setDealer();
         this.initializePlayersHands();
-        console.log(this.allPlayerActionsResolved());
     };
-    BlackjackTable.prototype.initializePlayers = function () {
-        if (this.gameMode === "AI") {
-            this.setAIPlayers();
-        }
-        else {
-            this.setHumanPlayers();
-        }
+    BlackjackTable.prototype.setPlayer = function (playerName, playerType) {
+        var gameType = _super.prototype.getCurrentGameType.call(this);
+        this.players.push(new Player_1.BlackjackPlayer(playerName, playerType, gameType));
     };
     BlackjackTable.prototype.setAIPlayers = function () {
         this.setPlayer("Player", "player");
@@ -88,13 +86,21 @@ var BlackjackTable = /** @class */ (function (_super) {
             this.setPlayer(playerName, "player");
         }
     };
-    BlackjackTable.prototype.setPlayer = function (playerName, playerType) {
-        var gameType = _super.prototype.getCurrentGameType.call(this);
-        this.players.push(new Player_1.BlackjackPlayer(playerName, playerType, gameType));
+    BlackjackTable.prototype.initializePlayers = function () {
+        if (this.gameMode === "ai") {
+            this.setAIPlayers();
+        }
+        else {
+            this.setHumanPlayers();
+        }
     };
     BlackjackTable.prototype.setDealer = function () {
         var gameType = _super.prototype.getCurrentGameType.call(this);
         this.dealer = new Player_1.BlackjackPlayer("Dealer", "dealer", gameType);
+    };
+    BlackjackTable.prototype.setPlayerHands = function (player) {
+        var newCard = _super.prototype.getCurrentDeck.call(this).drawOne();
+        player.addHand(newCard);
     };
     BlackjackTable.prototype.initializePlayersHands = function () {
         for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
@@ -103,7 +109,15 @@ var BlackjackTable = /** @class */ (function (_super) {
                 this.setPlayerHands(player);
             }
         }
-        this.setPlayerHands(this.dealer);
+        for (var i = 0; i < 2; i++) {
+            this.setPlayerHands(this.dealer);
+        }
+    };
+    BlackjackTable.prototype.clearPlayersBets = function () {
+        for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
+            var player = _a[_i];
+            player.clearBets();
+        }
     };
     BlackjackTable.prototype.clearPlayersCards = function () {
         for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
@@ -111,24 +125,72 @@ var BlackjackTable = /** @class */ (function (_super) {
             player.clearHands();
         }
     };
-    BlackjackTable.prototype.setPlayerHands = function (player) {
-        var newCard = _super.prototype.getCurrentDeck.call(this).drawOne();
-        player.addHand(newCard);
-    };
     BlackjackTable.prototype.allPlayerActionsResolved = function () {
         for (var _i = 0, _a = this.players; _i < _a.length; _i++) {
             var player = _a[_i];
             var currentPlayerStatus = player.getCurrentStatus();
+            // doubleの時もfalseかも
             if (currentPlayerStatus == "betting" || currentPlayerStatus == "hit")
                 return false;
         }
         return true;
     };
+    BlackjackTable.prototype.addPlayerBets = function (player, bets) {
+        player.addBets(bets);
+    };
+    BlackjackTable.prototype.removePlayerBets = function (player, bets) {
+        player.removeBets(bets);
+    };
+    BlackjackTable.prototype.addPlayerChips = function (player, chips) {
+        player.addChips(chips);
+    };
+    BlackjackTable.prototype.removePlayerChips = function (player, chips) {
+        player.removeChips(chips);
+    };
+    BlackjackTable.prototype.canUpdatePlayerBet = function (player) {
+        var currentPlayerBets = player.getCurrentBets();
+        var currentPlayerChips = player.getCurrentChips();
+        return currentPlayerBets < currentPlayerChips;
+    };
+    BlackjackTable.prototype.getCurrentGameMode = function () {
+        return this.gameMode;
+    };
+    BlackjackTable.prototype.getCurrentPlayerNumber = function () {
+        return this.playerNumber;
+    };
+    BlackjackTable.prototype.getCurrentPlayerNames = function () {
+        return this.playerNames;
+    };
+    BlackjackTable.prototype.getCurrentBetDenominations = function () {
+        return this.betDenominations;
+    };
+    BlackjackTable.prototype.print = function () {
+        console.log("----- Start Game -----");
+        console.log();
+        console.log("This game type : " + _super.prototype.getCurrentGameType.call(this));
+        console.log("This game deck : " + _super.prototype.getCurrentDeck.call(this));
+        console.log("This game turn : " + _super.prototype.getCurrentTurn.call(this));
+        console.log("This game mode : " + this.getCurrentGameMode());
+        console.log("This game player number : " + this.getCurrentPlayerNumber());
+        console.log("This game player's names : " + this.getCurrentPlayerNames());
+        console.log("This game bet denominations : " + this.getCurrentBetDenominations());
+        console.log();
+        console.log("----- Game Players -----");
+        console.log();
+        var i = 1;
+        this.players.forEach(function (player) {
+            console.log("Player_" + i);
+            console.log();
+            player.print();
+            console.log();
+            i++;
+        });
+        console.log("----- Dealer -----");
+        this.dealer.print();
+        console.log();
+    };
     return BlackjackTable;
 }(Table));
 exports.BlackjackTable = BlackjackTable;
-var table = new BlackjackTable("Player", [
-    "Naga",
-    "Toshi",
-    "Sam",
-]);
+var table = new BlackjackTable("player", ["Naga", "Toshi"]);
+table.print();

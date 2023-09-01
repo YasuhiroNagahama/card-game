@@ -73,12 +73,12 @@ var BlackjackPlayer = /** @class */ (function (_super) {
         return _this;
     }
     BlackjackPlayer.prototype.initializeBlackjackPlayer = function () {
-        // プレイヤーの種類がディーラーの場合はchipsを0にする
         var currentPlayerType = _super.prototype.getCurrentPlayerType.call(this);
+        // プレイヤーの種類がディーラーの場合はchipsを0にする
         this.chips = currentPlayerType === "dealer" ? 0 : 400;
         this.bets = 0;
         _super.prototype.setPlayerStatus.call(this, "betting");
-        // this.checkBlackjack();
+        this.checkBlackjack();
     };
     BlackjackPlayer.prototype.checkBlackjack = function () {
         var currentHands = _super.prototype.getCurrentHands.call(this);
@@ -140,7 +140,7 @@ var BlackjackPlayer = /** @class */ (function (_super) {
         return currentStatus === "blackjack";
     };
     BlackjackPlayer.prototype.isBust = function () {
-        var totalScore = this.totalCardsScore();
+        var totalScore = this.getTotalHandsScore();
         return totalScore > 21;
     };
     BlackjackPlayer.prototype.canDouble = function () {
@@ -148,7 +148,7 @@ var BlackjackPlayer = /** @class */ (function (_super) {
         var currentChips = this.getCurrentChips();
         return currentBets * 2 < currentChips;
     };
-    BlackjackPlayer.prototype.totalCardsScore = function () {
+    BlackjackPlayer.prototype.getTotalHandsScore = function () {
         var currentHands = _super.prototype.getCurrentHands.call(this);
         var totalScore = 0;
         for (var _i = 0, currentHands_2 = currentHands; _i < currentHands_2.length; _i++) {
@@ -158,7 +158,21 @@ var BlackjackPlayer = /** @class */ (function (_super) {
         }
         return totalScore;
     };
+    BlackjackPlayer.prototype.print = function () {
+        var hands = this.getCurrentHands();
+        console.log("This player name : " + this.getCurrentPlayerName());
+        console.log("This player type : " + this.getCurrentPlayerType());
+        console.log("This player win amounts : " + this.getCurrentWinAmounts());
+        console.log("This player status : " + this.getCurrentStatus());
+        console.log("This player hands");
+        hands.forEach(function (hand) {
+            console.log(hand);
+        });
+        console.log("This player chips : " + this.getCurrentChips());
+        console.log("This player bets : " + this.getCurrentBets());
+        console.log("This player total score : " + this.getTotalHandsScore());
+        console.log("This player is blackjack : " + this.isBlackjack());
+    };
     return BlackjackPlayer;
 }(Player));
 exports.BlackjackPlayer = BlackjackPlayer;
-var player = new BlackjackPlayer("player", "player", "blackjack");
