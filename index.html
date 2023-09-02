@@ -55,16 +55,16 @@
             <div class="select-box-type-wrapper">
               <label for="mode-select" class="select-box-type">Game Mode</label>
             </div>
-            <select id="modeSelect" class="game-selectbox game-mode-select">
-              <option value="ai" class="game-mode">vs AI</option>
+            <select id="modeSelect" class="game-select game-mode-select">
               <option value="player" class="game-mode">vs Player</option>
+              <option value="ai" class="game-mode">vs AI</option>
             </select>
           </li>
           <li class="select-box-item">
             <div class="select-box-type-wrapper">
               <label for="type-select" class="select-box-type">Game Type</label>
             </div>
-            <select id="typeSelect" class="game-selectbox game-type-select">
+            <select id="typeSelect" class="game-select game-type-select">
               <option value="blackjack" class="game-type">Blackjack</option>
             </select>
           </li>
@@ -72,12 +72,12 @@
       </div>
       <div id="peopleSelect" class="select-people-number-wrapper">
         <div class="select-people-number">
-          <input type="radio" id="two" name="radio" value="two" />
-          <label for="two">2</label>
+          <input type="radio" id="two" name="radio" value="two" checked/>
+          <label for="two" class="people-number">2</label>
         </div>
         <div class="select-people-number">
           <input type="radio" id="three" name="radio" value="three" />
-          <label for="three">3</label>
+          <label for="three" class="people-number">3</label>
         </div>
       </div>
       <div id="startBtn" class="start-btn-wrapper">

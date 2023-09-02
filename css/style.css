@@ -62,7 +62,7 @@ body {
   font-size: 24px;
 }
 
-.game-selectbox {
+.game-select {
   border: 1px solid var(--white-color);
   padding: 8px;
 }
@@ -80,6 +80,17 @@ body {
   align-items: center;
   gap: 20px;
   font-size: 24px;
+}
+
+.people-number {
+  cursor: pointer;
+  border: 2px solid var(--white-color);
+  padding: 8px 16px;
+}
+
+.people-number:hover {
+  color: var(--dark-color);
+  background-color: var(--white-color);
 }
 
 .start-btn-wrapper {
