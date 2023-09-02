@@ -201,7 +201,7 @@ export class BlackjackTable extends Table {
       "This game bet denominations : " + this.getCurrentBetDenominations()
     );
     console.log();
-    console.log("----- Game Players -----");
+    console.log("----- Players -----");
     console.log();
 
     let i = 1;

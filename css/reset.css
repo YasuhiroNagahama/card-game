@@ -99,7 +99,7 @@ sub {
   vertical-align: text-bottom;
 }
 
-input,
+/* input, */
 textarea,
 select,
 button {

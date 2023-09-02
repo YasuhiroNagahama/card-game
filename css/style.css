@@ -37,6 +37,11 @@ body {
   font-size: 24px;
   font-weight: bold;
 }
+@media screen and (min-width: 768px) {
+  .start-display-text {
+    font-size: 32px;
+  }
+}
 
 .select-box-list {
   display: flex;
@@ -62,6 +67,21 @@ body {
   padding: 8px;
 }
 
+.select-people-number-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.select-people-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-size: 24px;
+}
+
 .start-btn-wrapper {
   width: 120px;
   height: 64px;
@@ -69,6 +89,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.start-btn-wrapper:hover {
+  transform: translate(4px, -4px);
 }
 
 .start-btn {

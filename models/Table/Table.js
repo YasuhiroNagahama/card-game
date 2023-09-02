@@ -175,7 +175,7 @@ var BlackjackTable = /** @class */ (function (_super) {
         console.log("This game player's names : " + this.getCurrentPlayerNames());
         console.log("This game bet denominations : " + this.getCurrentBetDenominations());
         console.log();
-        console.log("----- Game Players -----");
+        console.log("----- Players -----");
         console.log();
         var i = 1;
         this.players.forEach(function (player) {
@@ -186,6 +186,7 @@ var BlackjackTable = /** @class */ (function (_super) {
             i++;
         });
         console.log("----- Dealer -----");
+        console.log();
         this.dealer.print();
         console.log();
     };
