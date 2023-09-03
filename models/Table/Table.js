@@ -49,11 +49,8 @@ var Table = /** @class */ (function () {
 exports.Table = Table;
 var BlackjackTable = /** @class */ (function (_super) {
     __extends(BlackjackTable, _super);
-    // vs Playerの場合は2人または3人でプレイ可能
-    // 1人なら vs AI1、2-3人なら vs Player
     function BlackjackTable(gameMode, playerNames) {
         var _this = _super.call(this, "blackjack") || this;
-        // blackjack => 1-3
         _this.playerNumber = 0;
         _this.playerNames = new Array();
         _this.betDenominations = new Array();

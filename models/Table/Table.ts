@@ -45,23 +45,17 @@ export class Table implements TableInterface {
 }
 
 export class BlackjackTable extends Table {
-  // blackjack => 'AI', 'Player'
   private gameMode: string;
-  // blackjack => 1-3
   private playerNumber: number = 0;
-  private playerNames: string[] = new Array();
   private betDenominations: number[] = new Array();
   private dealer: BlackjackPlayer;
   private players: BlackjackPlayer[] = new Array();
 
-  // vs Playerの場合は2人または3人でプレイ可能
-  // 1人なら vs AI1、2-3人なら vs Player
-  constructor(gameMode: string, playerNames: string[]) {
+  constructor(gameMode: string, playerNumber: number) {
     super("blackjack");
 
     this.gameMode = gameMode;
-    this.playerNumber = playerNames.length;
-    this.playerNames = playerNames;
+    this.playerNumber = playerNumber;
     this.betDenominations = [5, 25, 50, 100];
 
     this.initializeBlackjackTable();
@@ -88,8 +82,8 @@ export class BlackjackTable extends Table {
   }
 
   private setHumanPlayers(): void {
-    for (const playerName of this.playerNames) {
-      this.setPlayer(playerName, "player");
+    for (let i = 1; i <= this.playerNumber; i++) {
+      this.setPlayer("Player_" + String(i), "player");
     }
   }
 
@@ -180,10 +174,6 @@ export class BlackjackTable extends Table {
     return this.playerNumber;
   }
 
-  public getCurrentPlayerNames(): string[] {
-    return this.playerNames;
-  }
-
   public getCurrentBetDenominations(): number[] {
     return this.betDenominations;
   }
@@ -196,7 +186,6 @@ export class BlackjackTable extends Table {
     console.log("This game turn : " + super.getCurrentTurn());
     console.log("This game mode : " + this.getCurrentGameMode());
     console.log("This game player number : " + this.getCurrentPlayerNumber());
-    console.log("This game player's names : " + this.getCurrentPlayerNames());
     console.log(
       "This game bet denominations : " + this.getCurrentBetDenominations()
     );
@@ -220,7 +209,3 @@ export class BlackjackTable extends Table {
     console.log();
   }
 }
-
-const table: BlackjackTable = new BlackjackTable("player", ["Naga", "Toshi"]);
-
-table.print();

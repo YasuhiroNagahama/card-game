@@ -74,7 +74,7 @@ body {
   gap: 40px;
 }
 
-.select-people-number {
+.people-number-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
