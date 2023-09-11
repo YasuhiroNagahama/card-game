@@ -69,7 +69,6 @@ export class Player implements PlayerInterface {
   }
 }
 
-// 未完成
 export class BlackjackPlayer extends Player {
   private chips: number;
   private bets: number;
@@ -89,26 +88,26 @@ export class BlackjackPlayer extends Player {
 
     super.setPlayerStatus("betting");
 
-    this.checkBlackjack();
+    // this.checkBlackjack();
   }
 
-  public checkBlackjack(): void {
-    const currentHands: Card[] = super.getCurrentHands();
-    const ranks: string[] = [];
+  // public checkBlackjack(): void {
+  //   const currentHands: Card[] = super.getCurrentHands();
+  //   const ranks: string[] = [];
 
-    for (const hand of currentHands) {
-      ranks.push(hand.getCardRank());
-    }
+  //   for (const hand of currentHands) {
+  //     ranks.push(hand.getCardRank());
+  //   }
 
-    if (
-      (ranks.includes("A") && ranks.includes("10")) ||
-      ranks.includes("J") ||
-      ranks.includes("Q") ||
-      ranks.includes("K")
-    ) {
-      super.setPlayerStatus("blackjack");
-    }
-  }
+  //   if (
+  //     (ranks.includes("A") && ranks.includes("10")) ||
+  //     ranks.includes("J") ||
+  //     ranks.includes("Q") ||
+  //     ranks.includes("K")
+  //   ) {
+  //     super.setPlayerStatus("blackjack");
+  //   }
+  // }
 
   public getCurrentChips(): number {
     return this.chips;

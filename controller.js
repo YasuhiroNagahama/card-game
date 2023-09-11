@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,6 +14,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Table_1 = require("./models/Table/Table");
+var jsdom_1 = require("jsdom");
 {
     var Controller = /** @class */ (function () {
         function Controller() {
@@ -31,35 +35,44 @@ var __extends = (this && this.__extends) || (function () {
             });
         };
         Controller.prototype.selectGameType = function () {
-            var modeSelect = (document.getElementById("modeSelect"));
-            var typeSelect = (document.getElementById("typeSelect"));
-            var gameMode = modeSelect.value;
-            var gameType = typeSelect.value;
-            var peopleNumber = 3;
-            if (gameMode === "player") {
-                var peopleNumberElements = document.querySelectorAll(".input-people-number");
-                peopleNumberElements.forEach(function (peopleNumberElement) {
-                    if (peopleNumberElement.checked)
-                        peopleNumber = Number(peopleNumberElement.value);
-                });
-            }
-            if (gameType === "blackjack") {
-                var blackjack = new BlackjackController_1();
-                blackjack.startBlackjack();
-                console.log(gameMode);
-                console.log(gameType);
-                console.log(peopleNumber);
-            }
-            else {
-                console.log("いつか追加！");
-            }
+            var startBtn = document.getElementById("startBtn");
+            startBtn.addEventListener("click", function () {
+                var modeSelect = (document.getElementById("modeSelect"));
+                var typeSelect = (document.getElementById("typeSelect"));
+                var gameMode = modeSelect.value;
+                var gameType = typeSelect.value;
+                // vs AI の初期値である 3 を代入
+                var playerNumber = 3;
+                var dom = jsdom_1.JSDOM.fromFile("index.html");
+                console.log(dom);
+                if (gameMode === "player") {
+                    var playerNumberElements = document.querySelectorAll(".input-people-number");
+                    playerNumberElements.forEach(function (playerNumberElement) {
+                        if (playerNumberElement.checked)
+                            playerNumber = Number(playerNumberElement.value);
+                    });
+                }
+                if (gameType === "blackjack") {
+                    var blackjack = new BlackjackController_1(gameMode, playerNumber);
+                    blackjack.startBlackjack();
+                }
+                else {
+                    console.log("いつか追加！");
+                }
+            });
         };
         return Controller;
     }());
     var BlackjackController_1 = /** @class */ (function (_super) {
         __extends(BlackjackController, _super);
-        function BlackjackController() {
-            return _super !== null && _super.apply(this, arguments) || this;
+        function BlackjackController(gameMode, playerNumber) {
+            var _this = _super.call(this) || this;
+            _this.playerNumber = 0;
+            _this.gameMode = gameMode;
+            _this.playerNumber = playerNumber;
+            _this.blackJackTable = new Table_1.BlackjackTable(_this.gameMode, _this.playerNumber);
+            _this.blackJackTable.print();
+            return _this;
         }
         BlackjackController.prototype.startBlackjack = function () { };
         return BlackjackController;

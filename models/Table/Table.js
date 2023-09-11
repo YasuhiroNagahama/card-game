@@ -49,15 +49,13 @@ var Table = /** @class */ (function () {
 exports.Table = Table;
 var BlackjackTable = /** @class */ (function (_super) {
     __extends(BlackjackTable, _super);
-    function BlackjackTable(gameMode, playerNames) {
+    function BlackjackTable(gameMode, playerNumber) {
         var _this = _super.call(this, "blackjack") || this;
         _this.playerNumber = 0;
-        _this.playerNames = new Array();
         _this.betDenominations = new Array();
         _this.players = new Array();
         _this.gameMode = gameMode;
-        _this.playerNumber = playerNames.length;
-        _this.playerNames = playerNames;
+        _this.playerNumber = playerNumber;
         _this.betDenominations = [5, 25, 50, 100];
         _this.initializeBlackjackTable();
         return _this;
@@ -78,9 +76,8 @@ var BlackjackTable = /** @class */ (function (_super) {
         this.setPlayer("AI", "ai");
     };
     BlackjackTable.prototype.setHumanPlayers = function () {
-        for (var _i = 0, _a = this.playerNames; _i < _a.length; _i++) {
-            var playerName = _a[_i];
-            this.setPlayer(playerName, "player");
+        for (var i = 1; i <= this.playerNumber; i++) {
+            this.setPlayer("Player_" + String(i), "player");
         }
     };
     BlackjackTable.prototype.initializePlayers = function () {
@@ -155,9 +152,6 @@ var BlackjackTable = /** @class */ (function (_super) {
     BlackjackTable.prototype.getCurrentPlayerNumber = function () {
         return this.playerNumber;
     };
-    BlackjackTable.prototype.getCurrentPlayerNames = function () {
-        return this.playerNames;
-    };
     BlackjackTable.prototype.getCurrentBetDenominations = function () {
         return this.betDenominations;
     };
@@ -169,7 +163,6 @@ var BlackjackTable = /** @class */ (function (_super) {
         console.log("This game turn : " + _super.prototype.getCurrentTurn.call(this));
         console.log("This game mode : " + this.getCurrentGameMode());
         console.log("This game player number : " + this.getCurrentPlayerNumber());
-        console.log("This game player's names : " + this.getCurrentPlayerNames());
         console.log("This game bet denominations : " + this.getCurrentBetDenominations());
         console.log();
         console.log("----- Players -----");
@@ -190,5 +183,3 @@ var BlackjackTable = /** @class */ (function (_super) {
     return BlackjackTable;
 }(Table));
 exports.BlackjackTable = BlackjackTable;
-var table = new BlackjackTable("player", ["Naga", "Toshi"]);
-table.print();

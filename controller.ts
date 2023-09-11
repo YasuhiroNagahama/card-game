@@ -1,3 +1,6 @@
+import { BlackjackTable, Table } from "./models/Table/Table";
+import { JSDOM } from "jsdom";
+
 {
   class Controller {
     public updateGameMode(): void {
@@ -20,36 +23,60 @@
     }
 
     public selectGameType(): void {
-      const modeSelect = <HTMLSelectElement>(
-        document.getElementById("modeSelect")
-      );
-      const typeSelect = <HTMLSelectElement>(
-        document.getElementById("typeSelect")
-      );
-      const gameMode: string = modeSelect.value;
-      const gameType: string = typeSelect.value;
-      let peopleNumber: number = 3;
+      const startBtn = <HTMLElement>document.getElementById("startBtn");
 
-      if (gameMode === "player") {
-        const peopleNumberElements =
-          document.querySelectorAll<HTMLInputElement>(".input-people-number");
+      startBtn.addEventListener("click", () => {
+        const modeSelect = <HTMLSelectElement>(
+          document.getElementById("modeSelect")
+        );
+        const typeSelect = <HTMLSelectElement>(
+          document.getElementById("typeSelect")
+        );
+        const gameMode: string = modeSelect.value;
+        const gameType: string = typeSelect.value;
+        // vs AI の初期値である 3 を代入
+        let playerNumber: number = 3;
 
-        peopleNumberElements.forEach((peopleNumberElement) => {
-          if (peopleNumberElement.checked)
-            peopleNumber = Number(peopleNumberElement.value);
-        });
-      }
+        if (gameMode === "player") {
+          const playerNumberElements =
+            document.querySelectorAll<HTMLInputElement>(".input-people-number");
 
-      if (gameType === "blackjack") {
-        const blackjack: BlackjackController = new BlackjackController();
-        blackjack.startBlackjack();
-      } else {
-        console.log("いつか追加！");
-      }
+          playerNumberElements.forEach((playerNumberElement) => {
+            if (playerNumberElement.checked)
+              playerNumber = Number(playerNumberElement.value);
+          });
+        }
+
+        if (gameType === "blackjack") {
+          const blackjack: BlackjackController = new BlackjackController(
+            gameMode,
+            playerNumber
+          );
+          blackjack.startBlackjack();
+        } else {
+          console.log("いつか追加！");
+        }
+      });
     }
   }
 
   class BlackjackController extends Controller {
+    private gameMode: string;
+    private playerNumber: number = 0;
+    private blackJackTable: BlackjackTable;
+
+    constructor(gameMode: string, playerNumber: number) {
+      super();
+      this.gameMode = gameMode;
+      this.playerNumber = playerNumber;
+      this.blackJackTable = new BlackjackTable(
+        this.gameMode,
+        this.playerNumber
+      );
+
+      this.blackJackTable.print();
+    }
+
     public startBlackjack(): void {}
   }
 

@@ -64,7 +64,6 @@ var Player = /** @class */ (function () {
     return Player;
 }());
 exports.Player = Player;
-// 未完成
 var BlackjackPlayer = /** @class */ (function (_super) {
     __extends(BlackjackPlayer, _super);
     function BlackjackPlayer(playerName, playerType, gameType) {
@@ -78,22 +77,23 @@ var BlackjackPlayer = /** @class */ (function (_super) {
         this.chips = currentPlayerType === "dealer" ? 0 : 400;
         this.bets = 0;
         _super.prototype.setPlayerStatus.call(this, "betting");
-        this.checkBlackjack();
+        // this.checkBlackjack();
     };
-    BlackjackPlayer.prototype.checkBlackjack = function () {
-        var currentHands = _super.prototype.getCurrentHands.call(this);
-        var ranks = [];
-        for (var _i = 0, currentHands_1 = currentHands; _i < currentHands_1.length; _i++) {
-            var hand = currentHands_1[_i];
-            ranks.push(hand.getCardRank());
-        }
-        if ((ranks.includes("A") && ranks.includes("10")) ||
-            ranks.includes("J") ||
-            ranks.includes("Q") ||
-            ranks.includes("K")) {
-            _super.prototype.setPlayerStatus.call(this, "blackjack");
-        }
-    };
+    // public checkBlackjack(): void {
+    //   const currentHands: Card[] = super.getCurrentHands();
+    //   const ranks: string[] = [];
+    //   for (const hand of currentHands) {
+    //     ranks.push(hand.getCardRank());
+    //   }
+    //   if (
+    //     (ranks.includes("A") && ranks.includes("10")) ||
+    //     ranks.includes("J") ||
+    //     ranks.includes("Q") ||
+    //     ranks.includes("K")
+    //   ) {
+    //     super.setPlayerStatus("blackjack");
+    //   }
+    // }
     BlackjackPlayer.prototype.getCurrentChips = function () {
         return this.chips;
     };
@@ -151,8 +151,8 @@ var BlackjackPlayer = /** @class */ (function (_super) {
     BlackjackPlayer.prototype.getTotalHandsScore = function () {
         var currentHands = _super.prototype.getCurrentHands.call(this);
         var totalScore = 0;
-        for (var _i = 0, currentHands_2 = currentHands; _i < currentHands_2.length; _i++) {
-            var hand = currentHands_2[_i];
+        for (var _i = 0, currentHands_1 = currentHands; _i < currentHands_1.length; _i++) {
+            var hand = currentHands_1[_i];
             var cardRank = hand.getCardRankNumberBlackjack();
             totalScore += cardRank;
         }
