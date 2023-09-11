@@ -1,5 +1,4 @@
 import { BlackjackTable, Table } from "./models/Table/Table";
-import { JSDOM } from "jsdom";
 
 {
   class Controller {
