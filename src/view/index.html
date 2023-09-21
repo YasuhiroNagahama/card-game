@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>カードゲーム</title>
+    <meta name="description" content="ページの説明" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="../../img/favicon.ico" id="favicon" />
+
+    <!--- css --->
+    <link rel="stylesheet" href="../style/style.css" />
+    <link rel="stylesheet" href="../style/reset.css" />
+
+    <!-- fontawesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="gameContainer" class="game-display-container">
+      <div id="startDisplay" class="start-display-wrapper">
+        <div class="start-display-text-wrapper">
+          <p class="start-display-text">Welcome to card game</p>
+        </div>
+        <div class="select-box-wrapper">
+          <ul class="select-box-list">
+            <li class="select-box-item">
+              <div class="select-box-type-wrapper">
+                <label for="mode-select" class="select-box-type"
+                  >Game Mode</label
+                >
+              </div>
+              <select id="modeSelectBox" class="game-select game-mode-select">
+                <option value="player" class="game-mode">vs Player</option>
+                <option value="ai" class="game-mode">vs AI</option>
+              </select>
+            </li>
+            <li class="select-box-item">
+              <div class="select-box-type-wrapper">
+                <label for="type-select" class="select-box-type"
+                  >Game Type</label
+                >
+              </div>
+              <select id="typeSelectBox" class="game-select game-type-select">
+                <option value="blackjack" class="game-type">Blackjack</option>
+              </select>
+            </li>
+          </ul>
+        </div>
+        <div id="playerCount" class="select-player-number-wrapper">
+          <div class="player-number-wrapper">
+            <input
+              type="radio"
+              id="two"
+              class="input-player-number"
+              name="radio"
+              value="2"
+              checked
+            />
+            <label for="two" class="player-number">2</label>
+          </div>
+          <div class="player-number-wrapper">
+            <input
+              type="radio"
+              id="three"
+              class="input-player-number"
+              name="radio"
+              value="3"
+            />
+            <label for="three" class="player-number">3</label>
+          </div>
+        </div>
+        <div id="startBtn" class="start-btn-wrapper">
+          <button class="start-btn">StartGame</button>
+        </div>
+      </div>
+      <div class="favicon-links-wrapper">
+        <div class="favicon-links">
+          <a
+            class="favicon-type"
+            target="_blank"
+            href="https://icons8.com/icon/jSrlef4KpFIC/microsoft-solitaire-collection"
+            >Microsoft Solitaire Collection</a
+          >
+          icon by
+          <a class="favicon-icons8" target="_blank" href="https://icons8.com"
+            >Icons8</a
+          >
+        </div>
+      </div>
+    </div>
+    <script type="module" src="../controller/controller.js"></script>
+    <script type="module" src="../view/view.js"></script>
+  </body>
+</html>

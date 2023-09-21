@@ -1,0 +1,484 @@
+@charset "utf-8";
+
+:root {
+  --primary-color: #0000ff;
+  --danger-color: #ff0000;
+  --success-color: #008000;
+  --warning-color: #ffff00;
+  --dark-color: black;
+  --white-color: white;
+  --secondary-color: gray;
+}
+
+:root {
+  --z-index--1: -1;
+  --z-index-1: 1;
+  --z-index-100: 100;
+  --z-index-150: 150;
+}
+
+body {
+  font-family: "Exo", sans-serif;
+  color: var(--white-color);
+  background-color: var(--dark-color);
+  font-size: 16px;
+}
+
+/* start-page */
+
+.start-display-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 64px;
+}
+
+.start-display-text {
+  font-size: 24px;
+  font-weight: bold;
+}
+@media screen and (min-width: 768px) {
+  .start-display-text {
+    font-size: 32px;
+  }
+}
+
+.select-box-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+}
+
+.select-box-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.select-box-type {
+  font-size: 24px;
+}
+
+.game-select {
+  border: 1px solid var(--white-color);
+  padding: 8px;
+}
+
+.select-player-number-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.player-number-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-size: 24px;
+}
+
+.player-number {
+  cursor: pointer;
+  border: 2px solid var(--white-color);
+  padding: 8px 16px;
+}
+
+.player-number:hover {
+  color: var(--dark-color);
+  background-color: var(--white-color);
+}
+
+.start-btn-wrapper {
+  width: 120px;
+  height: 64px;
+  border: 2px solid var(--white-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.start-btn-wrapper:hover {
+  transform: translate(4px, -4px);
+}
+
+.start-btn {
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+}
+
+/* game-display */
+
+.game-display-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 16px;
+}
+
+/* bet-modal */
+
+.game-bet-wrapper {
+  position: absolute;
+  gap: 24px;
+  top: 50%;
+  left: 50%;
+  background-color: var(--white-color);
+  transform: translate(-50%, -50%);
+  padding: 40px 24px;
+  border-radius: 2%;
+}
+
+.game-bet-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.game-bet-item {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--dark-color);
+  border: 2px solid var(--dark-color);
+  border-radius: 5%;
+  font-size: 24px;
+}
+@media screen and (min-width: 768px) {
+  .game-bet-item {
+    width: 120px;
+    height: 120px;
+    font-size: 32px;
+  }
+}
+
+.game-bet-item:hover {
+  color: var(--white-color);
+  background-color: var(--dark-color);
+}
+
+.game-bet-btn {
+  width: 100%;
+  height: 100%;
+}
+
+.game-bet-confirm-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--dark-color);
+  border: 2px solid var(--dark-color);
+  margin: 24px 0;
+}
+
+.game-bet-confirm-btn-wrapper:hover {
+  color: var(--dark-color);
+  background-color: var(--white-color);
+}
+
+.game-bet-confirm-btn {
+  width: 100%;
+  height: 100%;
+  font-size: 24px;
+}
+@media screen and (min-width: 768px) {
+  .game-bet-confirm-btn {
+    font-size: 32px;
+  }
+}
+
+.game-bet-controller-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game-bet-reset-btn-wrapper {
+  width: 100px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--dark-color);
+  border: 2px solid var(--dark-color);
+}
+@media screen and (min-width: 768px) {
+  .game-bet-reset-btn-wrapper {
+    width: 120px;
+    height: 80px;
+  }
+}
+
+.game-bet-reset-btn-wrapper:hover {
+  color: var(--dark-color);
+  background-color: var(--white-color);
+}
+
+.game-bet-reset-btn {
+  width: 100%;
+  height: 100%;
+}
+@media screen and (min-width: 768px) {
+  .game-bet-reset-btn {
+    font-size: 24px;
+  }
+}
+
+.game-bet-total-wrapper {
+  border: 2px solid var(--dark-color);
+  padding: 8px;
+}
+@media screen and (min-width: 768px) {
+  .game-bet-total-wrapper {
+    padding: 16px;
+  }
+}
+
+.game-bet-total {
+  color: var(--dark-color);
+  font-size: 24px;
+}
+
+/* result */
+
+.game-result-btn-wrapper {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  background-color: var(--white-color);
+  top: 8px;
+  left: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid var(--white-color);
+  border-radius: 5%;
+}
+
+.game-result-btn {
+  width: 100%;
+  height: 100%;
+}
+
+/* card-back */
+
+.game-card-back-wrapper {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.game-card-back-list {
+  top: 20%;
+  right: 40%;
+  width: 80px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-back-top,
+.card-back-bottom {
+  font-size: 24px;
+  padding: 4px 8px;
+}
+
+.card-back-top {
+  display: flex;
+  justify-content: start;
+}
+
+.card-back-bottom {
+  display: flex;
+  justify-content: end;
+}
+
+/* player */
+
+.game-players-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-players-info-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+}
+
+.game-player-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-player-about-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.game-player-name {
+  font-size: 32px;
+}
+
+.game-player-status {
+  color: var(--dark-color);
+  background-color: var(--white-color);
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0 4px;
+  border-radius: 5%;
+}
+
+.game-player-cards-wrapper {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  overflow-x: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.game-player-cards-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.dealer-cards,
+.player-cards {
+  max-width: 300px;
+}
+@media screen and (min-width: 768px) {
+  .dealer-cards {
+    max-width: none;
+  }
+}
+@media screen and (min-width: 768px) {
+  .player-cards {
+    max-width: 160px;
+  }
+}
+
+.game-player-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid var(--white-color);
+  margin: 0 auto;
+}
+
+.game-player-card-element-list {
+  width: 80px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-card-element-item {
+  font-size: 24px;
+}
+
+.game-card-suit {
+  font-size: 40px;
+}
+
+/* btn */
+
+.game-btn-list-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-btn-list {
+  display: flex;
+  gap: 16px;
+}
+
+.game-btn-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.game-btn-wrapper {
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 0;
+  border: 2px solid var(--white-color);
+  border-radius: 5%;
+}
+@media screen and (min-width: 768px) {
+  .game-btn-wrapper {
+    width: 180px;
+  }
+}
+
+.game-btn-wrapper:hover {
+  color: var(--dark-color);
+  background-color: var(--white-color);
+}
+
+.game-btn {
+  width: 100%;
+  height: 100%;
+}
+@media screen and (min-width: 768px) {
+  .game-btn {
+    font-size: 24px;
+  }
+}
+
+/* favicon */
+
+.favicon-link-wrapper {
+  position: relative;
+}
+
+.favicon-links {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.favicon-type:hover,
+.favicon-icons8:hover {
+  color: var(--success-color);
+}
+
+/* font awesome */
+
+.fa-square-poll-horizontal {
+  color: var(--dark-color);
+  font-size: 48px;
+}

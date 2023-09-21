@@ -1,23 +1,22 @@
-import { CardInterface } from "../../interfaces/CardInterface/CardInterface";
-
-export class Card implements CardInterface {
-  private suit: string;
-  private rank: string;
-
-  constructor(suit: string, rank: string) {
+export class Card {
+  constructor(suit, rank) {
     this.suit = suit;
     this.rank = rank;
   }
 
-  public getCardSuit(): string {
+  getCardSuit() {
     return this.suit;
   }
 
-  public getCardRank(): string {
+  getCardRank() {
     return this.rank;
   }
 
-  public getCardRankNumber(): number {
+  getCardInfoObj() {
+    return {suit: this.suit, rank: this.rank};
+  }
+
+  getCardRankNumber() {
     switch (this.getCardRank()) {
       case "A":
         return 1;
@@ -34,7 +33,7 @@ export class Card implements CardInterface {
     }
   }
 
-  public getCardRankNumberBlackjack(): number {
+  getCardRankNumberBlackjack() {
     switch (this.getCardRank()) {
       case "A":
         return 1;
@@ -47,7 +46,8 @@ export class Card implements CardInterface {
     }
   }
 
-  public print(): void {
+  print() {
+    console.log("\n");
     console.log("This suit : " + this.suit);
     console.log("This rank : " + this.rank);
     console.log("This card rank number : " + this.getCardRankNumber());

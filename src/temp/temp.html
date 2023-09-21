@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>カードゲーム</title>
+    <meta name="description" content="ページの説明" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="../../img/favicon.ico" id="favicon" />
+
+    <!--- css --->
+    <link rel="stylesheet" href="../style/style.css" />
+    <link rel="stylesheet" href="../style/reset.css" />
+
+    <!-- fontawesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="gameContainer" class="game-display-container">
+      <div id="gameDisplay" class="game-display-wrapper">
+        <div class="game-players-wrapper">
+          <div class="game-player-info-wrapper">
+            <div class="game-player-about-wrapper">
+              <p id="dealerName" class="game-player-name">Dealer</p>
+              <span id="dealerStatus" class="game-player-status"></span>
+            </div>
+            <div
+              id="dealerCards"
+              class="game-player-cards-wrapper dealer-cards"
+            >
+              <div class="game-player-card">
+                <ul class="game-player-card-element-list">
+                  <li
+                    id="cardSymbol"
+                    class="game-card-element-item game-card-img"
+                  >
+                    &#9824;
+                  </li>
+                  <li id="cardNumber" class="game-card-element-item">K(13)</li>
+                </ul>
+              </div>
+            </div>
+            <div class="game-player-details-wrapper">
+              <div class="game-player-details-list-wrapper">
+                <ul class="game-player-details-list">
+                  <li class="game-player-details-item">
+                    SCORE : <span id="playerScore">7</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="game-players-info-wrapper">
+            <div class="game-player-info-wrapper player-info-wrapper">
+              <div class="game-player-about-wrapper">
+                <p class="game-player-name">Player</p>
+                <span id="playerStatus" class="game-player-status">BUST</span>
+              </div>
+              <div
+                id="playerCards"
+                class="game-player-cards-wrapper player-cards"
+              >
+                <div class="game-player-card">
+                  <ul class="game-player-card-element-list">
+                    <li
+                      id="cardSymbol"
+                      class="game-card-element-item game-card-img"
+                    >
+                      &#9824;
+                    </li>
+                    <li id="cardNumber" class="game-card-element-item">
+                      K(13)
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="game-player-details-wrapper">
+                <div class="game-player-details-list-wrapper">
+                  <ul class="game-player-details-list">
+                    <li class="game-player-details-item">
+                      SCORE : <span id="playerScore">7</span>
+                    </li>
+                    <li class="game-player-details-item">
+                      BETS : <span id="playerBets">50</span>
+                    </li>
+                    <li class="game-player-details-item">
+                      CHIPS : <span id="playerChpps">350</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="game-btn-list-wrapper">
+          <ul class="game-btn-list">
+            <li class="game-btn-item">
+              <div id="doubleBtn" class="game-btn-wrapper">
+                <button class="game-btn">DOUBLE</button>
+              </div>
+              <div id="standBtn" class="game-btn-wrapper">
+                <button class="game-btn">STAND</button>
+              </div>
+            </li>
+            <li class="game-btn-item">
+              <div id="hitBtn" class="game-btn-wrapper">
+                <button class="game-btn">HIT</button>
+              </div>
+              <div id="surrenderBtn" class="game-btn-wrapper">
+                <button class="game-btn">SURRENDER</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="../view/view.js"></script>
+  </body>
+</html>

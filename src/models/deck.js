@@ -1,16 +1,9 @@
-import { Card } from "../Card/Card";
-import { DeckInterface } from "../../interfaces/DeckInterface/DeckInterface";
+import { Card } from "./card.js";
 
-export class Deck implements DeckInterface {
-  private gameType: string;
-  private cards: Card[];
-  private suits: string[];
-  private ranks: string[];
-  private joker: boolean;
-
-  constructor(gameType: string) {
+export class Deck {
+  constructor(gameType) {
     this.gameType = gameType;
-    this.suits = ["H", "D", "C", "D"];
+    this.suits = ["&#9825;", "&#9828;", "&#9674;", "&#9831;"];
     this.ranks = [
       "A",
       "2",
@@ -30,14 +23,14 @@ export class Deck implements DeckInterface {
     this.initialize();
   }
 
-  public initialize(): void {
+  initialize() {
     this.cards = [];
     this.joker = true;
 
     this.setDeck();
   }
 
-  public setJokerToDeck(): void {
+  setJokerToDeck() {
     // 条件が後に増える
     if (this.gameType === "blackjack") {
       this.joker = false;
@@ -46,7 +39,7 @@ export class Deck implements DeckInterface {
     }
   }
 
-  public setDeck(): void {
+  setDeck() {
     for (let suit of this.suits) {
       for (let rank of this.ranks) {
         this.cards.push(new Card(suit, rank));
@@ -57,36 +50,38 @@ export class Deck implements DeckInterface {
     this.shuffle();
   }
 
-  public shuffle(): void {
-    for (let i: number = this.cards.length - 1; i > 0; i--) {
-      const j: number = Math.floor(Math.random() * (i + 1));
+  shuffle() {
+    for (let i = this.cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
       [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
     }
   }
 
-  public resetDeck(): void {
+  resetDeck() {
     this.cards = [];
     this.setDeck();
   }
 
-  public drawOne(): Card {
+  drawOne() {
     // 仮の戻り値undefined
-    if (this.cards.length <= 0) return undefined!;
+    if (this.cards.length <= 0) return undefined;
 
-    return this.cards.pop()!;
+    return this.cards.pop();
   }
 
-  public getCurrentDeckLength(): number {
+  getCurrentDeckLength() {
     return this.cards.length;
   }
 
-  public isEmpty(): boolean {
+  isEmpty() {
     return this.cards.length <= 0;
   }
 
-  public print(): void {
+  print() {
+    console.log("\n");
     console.log("This game type : " + this.gameType);
-    console.log("This cards : " + this.cards);
+    console.log("This cards : ");
+    this.cards.forEach((card) => console.log(card));
     console.log("This suits : " + this.suits);
     console.log("This ranks  : " + this.ranks);
     console.log("This joker  : " + this.joker);
