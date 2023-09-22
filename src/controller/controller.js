@@ -104,16 +104,56 @@ class BlackjackController {
     }
   }
 
-  switchGameDisplay() {
-    this.blackjackView.removeDisplay(document.getElementById("startDisplay"));
+  removeStartDisplay() {
+    this.blackjackView.removeStartDisplay();
+  }
+
+  processBet() {
     this.blackjackView.addBetsModal();
-    this.blackjackView.addGameDisplay();
+    this.pushBetBtn();
+  }
+
+  switchGameDisplay() {
+    // this.blackjackView.addGameDisplay();
   }
 
   startBlackjack() {
-    this.switchGameDisplay();
-    this.loadDealerDataToView();
-    this.loadPlayerDataToView();
+    this.removeStartDisplay();
+    this.processBet();
+    // this.loadDealerDataToView();
+    // this.loadPlayerDataToView();
+  }
+
+  pushBetBtn() {
+    if (this.blackJackTable.getCurrentGameMode() == "ai") {
+      const players = this.blackJackTable.getCurrentPlayers();
+
+      for (const player of players) {
+        console.log(player.getCurrentPlayerType());
+      }
+    }
+  }
+
+  betBtnClick(player) {
+    const betBtn = document.getElementById("betBtn");
+
+    betBtn.addEventListener("click", () => {
+      const currentBets = player.getCurrentBets();
+
+      if (currentBets > 0) {
+        console.log("Game Start");
+      }
+    });
+  }
+
+  addBetClickHandler(player, amount) {
+    const betBtn = document.getElementById(`bet${amount}`);
+
+    betBtn.addEventListener("click", () => {
+      if (player.canBets(amount)) {
+        player.addBets(amount);
+      }
+    });
   }
 
   pushHitBtn() {

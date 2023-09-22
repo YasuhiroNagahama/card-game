@@ -44,7 +44,7 @@ export class BlackjackTable extends Table {
     super("blackjack");
     this.gameMode = gameMode;
     this.playerNumber = playerNumber;
-    this.betDenominations = [5, 25, 50, 100];
+    this.betDenominations = [5, 20, 50, 100];
     this.players = [];
     this.dealer = "";
     this.initializeBlackjackTable();
@@ -160,6 +160,11 @@ export class BlackjackTable extends Table {
     const currentPlayerChips = player.getCurrentChips();
 
     return currentPlayerBets < currentPlayerChips;
+  }
+
+  isVsAI() {
+    const currentGameMode = this.getCurrentGameMode();
+    return currentGameMode === "ai";
   }
 
   getCurrentGameMode() {

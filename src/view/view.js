@@ -5,6 +5,11 @@ export class View {
     display.remove();
   }
 
+  removeStartDisplay() {
+    const startDisplay = document.getElementById("startDisplay");
+    this.removeDisplay(startDisplay);
+  }
+
   createStartDisplay() {
     const startDisplayWrap = document.createElement("div");
     startDisplayWrap.id = "startDisplay";

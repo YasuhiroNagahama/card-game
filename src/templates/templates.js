@@ -93,24 +93,27 @@ export const templates = {
   </div>`,
   },
   bets: `
+<div class="game-bet-player-name-wrapper">
+  <p class="game-bet-player-name">Player_1</p>
+</div>
 <div class="game-bet-list-wrapper">
   <ul class="game-bet-list">
-    <li class="game-bet-item">
+    <li id="bet5" class="game-bet-item">
       <button class="game-bet-btn">5</button>
     </li>
-    <li class="game-bet-item">
-      <button class="game-bet-btn">25</button>
+    <li id="bet20" class="game-bet-item">
+      <button class="game-bet-btn">20</button>
     </li>
-    <li class="game-bet-item">
+    <li id="bet50" class="game-bet-item">
       <button class="game-bet-btn">50</button>
     </li>
-    <li class="game-bet-item">
+    <li id="bet100" class="game-bet-item">
       <button class="game-bet-btn">100</button>
     </li>
   </ul>
 </div>
-<div class="game-bet-confirm-btn-wrapper">
-  <button class="game-bet-confirm-btn">OK</button>
+<div id="betBtn" class="game-bet-confirm-btn-wrapper">
+  <button class="game-bet-confirm-btn">Bet</button>
 </div>
 <div class="game-bet-controller-wrapper">
   <div class="game-bet-reset-btn-wrapper">
@@ -118,7 +121,7 @@ export const templates = {
   </div>
   <div class="game-bet-total-wrapper">
     <p class="game-bet-total">
-      Total : <span id="totalBets"></span>
+      Total : <span id="totalBets">0</span>
     </p>
   </div>
 </div>

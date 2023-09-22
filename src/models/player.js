@@ -66,7 +66,6 @@ export class BlackjackPlayer extends Player {
     super(playerName, playerType, gameType);
     this.chips = playerType === "dealer" ? 0 : 400;
     this.bets = 0;
-    // scoreをメンバ変数として扱う
     this.score = 0;
     super.setPlayerStatus("betting");
   }
@@ -86,6 +85,10 @@ export class BlackjackPlayer extends Player {
     this.bets += betsToAdd;
   }
 
+  canBets(betsToAdd) {
+    return this.bets <= this.bets + betsToAdd;
+  }
+
   removeChips(chipsToRemove) {
     this.chips -= chipsToRemove;
   }
@@ -94,7 +97,7 @@ export class BlackjackPlayer extends Player {
     this.bets -= betsToRemove;
   }
 
-  hit(card) {
+  setHit(card) {
     super.addHand(card);
 
     if (this.isBust()) {
@@ -160,8 +163,6 @@ export class BlackjackPlayer extends Player {
 
       this.score = totalScore;
     }
-
-    console.log(this.playerName + " " + this.score);
   }
 
   getTotalHandsScore() {

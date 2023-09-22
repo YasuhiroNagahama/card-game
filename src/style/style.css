@@ -135,7 +135,18 @@ body {
   background-color: var(--white-color);
   transform: translate(-50%, -50%);
   padding: 40px 24px;
+  border: 2px solid var(--dark-color);
   border-radius: 2%;
+}
+
+.game-bet-player-name-wrapper {
+  margin-bottom: 8px;
+}
+
+.game-bet-player-name {
+  color: var(--dark-color);
+  text-align: center;
+  font-size: 40px;
 }
 
 .game-bet-list {
