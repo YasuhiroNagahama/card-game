@@ -92,7 +92,7 @@ export const templates = {
     </ul>
   </div>`,
   },
-  bet: `<div class="game-bet-wrapper">
+  bets: `
 <div class="game-bet-list-wrapper">
   <ul class="game-bet-list">
     <li class="game-bet-item">
@@ -109,17 +109,20 @@ export const templates = {
     </li>
   </ul>
 </div>
+<div class="game-bet-confirm-btn-wrapper">
+  <button class="game-bet-confirm-btn">OK</button>
+</div>
 <div class="game-bet-controller-wrapper">
   <div class="game-bet-reset-btn-wrapper">
     <button class="game-bet-reset-btn">RESET</button>
   </div>
   <div class="game-bet-total-wrapper">
     <p class="game-bet-total">
-      Total : <span id="totalBets">100</span>
+      Total : <span id="totalBets"></span>
     </p>
   </div>
 </div>
-</div>`,
+`,
   cardBack: `
 <div class="game-player-card">
 <ul class="game-card-back-list">

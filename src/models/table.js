@@ -55,6 +55,7 @@ export class BlackjackTable extends Table {
     this.initializePlayers();
     this.setDealer();
     this.initializePlayersHands();
+    this.setPlayersScore();
   }
 
   setPlayer(playerName, playerType) {
@@ -105,6 +106,14 @@ export class BlackjackTable extends Table {
     for (let i = 0; i < 2; i++) {
       this.setPlayerHands(this.dealer);
     }
+  }
+
+  setPlayersScore() {
+    for (const player of this.players) {
+      player.setTotalHandsScore();
+    }
+
+    this.dealer.setTotalHandsScore();
   }
 
   clearPlayersBets() {

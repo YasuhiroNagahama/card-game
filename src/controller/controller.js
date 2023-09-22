@@ -99,12 +99,14 @@ class BlackjackController {
         playerBets: player.getCurrentBets(),
         playerScore: player.getTotalHandsScore(),
       };
+
       this.blackjackView.addPlayerElement(playerInfo);
     }
   }
 
   switchGameDisplay() {
     this.blackjackView.removeDisplay(document.getElementById("startDisplay"));
+    this.blackjackView.addBetsModal();
     this.blackjackView.addGameDisplay();
   }
 

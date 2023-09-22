@@ -130,7 +130,6 @@ body {
 
 .game-bet-wrapper {
   position: absolute;
-  gap: 24px;
   top: 50%;
   left: 50%;
   background-color: var(--white-color);

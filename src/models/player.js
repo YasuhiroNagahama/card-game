@@ -66,6 +66,8 @@ export class BlackjackPlayer extends Player {
     super(playerName, playerType, gameType);
     this.chips = playerType === "dealer" ? 0 : 400;
     this.bets = 0;
+    // scoreをメンバ変数として扱う
+    this.score = 0;
     super.setPlayerStatus("betting");
   }
 
@@ -75,8 +77,6 @@ export class BlackjackPlayer extends Player {
     this.bets = 0;
     super.setPlayerStatus("betting");
   }
-
-  // blackjackの判定処理がない
 
   addChips(chipsToAdd) {
     this.chips += chipsToAdd;
@@ -94,39 +94,30 @@ export class BlackjackPlayer extends Player {
     this.bets -= betsToRemove;
   }
 
-  clearBets() {
-    this.bets = 0;
-  }
-
   hit(card) {
     super.addHand(card);
 
     if (this.isBust()) {
-      this.bust();
+      this.setBust();
     }
   }
 
-  stand() {
+  setStand() {
     super.setPlayerStatus("stand");
   }
 
-  surrender() {
+  setSurrender() {
     this.removeBets(Math.floor(this.bets / 2));
     super.setPlayerStatus("surrender");
   }
 
-  double() {
+  setDouble() {
     this.addBets(this.bets);
     super.setPlayerStatus("double");
   }
 
-  bust() {
+  setBust() {
     super.setPlayerStatus("bust");
-  }
-
-  isBlackjack() {
-    const currentStatus = super.getCurrentStatus();
-    return currentStatus === "blackjack";
   }
 
   isBust() {
@@ -148,14 +139,33 @@ export class BlackjackPlayer extends Player {
     return this.bets;
   }
 
-  getTotalHandsScore() {
+  isBlackjack(playerHandsArr) {
+    return (
+      playerHandsArr.includes("A") &&
+      /(10|J|Q|K)/.test(playerHandsArr.join(" "))
+    );
+  }
+
+  setTotalHandsScore() {
     const currentHands = super.getCurrentHands();
-    let totalScore = 0;
-    for (const hand of currentHands) {
-      const cardRank = hand.getCardRankNumberBlackjack();
-      totalScore += cardRank;
+    const playerHandsArr = currentHands.map((hand) => hand.getCardRank());
+
+    if (this.isBlackjack(playerHandsArr)) {
+      // bustにするコード
+      this.score = 21;
+    } else {
+      const totalScore = currentHands
+        .map((hand) => hand.getCardRankNumberBlackjack())
+        .reduce((sum, element) => sum + element, 0);
+
+      this.score = totalScore;
     }
-    return totalScore;
+
+    console.log(this.playerName + " " + this.score);
+  }
+
+  getTotalHandsScore() {
+    return this.score;
   }
 
   print() {

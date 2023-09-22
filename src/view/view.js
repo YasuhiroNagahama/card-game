@@ -15,6 +15,15 @@ export class View {
     return startDisplayWrap;
   }
 
+  createBetsModal() {
+    const betsWrap = document.createElement("div");
+    betsWrap.classList.add("game-bet-wrapper");
+
+    betsWrap.innerHTML = templates.bets;
+
+    return betsWrap;
+  }
+
   createCardBack() {
     const cardBackWrap = document.createElement("div");
     cardBackWrap.classList("game-card-back-wrapper");
@@ -30,49 +39,6 @@ export class View {
     resultBtnWrap.innerHTML = templates.resultBtn;
 
     return resultBtnWrap;
-  }
-
-  createDealerElement(dealerHand) {
-    const dealerEle = document.createElement("div");
-    dealerEle.classList.add("game-player-info-wrapper");
-
-    dealerEle.innerHTML = `<div class="game-player-about-wrapper">
-      <p id="dealerName" class="game-player-name">Dealer</p>
-      <span id="dealerStatus" class="game-player-status">waiting</span>
-    </div>
-    <div
-      id="dealerCards"
-      class="game-player-cards-wrapper dealer-cards"
-    >
-      <div class="game-player-card">
-        <ul class="game-player-card-element-list">
-          <li
-            id="cardSuit"
-            class="game-card-element-item game-card-suit"
-          >
-          ${dealerHand.suit}
-          </li>
-          <li id="cardRank" class="game-card-element-item game-card-rank">${dealerHand.rank}</li>
-        </ul>
-      </div>
-      <div class="game-player-card">
-        <ul class="game-card-back-list">
-          <li class="game-card-back-item card-back-top">&#x2588;</li>
-          <li class="game-card-back-item card-back-bottom">&#x2588;</li>
-        </ul>
-      </div>
-    </div>
-    <div class="game-player-details-wrapper">
-      <div class="game-player-details-list-wrapper">
-        <ul class="game-player-details-list">
-          <li class="game-player-details-item">
-            SCORE : <span id="dealerScore">??</span>
-          </li>
-        </ul>
-      </div>
-    </div>`;
-
-    return dealerEle;
   }
 }
 
@@ -129,9 +95,52 @@ export class BlackjackView extends View {
     return playersInfoWrap;
   }
 
+  createDealerElement(dealerHand) {
+    const dealerEle = document.createElement("div");
+    dealerEle.classList.add("game-player-info-wrapper");
+
+    dealerEle.innerHTML = `<div class="game-player-about-wrapper">
+      <p id="dealerName" class="game-player-name">Dealer</p>
+      <span id="dealerStatus" class="game-player-status">waiting</span>
+    </div>
+    <div
+      id="dealerCards"
+      class="game-player-cards-wrapper dealer-cards"
+    >
+      <div class="game-player-card">
+        <ul class="game-player-card-element-list">
+          <li
+            id="cardSuit"
+            class="game-card-element-item game-card-suit"
+          >
+          ${dealerHand.suit}
+          </li>
+          <li id="cardRank" class="game-card-element-item game-card-rank">${dealerHand.rank}</li>
+        </ul>
+      </div>
+      <div class="game-player-card">
+        <ul class="game-card-back-list">
+          <li class="game-card-back-item card-back-top">&#x2588;</li>
+          <li class="game-card-back-item card-back-bottom">&#x2588;</li>
+        </ul>
+      </div>
+    </div>
+    <div class="game-player-details-wrapper">
+      <div class="game-player-details-list-wrapper">
+        <ul class="game-player-details-list">
+          <li class="game-player-details-item">
+            SCORE : <span id="dealerScore">??</span>
+          </li>
+        </ul>
+      </div>
+    </div>`;
+
+    return dealerEle;
+  }
+
   addDealerElement(dealerHand) {
     const playersWrap = document.getElementById("playersWrap");
-    const dealerEle = super.createDealerElement(dealerHand);
+    const dealerEle = this.createDealerElement(dealerHand);
 
     playersWrap.prepend(dealerEle);
   }
@@ -199,6 +208,12 @@ export class BlackjackView extends View {
     playersInfoWrap.append(playerInfoWrap);
   }
 
+  addBetsModal() {
+    const betsWrap = super.createBetsModal();
+
+    this.container.prepend(betsWrap);
+  }
+
   addGameDisplay() {
     const gameDisplayWrap = document.createElement("div");
     gameDisplayWrap.id = "gameDisplay";
@@ -217,4 +232,12 @@ export class BlackjackView extends View {
     gameDisplayWrap.append(btnListWrap);
     this.container.prepend(gameDisplayWrap);
   }
+
+  // レスポンシブ対応
+
+  // hideElementOnResize() {
+  //   window.addEventListener('resize', () => {
+  //     console.log(1);
+  //   });
+  // }
 }
