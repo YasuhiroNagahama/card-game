@@ -40,8 +40,8 @@ export class Deck {
   }
 
   setDeck() {
-    for (let suit of this.suits) {
-      for (let rank of this.ranks) {
+    for (const suit of this.suits) {
+      for (const rank of this.ranks) {
         this.cards.push(new Card(suit, rank));
       }
     }

@@ -17,11 +17,29 @@ class Controller {
     this.selectGameType();
   }
 
+  hiddenPlayerCount() {
+    const playerCountEle = document.getElementById("playerCount");
+
+    playerCountEle.style.display = "none";
+  }
+
+  displayPlayerCount() {
+    const playerCountEle = document.getElementById("playerCount");
+
+    playerCountEle.style.display = "flex";
+  }
+
   updateGameMode() {
     const modeSelectBox = document.getElementById("modeSelectBox");
 
     modeSelectBox.addEventListener("change", () => {
       this.gameMode = modeSelectBox.value;
+
+      if (this.gameMode === "ai") {
+        this.hiddenPlayerCount();
+      } else {
+        this.displayPlayerCount();
+      }
     });
   }
 
@@ -110,53 +128,66 @@ class BlackjackController {
 
   processBet() {
     this.blackjackView.addBetsModal();
-    this.pushBetBtn();
+
+    this.bet5BtnClick();
+    this.bet20BtnClick();
+    this.bet50BtnClick();
+    this.bet100BtnClick();
+    this.betBtnClick();
   }
 
   switchGameDisplay() {
-    // this.blackjackView.addGameDisplay();
+    this.blackjackView.addGameDisplay();
   }
 
   startBlackjack() {
     this.removeStartDisplay();
     this.processBet();
+
+    // this.switchGameDisplay();
     // this.loadDealerDataToView();
     // this.loadPlayerDataToView();
   }
 
-  pushBetBtn() {
-    if (this.blackJackTable.getCurrentGameMode() == "ai") {
-      const players = this.blackJackTable.getCurrentPlayers();
-
-      for (const player of players) {
-        console.log(player.getCurrentPlayerType());
-      }
-    }
-  }
-
-  betBtnClick(player) {
+  betBtnClick() {
     const betBtn = document.getElementById("betBtn");
 
-    betBtn.addEventListener("click", () => {
-      const currentBets = player.getCurrentBets();
+    betBtn.addEventListener("click", () => {});
+  }
 
-      if (currentBets > 0) {
-        console.log("Game Start");
-      }
+  bet5BtnClick() {
+    const bet5Btn = document.getElementById("bet5");
+
+    bet5Btn.addEventListener("click", () => {
+      console.log(bet5Btn);
     });
   }
 
-  addBetClickHandler(player, amount) {
-    const betBtn = document.getElementById(`bet${amount}`);
+  bet20BtnClick() {
+    const bet20Btn = document.getElementById("bet20");
 
-    betBtn.addEventListener("click", () => {
-      if (player.canBets(amount)) {
-        player.addBets(amount);
-      }
+    bet20Btn.addEventListener("click", () => {
+      console.log(bet20Btn);
     });
   }
 
-  pushHitBtn() {
+  bet50BtnClick() {
+    const bet50Btn = document.getElementById("bet50");
+
+    bet50Btn.addEventListener("click", () => {
+      console.log(bet50Btn);
+    });
+  }
+
+  bet100BtnClick() {
+    const bet100Btn = document.getElementById("bet100");
+
+    bet100Btn.addEventListener("click", () => {
+      console.log(bet100Btn);
+    });
+  }
+
+  hitBtnClick() {
     const hitBtn = document.getElementById("hitBtn");
 
     hitBtn.addEventListener("click", () => {
@@ -164,7 +195,7 @@ class BlackjackController {
     });
   }
 
-  pushDoubleBtn() {
+  doubleBtnClick() {
     const doubleBtn = document.getElementById("doubleBtn");
 
     doubleBtn.addEventListener("click", () => {
@@ -172,7 +203,7 @@ class BlackjackController {
     });
   }
 
-  pushStandBtn() {
+  standBtnClick() {
     const standBtn = document.getElementById("standBtn");
 
     standBtn.addEventListener("click", () => {
@@ -180,7 +211,7 @@ class BlackjackController {
     });
   }
 
-  pushSurrenderBtn() {
+  surrenderBtnClick() {
     const surrenderBtn = document.getElementById("surrenderBtn");
 
     surrenderBtn.addEventListener("click", () => {

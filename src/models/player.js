@@ -149,6 +149,11 @@ export class BlackjackPlayer extends Player {
     );
   }
 
+  isPlayer() {
+    const currentPlayer = this.getCurrentPlayerType();
+    return currentPlayer === "player";
+  }
+
   setTotalHandsScore() {
     const currentHands = super.getCurrentHands();
     const playerHandsArr = currentHands.map((hand) => hand.getCardRank());
