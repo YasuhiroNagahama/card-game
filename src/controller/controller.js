@@ -159,7 +159,7 @@ class BlackjackController {
     const bet5Btn = document.getElementById("bet5");
 
     bet5Btn.addEventListener("click", () => {
-      console.log(bet5Btn);
+      console.log(5);
     });
   }
 
@@ -167,7 +167,7 @@ class BlackjackController {
     const bet20Btn = document.getElementById("bet20");
 
     bet20Btn.addEventListener("click", () => {
-      console.log(bet20Btn);
+      console.log(20);
     });
   }
 
@@ -175,7 +175,7 @@ class BlackjackController {
     const bet50Btn = document.getElementById("bet50");
 
     bet50Btn.addEventListener("click", () => {
-      console.log(bet50Btn);
+      console.log(50);
     });
   }
 
@@ -183,7 +183,7 @@ class BlackjackController {
     const bet100Btn = document.getElementById("bet100");
 
     bet100Btn.addEventListener("click", () => {
-      console.log(bet100Btn);
+      console.log(100);
     });
   }
 

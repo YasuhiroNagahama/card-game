@@ -132,15 +132,16 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
   background-color: var(--white-color);
   transform: translate(-50%, -50%);
   padding: 40px 24px;
   border: 2px solid var(--dark-color);
   border-radius: 2%;
-}
-
-.game-bet-player-name-wrapper {
-  margin-bottom: 8px;
 }
 
 .game-bet-player-name {
@@ -186,12 +187,18 @@ body {
 }
 
 .game-bet-confirm-btn-wrapper {
+  width: 240px;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--dark-color);
   border: 2px solid var(--dark-color);
-  margin: 24px 0;
+}
+@media screen and (min-width: 768px) {
+  .game-bet-confirm-btn-wrapper {
+    width: 400px;
+  }
 }
 
 .game-bet-confirm-btn-wrapper:hover {
@@ -212,7 +219,7 @@ body {
 
 .game-bet-controller-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
@@ -222,6 +229,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 80px;
   background-color: var(--dark-color);
   border: 2px solid var(--dark-color);
 }
@@ -229,6 +237,7 @@ body {
   .game-bet-reset-btn-wrapper {
     width: 120px;
     height: 80px;
+    margin-right: 160px;
   }
 }
 
@@ -248,6 +257,10 @@ body {
 }
 
 .game-bet-total-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   border: 2px solid var(--dark-color);
   padding: 8px;
 }
@@ -260,6 +273,12 @@ body {
 .game-bet-total {
   color: var(--dark-color);
   font-size: 24px;
+}
+
+.game-bet-input {
+  width: 40px;
+  margin-right: 4px;
+  border: none;
 }
 
 /* result */

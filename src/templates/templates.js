@@ -120,9 +120,8 @@ export const templates = {
     <button class="game-bet-reset-btn">RESET</button>
   </div>
   <div class="game-bet-total-wrapper">
-    <p class="game-bet-total">
-      Total : <span id="totalBets">0</span>
-    </p>
+    <p class="game-bet-total">Total</p>
+    <input id="betTotal" class="game-bet-total game-bet-input" type="number" min="0" value="0"></input>
   </div>
 </div>
 `,
