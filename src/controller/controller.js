@@ -37,6 +37,7 @@ class Controller {
 
       if (this.gameMode === "ai") {
         this.hiddenPlayerCount();
+        this.playerNumber = 3;
       } else {
         this.displayPlayerCount();
       }
@@ -90,6 +91,8 @@ class BlackjackController {
   constructor(gameMode, playerNumber) {
     this.gameMode = gameMode;
     this.playerNumber = playerNumber;
+    this.currentPlayerIndex = 0;
+    this.selectedPlayerIndex = 0;
     this.blackJackTable = new BlackjackTable(this.gameMode, this.playerNumber);
     this.blackjackView = new BlackjackView();
 
@@ -129,6 +132,13 @@ class BlackjackController {
   processBet() {
     this.blackjackView.addBetsModal();
 
+    if (this.gameMode === "ai") {
+      this.blackjackView.addBetsOption(1);
+    } else {
+      this.blackjackView.addBetsOption(this.playerNumber);
+    }
+
+    this.playerSelectClick();
     this.bet5BtnClick();
     this.bet20BtnClick();
     this.bet50BtnClick();
@@ -149,17 +159,69 @@ class BlackjackController {
     // this.loadPlayerDataToView();
   }
 
+  getBetTotal() {
+    const betTotal = document.getElementById("betTotal");
+    return Number(betTotal.value);
+  }
+
+  playerSelectClick() {
+    const betsSelect = document.getElementById("playerSelect");
+
+    betsSelect.addEventListener("change", () => {
+      const playerIndex = Number(betsSelect.value);
+
+      this.selectedPlayerIndex = playerIndex;
+    });
+  }
+
   betBtnClick() {
     const betBtn = document.getElementById("betBtn");
 
-    betBtn.addEventListener("click", () => {});
+    betBtn.addEventListener("click", () => {
+      console.log(this.getBetTotal);
+    });
+  }
+
+  resetBtnClick() {
+    const resetBetBtn = document.getElementById("resetBetBtn");
+
+    resetBetBtn.addEventListener("click", () => {
+      if (confirm("ベッド額をリセットしますか？")) {
+        const currentPlayer =
+          this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+
+        currentPlayer.initializeBets();
+
+        this.blackjackView.updateBetsTotal(
+          String(currentPlayer.getCurrentBets())
+        );
+
+        alert("ベッド額のリセットを完了しました。");
+      } else {
+        alert("ベッド額のリセットを中止しました。");
+      }
+    });
+  }
+
+  addPlayerBet(bets) {
+    const currentPlayer =
+      this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+
+    if (currentPlayer.canBets(bets)) {
+      currentPlayer.addBets(bets);
+      this.blackjackView.updateBetsTotal(
+        String(currentPlayer.getCurrentBets())
+      );
+    } else {
+      alert("ベッド額と、すでにベットしている額の合計が所持金を上回ります。");
+    }
   }
 
   bet5BtnClick() {
     const bet5Btn = document.getElementById("bet5");
 
     bet5Btn.addEventListener("click", () => {
-      console.log(5);
+      this.addPlayerBet(5);
     });
   }
 
@@ -167,7 +229,7 @@ class BlackjackController {
     const bet20Btn = document.getElementById("bet20");
 
     bet20Btn.addEventListener("click", () => {
-      console.log(20);
+      this.addPlayerBet(20);
     });
   }
 
@@ -175,7 +237,7 @@ class BlackjackController {
     const bet50Btn = document.getElementById("bet50");
 
     bet50Btn.addEventListener("click", () => {
-      console.log(50);
+      this.addPlayerBet(50);
     });
   }
 
@@ -183,7 +245,7 @@ class BlackjackController {
     const bet100Btn = document.getElementById("bet100");
 
     bet100Btn.addEventListener("click", () => {
-      console.log(100);
+      this.addPlayerBet(100);
     });
   }
 

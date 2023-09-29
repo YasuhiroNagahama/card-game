@@ -85,8 +85,14 @@ export class BlackjackPlayer extends Player {
     this.bets += betsToAdd;
   }
 
+  initializeBets() {
+    // ディーラーを考慮すべきか
+    this.bets = 0;
+  }
+
   canBets(betsToAdd) {
-    return this.bets <= this.bets + betsToAdd;
+    console.log(this.chips);
+    return this.chips >= this.bets + betsToAdd;
   }
 
   removeChips(chipsToRemove) {

@@ -5,11 +5,6 @@ export class View {
     display.remove();
   }
 
-  removeStartDisplay() {
-    const startDisplay = document.getElementById("startDisplay");
-    this.removeDisplay(startDisplay);
-  }
-
   createStartDisplay() {
     const startDisplayWrap = document.createElement("div");
     startDisplayWrap.id = "startDisplay";
@@ -18,6 +13,20 @@ export class View {
     startDisplayWrap.innerHTML = templates.startDisplay;
 
     return startDisplayWrap;
+  }
+
+  removeStartDisplay() {
+    const startDisplay = document.getElementById("startDisplay");
+    this.removeDisplay(startDisplay);
+  }
+
+  createBetsOption(index, number) {
+    const betsOption = document.createElement("option");
+    betsOption.classList.add("game-bet-player-option");
+    betsOption.value = index;
+    betsOption.innerHTML = "Player_" + number;
+
+    return betsOption;
   }
 
   createBetsModal() {
@@ -213,6 +222,15 @@ export class BlackjackView extends View {
     playersInfoWrap.append(playerInfoWrap);
   }
 
+  addBetsOption(playerNumber) {
+    const playerSelect = document.getElementById("playerSelect");
+
+    for (let i = 0; i < playerNumber; i++) {
+      const betsOption = super.createBetsOption(i, i + 1);
+      playerSelect.append(betsOption);
+    }
+  }
+
   addBetsModal() {
     const betsWrap = super.createBetsModal();
 
@@ -238,11 +256,10 @@ export class BlackjackView extends View {
     this.container.prepend(gameDisplayWrap);
   }
 
-  // レスポンシブ対応
+  updateBetsTotal(bets) {
+    const betsTotal = document.getElementById("betsTotal");
 
-  // hideElementOnResize() {
-  //   window.addEventListener('resize', () => {
-  //     console.log(1);
-  //   });
-  // }
+    betsTotal.value = bets;
+    betsTotal.innerHTML = bets;
+  }
 }
