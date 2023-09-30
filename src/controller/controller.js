@@ -138,7 +138,8 @@ class BlackjackController {
       this.blackjackView.addBetsOption(this.playerNumber);
     }
 
-    this.playerSelectClick();
+    this.updateSelectedPlayer();
+    this.updatePlayerBets();
     this.bet5BtnClick();
     this.bet20BtnClick();
     this.bet50BtnClick();
@@ -159,12 +160,7 @@ class BlackjackController {
     // this.loadPlayerDataToView();
   }
 
-  getBetTotal() {
-    const betTotal = document.getElementById("betTotal");
-    return Number(betTotal.value);
-  }
-
-  playerSelectClick() {
+  updateSelectedPlayer() {
     const betsSelect = document.getElementById("playerSelect");
 
     betsSelect.addEventListener("change", () => {
@@ -174,11 +170,24 @@ class BlackjackController {
     });
   }
 
+  updatePlayerBets() {
+    const betsTotal = document.getElementById("betsTotal");
+
+    betsTotal.addEventListener("change", () => {
+      const currentPlayer =
+        this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+
+      currentPlayer.addBets(bets);
+    });
+  }
+
   betBtnClick() {
     const betBtn = document.getElementById("betBtn");
 
     betBtn.addEventListener("click", () => {
-      console.log(this.getBetTotal);
+      const currentPlayer =
+        this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+        console.log(currentPlayer.getCurrentBets());
     });
   }
 

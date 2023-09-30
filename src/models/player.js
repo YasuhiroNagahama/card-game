@@ -91,7 +91,6 @@ export class BlackjackPlayer extends Player {
   }
 
   canBets(betsToAdd) {
-    console.log(this.chips);
     return this.chips >= this.bets + betsToAdd;
   }
 
