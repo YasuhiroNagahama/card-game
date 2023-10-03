@@ -82,7 +82,7 @@ export class BlackjackPlayer extends Player {
   }
 
   addBets(betsToAdd) {
-    this.bets += betsToAdd;
+    this.bets = betsToAdd;
   }
 
   initializeBets() {
@@ -91,7 +91,7 @@ export class BlackjackPlayer extends Player {
   }
 
   canBets(betsToAdd) {
-    return this.chips >= this.bets + betsToAdd;
+    return betsToAdd >= 0 && this.chips >= betsToAdd;
   }
 
   removeChips(chipsToRemove) {
@@ -145,6 +145,10 @@ export class BlackjackPlayer extends Player {
 
   getCurrentBets() {
     return this.bets;
+  }
+
+  isBetCompleted() {
+    return this.bets >= 0;
   }
 
   isBlackjack(playerHandsArr) {

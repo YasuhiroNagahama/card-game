@@ -144,10 +144,14 @@ body {
   border-radius: 2%;
 }
 
+.game-bet-player-select-wrapper {
+  border: 2px solid var(--dark-color);
+}
+
 .game-bet-player-select {
   color: var(--dark-color);
   font-size: 24px;
-  padding: 4px;
+  padding: 8px;
 }
 @media screen and (min-width: 768px) {
   .game-bet-player-select {
