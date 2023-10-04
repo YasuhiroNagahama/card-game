@@ -5,16 +5,9 @@ class Controller {
   constructor() {
     this.gameMode = "player";
     this.gameType = "blackjack";
-    this.playerNumber = 2;
+    this.playerCount = 2;
 
     this.initialize();
-  }
-
-  initialize() {
-    this.updateGameMode();
-    this.updateGameType();
-    this.updatePlayerNumber();
-    this.selectGameType();
   }
 
   hiddenPlayerCount() {
@@ -30,48 +23,57 @@ class Controller {
   }
 
   updateGameMode() {
-    const modeSelectBox = document.getElementById("modeSelectBox");
+    const gameModeSelect = document.getElementById("gameModeSelect");
 
-    modeSelectBox.addEventListener("change", () => {
-      this.gameMode = modeSelectBox.value;
+    gameModeSelect.addEventListener("change", () => {
+      this.gameMode = gameModeSelect.value;
 
       if (this.gameMode === "ai") {
         this.hiddenPlayerCount();
-        this.playerNumber = 3;
+        this.playerCount = 3;
       } else {
         this.displayPlayerCount();
+
+        const playerCountsEle = document.querySelectorAll(
+          ".game-player-count-input"
+        );
+
+        playerCountsEle.forEach((playerCountEle) => {
+          if (playerCountEle.checked)
+            this.playerCount = Number(playerCountEle.value);
+        });
       }
     });
   }
 
   updateGameType() {
-    const typeSelectBox = document.getElementById("typeSelectBox");
+    const gameTypeSelect = document.getElementById("gameTypeSelect");
 
-    typeSelectBox.addEventListener("change", () => {
-      this.gameType = typeSelectBox.value;
+    gameTypeSelect.addEventListener("change", () => {
+      this.gameType = gameTypeSelect.value;
     });
   }
 
-  updatePlayerNumber() {
-    const playerNumberElements = document.querySelectorAll(
-      ".input-player-number"
+  updatePlayerCount() {
+    const playerCountsEle = document.querySelectorAll(
+      ".game-player-count-input"
     );
 
-    playerNumberElements.forEach((playerNumberElement) => {
-      playerNumberElement.addEventListener("change", () => {
-        this.playerNumber = Number(playerNumberElement.value);
+    playerCountsEle.forEach((playerCountEle) => {
+      playerCountEle.addEventListener("change", () => {
+        this.playerCount = Number(playerCountEle.value);
       });
     });
   }
 
-  selectGameType() {
-    const startBtn = document.getElementById("startBtn");
+  gameStartBtnClick() {
+    const gameStartBtn = document.getElementById("gameStartBtn");
 
-    startBtn.addEventListener("click", () => {
+    gameStartBtn.addEventListener("click", () => {
       if (this.gameType === "blackjack") {
         const blackjack = new BlackjackController(
           this.gameMode,
-          this.playerNumber
+          this.playerCount
         );
       } else {
         console.log("いつか追加！");
@@ -79,22 +81,28 @@ class Controller {
     });
   }
 
+  initialize() {
+    this.updateGameMode();
+    this.updateGameType();
+    this.updatePlayerCount();
+    this.gameStartBtnClick();
+  }
+
   print() {
-    console.log("\n");
-    console.log("This game mode : " + this.gameMode);
+    console.log("\nThis game mode : " + this.gameMode);
     console.log("This game type : " + this.gameType);
-    console.log("This player number : " + this.playerNumber);
+    console.log("This player number : " + this.playerCount);
   }
 }
 
 class BlackjackController {
-  constructor(gameMode, playerNumber) {
+  constructor(gameMode, playerCount) {
     this.gameMode = gameMode;
-    this.playerNumber = playerNumber;
+    this.playerCount = playerCount;
     this.currentPlayerIndex = 0;
     this.selectedPlayerIndex = 0;
     this.betsTotal = 0;
-    this.blackJackTable = new BlackjackTable(this.gameMode, this.playerNumber);
+    this.blackJackTable = new BlackjackTable(this.gameMode, this.playerCount);
     this.blackjackView = new BlackjackView();
 
     this.startBlackjack();
@@ -126,8 +134,8 @@ class BlackjackController {
     }
   }
 
-  removeStartDisplay() {
-    this.blackjackView.removeStartDisplay();
+  removeStartScreen() {
+    this.blackjackView.removeStartScreen();
   }
 
   processBet() {
@@ -136,7 +144,7 @@ class BlackjackController {
     if (this.gameMode === "ai") {
       this.blackjackView.addBetsOption(1);
     } else {
-      this.blackjackView.addBetsOption(this.playerNumber);
+      this.blackjackView.addBetsOption(this.playerCount);
     }
 
     this.blackjackStartBtnClick();
@@ -155,7 +163,7 @@ class BlackjackController {
   }
 
   startBlackjack() {
-    this.removeStartDisplay();
+    this.removeStartScreen();
     this.processBet();
   }
 

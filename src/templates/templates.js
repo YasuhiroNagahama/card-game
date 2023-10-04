@@ -1,6 +1,6 @@
 export const templates = {
-  startDisplay: `
-  <div id="startDisplay" class="start-display-wrapper">
+  startScreen: `
+  <div id="startScreen" class="start-display-wrapper">
   <div class="start-display-text-wrapper">
   <p class="start-display-text">Welcome to card game</p>
   </div>

@@ -31,60 +31,66 @@
   </head>
   <body>
     <div id="gameContainer" class="game-display-container">
-      <div id="startDisplay" class="start-display-wrapper">
-        <div class="start-display-text-wrapper">
-          <p class="start-display-text">Welcome to card game</p>
+      <div id="startScreen" class="start-screen-wrapper">
+        <div class="start-screen-text-wrapper">
+          <p class="start-screen-text">Welcome to card game</p>
         </div>
-        <div class="select-box-wrapper">
-          <ul class="select-box-list">
-            <li class="select-box-item">
-              <div class="select-box-type-wrapper">
-                <label for="mode-select" class="select-box-type"
+        <div class="game-options-select-wrapper">
+          <ul class="game-options-select-list">
+            <li class="game-options-select-item">
+              <div class="game-options-type-wrapper">
+                <label for="mode-select" class="game-options-type"
                   >Game Mode</label
                 >
               </div>
-              <select id="modeSelectBox" class="game-select game-mode-select">
+              <select
+                id="gameModeSelect"
+                class="game-options-select game-mode-select"
+              >
                 <option value="player" class="game-mode">vs Player</option>
                 <option value="ai" class="game-mode">vs AI</option>
               </select>
             </li>
-            <li class="select-box-item">
-              <div class="select-box-type-wrapper">
-                <label for="type-select" class="select-box-type"
+            <li class="game-options-select-item">
+              <div class="game-options-type-wrapper">
+                <label for="type-select" class="game-options-type"
                   >Game Type</label
                 >
               </div>
-              <select id="typeSelectBox" class="game-select game-type-select">
+              <select
+                id="gameTypeSelect"
+                class="game-options-select game-type-select"
+              >
                 <option value="blackjack" class="game-type">Blackjack</option>
               </select>
             </li>
           </ul>
         </div>
-        <div id="playerCount" class="select-player-number-wrapper">
-          <div class="player-number-wrapper">
+        <div id="playerCount" class="game-player-count-inputs-wrapper">
+          <div class="game-player-count-input-wrapper">
             <input
               type="radio"
-              id="two"
-              class="input-player-number"
+              id="twoPlayer"
+              class="game-player-count-input"
               name="radio"
               value="2"
               checked
             />
-            <label for="two" class="player-number">2</label>
+            <label for="twoPlayer" class="game-player-count">2</label>
           </div>
-          <div class="player-number-wrapper">
+          <div class="game-player-count-input-wrapper">
             <input
               type="radio"
-              id="three"
-              class="input-player-number"
+              id="threePlayer"
+              class="game-player-count-input"
               name="radio"
               value="3"
             />
-            <label for="three" class="player-number">3</label>
+            <label for="threePlayer" class="game-player-count">3</label>
           </div>
         </div>
-        <div id="startBtn" class="start-btn-wrapper">
-          <button class="start-btn">StartGame</button>
+        <div id="gameStartBtn" class="game-start-btn-wrapper">
+          <button class="game-start-btn">StartGame</button>
         </div>
       </div>
       <div class="favicon-links-wrapper">

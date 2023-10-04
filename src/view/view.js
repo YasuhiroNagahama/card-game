@@ -5,19 +5,19 @@ export class View {
     display.remove();
   }
 
-  createStartDisplay() {
-    const startDisplayWrap = document.createElement("div");
-    startDisplayWrap.id = "startDisplay";
-    startDisplayWrap.classList.add("start-display-wrapper");
+  createStartScreen() {
+    const startScreenWrap = document.createElement("div");
+    startScreenWrap.id = "startScreen";
+    startScreenWrap.classList.add("start-screen-wrapper");
 
-    startDisplayWrap.innerHTML = templates.startDisplay;
+    startScreenWrap.innerHTML = templates.startScreen;
 
-    return startDisplayWrap;
+    return startScreenWrap;
   }
 
-  removeStartDisplay() {
-    const startDisplay = document.getElementById("startDisplay");
-    this.removeDisplay(startDisplay);
+  removeStartScreen() {
+    const startScreen = document.getElementById("startScreen");
+    this.removeDisplay(startScreen);
   }
 
   createBetsOption(index, number) {

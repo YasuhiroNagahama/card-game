@@ -26,7 +26,7 @@ body {
 
 /* start-page */
 
-.start-display-wrapper {
+.start-screen-wrapper {
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -35,24 +35,24 @@ body {
   gap: 64px;
 }
 
-.start-display-text {
+.start-screen-text {
   font-size: 24px;
   font-weight: bold;
 }
 @media screen and (min-width: 768px) {
-  .start-display-text {
+  .start-screen-text {
     font-size: 32px;
   }
 }
 
-.select-box-list {
+.game-options-select-list {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 24px;
 }
 
-.select-box-item {
+.game-options-select-item {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,23 +60,23 @@ body {
   gap: 8px;
 }
 
-.select-box-type {
+.game-options-type {
   font-size: 24px;
 }
 
-.game-select {
+.game-options-select {
   border: 1px solid var(--white-color);
   padding: 8px;
 }
 
-.select-player-number-wrapper {
+.game-player-count-inputs-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 40px;
 }
 
-.player-number-wrapper {
+.game-player-count-input-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,18 +84,18 @@ body {
   font-size: 24px;
 }
 
-.player-number {
+.player-count {
   cursor: pointer;
   border: 2px solid var(--white-color);
   padding: 8px 16px;
 }
 
-.player-number:hover {
+.player-count:hover {
   color: var(--dark-color);
   background-color: var(--white-color);
 }
 
-.start-btn-wrapper {
+.game-start-btn-wrapper {
   width: 120px;
   height: 64px;
   border: 2px solid var(--white-color);
@@ -104,11 +104,11 @@ body {
   align-items: center;
 }
 
-.start-btn-wrapper:hover {
+.game-start-btn-wrapper:hover {
   transform: translate(4px, -4px);
 }
 
-.start-btn {
+.game-start-btn {
   width: 100%;
   height: 100%;
   font-weight: bold;
