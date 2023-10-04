@@ -1,57 +1,63 @@
 export const templates = {
   startScreen: `
-  <div id="startScreen" class="start-display-wrapper">
-  <div class="start-display-text-wrapper">
-  <p class="start-display-text">Welcome to card game</p>
+  <div class="start-screen-text-wrapper">
+    <p class="start-screen-text">Welcome to card game</p>
   </div>
-  <div class="select-box-wrapper">
-  <ul class="select-box-list">
-    <li class="select-box-item">
-      <div class="select-box-type-wrapper">
-        <label for="mode-select" class="select-box-type">Game Mode</label>
-      </div>
-      <select id="modeSelectBox" class="game-select game-mode-select">
-        <option value="player" class="game-mode">vs Player</option>
-        <option value="ai" class="game-mode">vs AI</option>
-      </select>
-    </li>
-    <li class="select-box-item">
-      <div class="select-box-type-wrapper">
-        <label for="type-select" class="select-box-type">Game Type</label>
-      </div>
-      <select id="typeSelectBox" class="game-select game-type-select">
-        <option value="blackjack" class="game-type">Blackjack</option>
-      </select>
-    </li>
-  </ul>
+  <div class="game-options-select-wrapper">
+    <ul class="game-options-select-list">
+      <li class="game-options-select-item">
+        <div class="game-options-type-wrapper">
+          <label for="mode-select" class="game-options-type"
+            >Game Mode</label>
+        </div>
+        <select
+          id="gameModeSelect"
+          class="game-options-select game-mode-select"
+        >
+          <option value="player" class="game-mode">vs Player</option>
+          <option value="ai" class="game-mode">vs AI</option>
+        </select>
+      </li>
+      <li class="game-options-select-item">
+        <div class="game-options-type-wrapper">
+          <label for="type-select" class="game-options-type"
+            >Game Type</label>
+        </div>
+        <select
+          id="gameTypeSelect"
+          class="game-options-select game-type-select"
+        >
+          <option value="blackjack" class="game-type">Blackjack</option>
+        </select>
+      </li>
+    </ul>
   </div>
-  <div id="playerCount" class="select-player-number-wrapper">
-  <div class="player-number-wrapper">
-    <input
-      type="radio"
-      id="two"
-      class="input-player-number"
-      name="radio"
-      value="2"
-      checked
-    />
-    <label for="two" class="player-number">2</label>
+  <div id="playerCount" class="game-player-count-inputs-wrapper">
+    <div class="game-player-count-input-wrapper">
+      <input
+        type="radio"
+        id="twoPlayer"
+        class="game-player-count-input"
+        name="radio"
+        value="2"
+        checked
+      />
+      <label for="twoPlayer" class="game-player-count">2</label>
+    </div>
+    <div class="game-player-count-input-wrapper">
+      <input
+        type="radio"
+        id="threePlayer"
+        class="game-player-count-input"
+        name="radio"
+        value="3"
+      />
+      <label for="threePlayer" class="game-player-count">3</label>
+    </div>
   </div>
-  <div class="player-number-wrapper">
-    <input
-      type="radio"
-      id="three"
-      class="input-player-number"
-      name="radio"
-      value="3"
-    />
-    <label for="three" class="player-number">3</label>
+  <div id="gameStartBtn" class="game-start-btn-wrapper">
+    <button class="game-start-btn">StartGame</button>
   </div>
-  </div>
-  <div id="startBtn" class="start-btn-wrapper">
-  <button class="start-btn">StartGame</button>
-  </div>
-</div>
 `,
   playerAbout: `<div class="game-player-about-wrapper">
     <p class="game-player-name"></p>
@@ -92,44 +98,44 @@ export const templates = {
     </ul>
   </div>`,
   },
-  bets: `
-<div class="game-bet-top-wrapper">
-  <div id="blackjackStartBtn" class="game-bet-start-btn-wrapper">
-    <button class="game-bet-start-btn">START</button>
+  bet: `
+  <div class="game-bet-top-wrapper">
+    <div id="startBtn" class="game-bet-start-btn-wrapper">
+      <button class="game-bet-start-btn">START</button>
+    </div>
+    <div class="game-bet-player-select-wrapper">
+      <select id="playerSelect" class="game-bet-player-select" name="playerSelect">
+      </select>
+    </div>
   </div>
-  <div class="game-bet-player-select-wrapper">
-    <select id="playerSelect" class="game-bet-player-select" name="playerBet">
-    </select>
+  <div class="game-bet-list-wrapper">
+    <ul class="game-bet-list">
+      <li id="bet5" class="game-bet-item">
+        <button class="game-bet-btn">5</button>
+      </li>
+      <li id="bet20" class="game-bet-item">
+        <button class="game-bet-btn">20</button>
+      </li>
+      <li id="bet50" class="game-bet-item">
+        <button class="game-bet-btn">50</button>
+      </li>
+      <li id="bet100" class="game-bet-item">
+        <button class="game-bet-btn">100</button>
+      </li>
+    </ul>
   </div>
-</div>
-<div class="game-bet-list-wrapper">
-  <ul class="game-bet-list">
-    <li id="bet5" class="game-bet-item">
-      <button class="game-bet-btn">5</button>
-    </li>
-    <li id="bet20" class="game-bet-item">
-      <button class="game-bet-btn">20</button>
-    </li>
-    <li id="bet50" class="game-bet-item">
-      <button class="game-bet-btn">50</button>
-    </li>
-    <li id="bet100" class="game-bet-item">
-      <button class="game-bet-btn">100</button>
-    </li>
-  </ul>
-</div>
-<div id="betBtn" class="game-bet-confirm-btn-wrapper">
-  <button class="game-bet-confirm-btn">Bet</button>
-</div>
-<div class="game-bet-controller-wrapper">
-  <div id="resetBetBtn" class="game-bet-reset-btn-wrapper">
-    <button class="game-bet-reset-btn">RESET</button>
+  <div id="betConfirmBtn" class="game-bet-confirm-btn-wrapper">
+    <button class="game-bet-confirm-btn">Bet</button>
   </div>
-  <div class="game-bet-total-wrapper">
-    <p class="game-bet-total">Total</p>
-    <input id="betsTotal" class="game-bet-total game-bet-input" type="number" min="0" value="0"></input>
+  <div class="game-bet-controller-wrapper">
+    <div id="resetBetBtn" class="game-bet-reset-btn-wrapper">
+      <button class="game-bet-reset-btn">RESET</button>
+    </div>
+    <div class="game-bet-total-wrapper">
+      <p class="game-bet-total">Total</p>
+      <input id="betTotal" class="game-bet-input" type="number" min="0" value="0"></input>
+    </div>
   </div>
-</div>
 `,
   cardBack: `
 <div class="game-player-card">

@@ -5,6 +5,11 @@ export class View {
     display.remove();
   }
 
+  removeStartScreen() {
+    const startScreen = document.getElementById("startScreen");
+    this.removeDisplay(startScreen);
+  }
+
   createStartScreen() {
     const startScreenWrap = document.createElement("div");
     startScreenWrap.id = "startScreen";
@@ -15,28 +20,23 @@ export class View {
     return startScreenWrap;
   }
 
-  removeStartScreen() {
-    const startScreen = document.getElementById("startScreen");
-    this.removeDisplay(startScreen);
+  createBetOption(index, number) {
+    const betOption = document.createElement("option");
+    betOption.classList.add("game-bet-player-option");
+    betOption.value = index;
+    betOption.innerHTML = "Player_" + number;
+
+    return betOption;
   }
 
-  createBetsOption(index, number) {
-    const betsOption = document.createElement("option");
-    betsOption.classList.add("game-bet-player-option");
-    betsOption.value = index;
-    betsOption.innerHTML = "Player_" + number;
+  createGameBetModal() {
+    const gameBetModal = document.createElement("div");
+    gameBetModal.classList.add("game-bet-modal-wrapper");
+    gameBetModal.id = "gameBetModal";
 
-    return betsOption;
-  }
+    gameBetModal.innerHTML = templates.bet;
 
-  createBetsModal() {
-    const betsWrap = document.createElement("div");
-    betsWrap.classList.add("game-bet-wrapper");
-    betsWrap.id = "gameBetWrap";
-
-    betsWrap.innerHTML = templates.bets;
-
-    return betsWrap;
+    return gameBetModal;
   }
 
   createCardBack() {
@@ -223,19 +223,19 @@ export class BlackjackView extends View {
     playersInfoWrap.append(playerInfoWrap);
   }
 
-  addBetsOption(playerNumber) {
+  addBetOption(playerCount) {
     const playerSelect = document.getElementById("playerSelect");
 
-    for (let i = 0; i < playerNumber; i++) {
-      const betsOption = super.createBetsOption(i, i + 1);
-      playerSelect.append(betsOption);
+    for (let i = 0; i < playerCount; i++) {
+      const betOption = super.createBetOption(i, i + 1);
+      playerSelect.append(betOption);
     }
   }
 
-  addBetsModal() {
-    const betsWrap = super.createBetsModal();
+  addBetModal() {
+    const gameBetModal = super.createGameBetModal();
 
-    this.container.prepend(betsWrap);
+    this.container.prepend(gameBetModal);
   }
 
   addGameDisplay() {
@@ -257,10 +257,10 @@ export class BlackjackView extends View {
     this.container.prepend(gameDisplayWrap);
   }
 
-  updateBetsTotal(bets) {
-    const betsTotal = document.getElementById("betsTotal");
+  updateBetTotal(betAmount) {
+    const betTotal = document.getElementById("betTotal");
 
-    betsTotal.value = bets;
-    betsTotal.innerHTML = bets;
+    betTotal.value = betAmount;
+    betTotal.innerHTML = betAmount;
   }
 }

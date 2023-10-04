@@ -24,7 +24,7 @@ body {
   font-size: 16px;
 }
 
-/* start-page */
+/* start-screen */
 
 .start-screen-wrapper {
   height: 100vh;
@@ -84,13 +84,13 @@ body {
   font-size: 24px;
 }
 
-.player-count {
+.game-player-count {
   cursor: pointer;
   border: 2px solid var(--white-color);
   padding: 8px 16px;
 }
 
-.player-count:hover {
+.game-player-count:hover {
   color: var(--dark-color);
   background-color: var(--white-color);
 }
@@ -140,7 +140,7 @@ body {
   background-color: var(--white-color);
 }
 
-.game-bet-wrapper {
+.game-bet-modal-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -300,6 +300,7 @@ body {
 }
 
 .game-bet-input {
+  font-size: 32px;
   width: 100px;
   padding: 4px 2px;
   text-align: right;

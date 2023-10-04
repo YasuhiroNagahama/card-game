@@ -91,7 +91,7 @@ class Controller {
   print() {
     console.log("\nThis game mode : " + this.gameMode);
     console.log("This game type : " + this.gameType);
-    console.log("This player number : " + this.playerCount);
+    console.log("This player count : " + this.playerCount);
   }
 }
 
@@ -101,11 +101,11 @@ class BlackjackController {
     this.playerCount = playerCount;
     this.currentPlayerIndex = 0;
     this.selectedPlayerIndex = 0;
-    this.betsTotal = 0;
+    this.betAmount = 0;
     this.blackJackTable = new BlackjackTable(this.gameMode, this.playerCount);
     this.blackjackView = new BlackjackView();
 
-    this.startBlackjack();
+    this.displayBetScreen();
   }
 
   loadDealerDataToView() {
@@ -134,37 +134,8 @@ class BlackjackController {
     }
   }
 
-  removeStartScreen() {
-    this.blackjackView.removeStartScreen();
-  }
-
-  processBet() {
-    this.blackjackView.addBetsModal();
-
-    if (this.gameMode === "ai") {
-      this.blackjackView.addBetsOption(1);
-    } else {
-      this.blackjackView.addBetsOption(this.playerCount);
-    }
-
-    this.blackjackStartBtnClick();
-    this.updateSelectedPlayer();
-    this.updatePlayerBets();
-    this.resetBtnClick();
-    this.bet5BtnClick();
-    this.bet20BtnClick();
-    this.bet50BtnClick();
-    this.bet100BtnClick();
-    this.betBtnClick();
-  }
-
   switchGameDisplay() {
     this.blackjackView.addGameDisplay();
-  }
-
-  startBlackjack() {
-    this.removeStartScreen();
-    this.processBet();
   }
 
   playersBetsCompleted() {
@@ -179,13 +150,13 @@ class BlackjackController {
     return true;
   }
 
-  blackjackStartBtnClick() {
-    const blackjackStartBtn = document.getElementById("blackjackStartBtn");
+  startBtnClick() {
+    const startBtn = document.getElementById("startBtn");
 
-    blackjackStartBtn.addEventListener("click", () => {
+    startBtn.addEventListener("click", () => {
       if (this.playersBetsCompleted()) {
-        const gameBetWrap = document.getElementById("gameBetWrap");
-        this.blackjackView.removeDisplay(gameBetWrap);
+        const gameBetModal = document.getElementById("gameBetModal");
+        this.blackjackView.removeDisplay(gameBetModal);
         this.switchGameDisplay();
         this.loadDealerDataToView();
         this.loadPlayerDataToView();
@@ -208,38 +179,38 @@ class BlackjackController {
       const currentPlayer =
         this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
 
-      this.betsTotal = currentPlayer.getCurrentBets();
+      this.betAmount = currentPlayer.getCurrentBets();
 
-      this.updateBetsTotalElement();
+      this.updateBetTotalElement();
     });
   }
 
   updatePlayerBets() {
-    const betsTotal = document.getElementById("betsTotal");
+    const betTotal = document.getElementById("betTotal");
 
-    betsTotal.addEventListener("change", () => {
+    betTotal.addEventListener("change", () => {
       const currentPlayer =
         this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
 
-      this.betsTotal = Number(betsTotal.value);
+      this.betAmount = Number(betTotal.value);
     });
   }
 
-  updateBetsTotalElement() {
-    this.blackjackView.updateBetsTotal(this.betsTotal);
+  updateBetTotalElement() {
+    this.blackjackView.updateBetTotal(this.betAmount);
   }
 
-  betBtnClick() {
-    const betBtn = document.getElementById("betBtn");
+  betConfirmBtnClick() {
+    const betConfirmBtn = document.getElementById("betConfirmBtn");
 
-    betBtn.addEventListener("click", () => {
+    betConfirmBtn.addEventListener("click", () => {
       const currentPlayer =
         this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
 
-      if (currentPlayer.canBets(this.betsTotal)) {
-        currentPlayer.addBets(this.betsTotal);
+      if (currentPlayer.canBets(this.betAmount)) {
+        currentPlayer.addBets(this.betAmount);
 
-        this.updateBetsTotalElement();
+        this.updateBetTotalElement();
 
         console.log(currentPlayer.getCurrentBets());
       } else {
@@ -253,12 +224,14 @@ class BlackjackController {
 
     resetBetBtn.addEventListener("click", () => {
       if (confirm("ベッド額をリセットしますか？")) {
+        this.betAmount = 0;
+
         const currentPlayer =
           this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
 
         currentPlayer.initializeBets();
 
-        this.blackjackView.updateBetsTotal(
+        this.blackjackView.updateBetTotal(
           String(currentPlayer.getCurrentBets())
         );
 
@@ -273,9 +246,9 @@ class BlackjackController {
     const bet5Btn = document.getElementById("bet5");
 
     bet5Btn.addEventListener("click", () => {
-      this.betsTotal += 5;
+      this.betAmount += 5;
 
-      this.updateBetsTotalElement();
+      this.updateBetTotalElement();
     });
   }
 
@@ -283,9 +256,9 @@ class BlackjackController {
     const bet20Btn = document.getElementById("bet20");
 
     bet20Btn.addEventListener("click", () => {
-      this.betsTotal += 20;
+      this.betAmount += 20;
 
-      this.updateBetsTotalElement();
+      this.updateBetTotalElement();
     });
   }
 
@@ -293,9 +266,9 @@ class BlackjackController {
     const bet50Btn = document.getElementById("bet50");
 
     bet50Btn.addEventListener("click", () => {
-      this.betsTotal += 50;
+      this.betAmount += 50;
 
-      this.updateBetsTotalElement();
+      this.updateBetTotalElement();
     });
   }
 
@@ -303,8 +276,8 @@ class BlackjackController {
     const bet100Btn = document.getElementById("bet100");
 
     bet100Btn.addEventListener("click", () => {
-      this.betsTotal += 100;
-      this.updateBetsTotalElement();
+      this.betAmount += 100;
+      this.updateBetTotalElement();
     });
   }
 
@@ -338,6 +311,35 @@ class BlackjackController {
     surrenderBtn.addEventListener("click", () => {
       console.log("push surrender btn");
     });
+  }
+
+  removeStartScreen() {
+    this.blackjackView.removeStartScreen();
+  }
+
+  processBet() {
+    this.blackjackView.addBetModal();
+
+    if (this.gameMode === "ai") {
+      this.blackjackView.addBetOption(1);
+    } else {
+      this.blackjackView.addBetOption(this.playerCount);
+    }
+
+    this.startBtnClick();
+    this.bet5BtnClick();
+    this.bet20BtnClick();
+    this.bet50BtnClick();
+    this.bet100BtnClick();
+    this.resetBtnClick();
+    this.updatePlayerBets();
+    this.betConfirmBtnClick();
+    this.updateSelectedPlayer();
+  }
+
+  displayBetScreen() {
+    this.removeStartScreen();
+    this.processBet();
   }
 }
 
