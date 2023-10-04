@@ -139,6 +139,7 @@ class BlackjackController {
       this.blackjackView.addBetsOption(this.playerNumber);
     }
 
+    this.blackjackStartBtnClick();
     this.updateSelectedPlayer();
     this.updatePlayerBets();
     this.resetBtnClick();
@@ -156,17 +157,42 @@ class BlackjackController {
   startBlackjack() {
     this.removeStartDisplay();
     this.processBet();
+  }
 
-    // this.switchGameDisplay();
-    // this.loadDealerDataToView();
-    // this.loadPlayerDataToView();
+  playersBetsCompleted() {
+    const players = this.blackJackTable.getCurrentPlayers();
+
+    for (const player of players) {
+      if (!player.isBetCompleted()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  blackjackStartBtnClick() {
+    const blackjackStartBtn = document.getElementById("blackjackStartBtn");
+
+    blackjackStartBtn.addEventListener("click", () => {
+      if (this.playersBetsCompleted()) {
+        const gameBetWrap = document.getElementById("gameBetWrap");
+        this.blackjackView.removeDisplay(gameBetWrap);
+        this.switchGameDisplay();
+        this.loadDealerDataToView();
+        this.loadPlayerDataToView();
+      } else {
+        alert(
+          "ベットが完了していないプレーヤーがいます。(ベット額は0以上にして下さい。)"
+        );
+      }
+    });
   }
 
   updateSelectedPlayer() {
     const betsSelect = document.getElementById("playerSelect");
 
     betsSelect.addEventListener("change", () => {
-      console.log(1);
       const playerIndex = Number(betsSelect.value);
 
       this.selectedPlayerIndex = playerIndex;
@@ -191,6 +217,10 @@ class BlackjackController {
     });
   }
 
+  updateBetsTotalElement() {
+    this.blackjackView.updateBetsTotal(this.betsTotal);
+  }
+
   betBtnClick() {
     const betBtn = document.getElementById("betBtn");
 
@@ -208,10 +238,6 @@ class BlackjackController {
         alert("ベッド額がマイナス値か、ベッド額の合計が所持金を上回ります。");
       }
     });
-  }
-
-  updateBetsTotalElement() {
-    this.blackjackView.updateBetsTotal(this.betsTotal);
   }
 
   resetBtnClick() {

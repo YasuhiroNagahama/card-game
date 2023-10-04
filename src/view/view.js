@@ -32,6 +32,7 @@ export class View {
   createBetsModal() {
     const betsWrap = document.createElement("div");
     betsWrap.classList.add("game-bet-wrapper");
+    betsWrap.id = "gameBetWrap";
 
     betsWrap.innerHTML = templates.bets;
 

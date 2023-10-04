@@ -93,9 +93,14 @@ export const templates = {
   </div>`,
   },
   bets: `
-<div class="game-bet-player-select-wrapper">
-  <select id="playerSelect" class="game-bet-player-select" name="playerBet">
-  </select>
+<div class="game-bet-top-wrapper">
+  <div id="blackjackStartBtn" class="game-bet-start-btn-wrapper">
+    <button class="game-bet-start-btn">START</button>
+  </div>
+  <div class="game-bet-player-select-wrapper">
+    <select id="playerSelect" class="game-bet-player-select" name="playerBet">
+    </select>
+  </div>
 </div>
 <div class="game-bet-list-wrapper">
   <ul class="game-bet-list">

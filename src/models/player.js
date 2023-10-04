@@ -148,7 +148,7 @@ export class BlackjackPlayer extends Player {
   }
 
   isBetCompleted() {
-    return this.bets >= 0;
+    return this.bets > 0;
   }
 
   isBlackjack(playerHandsArr) {
