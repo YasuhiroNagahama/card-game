@@ -16,27 +16,23 @@ export class Player {
     this.status = "";
   }
 
-  getCurrentPlayerName() {
+  getPlayerName() {
     return this.playerName;
   }
 
-  getCurrentPlayerType() {
+  getPlayerType() {
     return this.playerType;
   }
 
-  getCurrentGameType() {
-    return this.gameType;
-  }
-
-  getCurrentWinAmounts() {
+  getWinAmounts() {
     return this.winAmounts;
   }
 
-  getCurrentStatus() {
+  getStatus() {
     return this.status;
   }
 
-  getCurrentHands() {
+  getHands() {
     return this.hands;
   }
 
@@ -65,7 +61,7 @@ export class BlackjackPlayer extends Player {
   constructor(playerName, playerType, gameType) {
     super(playerName, playerType, gameType);
     this.chips = playerType === "dealer" ? 0 : 400;
-    this.bets = 0;
+    this.bet = 0;
     this.score = 0;
     super.setPlayerStatus("betting");
   }
@@ -73,7 +69,7 @@ export class BlackjackPlayer extends Player {
   initializeBlackjackPlayer() {
     const currentPlayerType = super.getCurrentPlayerType();
     this.chips = currentPlayerType === "dealer" ? 0 : 400;
-    this.bets = 0;
+    this.bet = 0;
     super.setPlayerStatus("betting");
   }
 
@@ -81,25 +77,25 @@ export class BlackjackPlayer extends Player {
     this.chips += chipsToAdd;
   }
 
-  addBets(betsToAdd) {
-    this.bets = betsToAdd;
+  addBet(betToAdd) {
+    this.bet = betToAdd;
   }
 
-  initializeBets() {
+  initializeBet() {
     // ディーラーを考慮すべきか
-    this.bets = 0;
+    this.bet = 0;
   }
 
-  canBet(betsToAdd) {
-    return betsToAdd >= 0 && this.chips >= betsToAdd;
+  canBet(betToAdd) {
+    return betToAdd >= 0 && this.chips >= betToAdd;
   }
 
   removeChips(chipsToRemove) {
     this.chips -= chipsToRemove;
   }
 
-  removeBets(betsToRemove) {
-    this.bets -= betsToRemove;
+  removeBet(betToRemove) {
+    this.bet -= betToRemove;
   }
 
   setHit(card) {
@@ -115,12 +111,12 @@ export class BlackjackPlayer extends Player {
   }
 
   setSurrender() {
-    this.removeBets(Math.floor(this.bets / 2));
+    this.removeBet(Math.floor(this.bet / 2));
     super.setPlayerStatus("surrender");
   }
 
   setDouble() {
-    this.addBets(this.bets);
+    this.addBet(this.bet);
     super.setPlayerStatus("double");
   }
 
@@ -134,21 +130,21 @@ export class BlackjackPlayer extends Player {
   }
 
   canDouble() {
-    const currentBets = this.getCurrentBets() * 2;
+    const currentBet = this.getCurrentBet() * 2;
     const currentChips = this.getCurrentChips();
-    return currentBets * 2 < currentChips;
+    return currentBet * 2 < currentChips;
   }
 
   getCurrentChips() {
     return this.chips;
   }
 
-  getCurrentBets() {
-    return this.bets;
+  getCurrentBet() {
+    return this.bet;
   }
 
   isBetCompleted() {
-    return this.bets > 0;
+    return this.bet > 0;
   }
 
   isBlackjack(playerHandsArr) {
@@ -164,7 +160,7 @@ export class BlackjackPlayer extends Player {
   }
 
   setTotalHandsScore() {
-    const currentHands = super.getCurrentHands();
+    const currentHands = super.getHands();
     const playerHandsArr = currentHands.map((hand) => hand.getCardRank());
 
     if (this.isBlackjack(playerHandsArr)) {
@@ -184,7 +180,7 @@ export class BlackjackPlayer extends Player {
   }
 
   print() {
-    const hands = this.getCurrentHands();
+    const hands = this.getHands();
     console.log("\n");
     console.log("This player name : " + this.getCurrentPlayerName());
     console.log("This player type : " + this.getCurrentPlayerType());
@@ -195,7 +191,7 @@ export class BlackjackPlayer extends Player {
       console.log(hand);
     });
     console.log("This player chips : " + this.getCurrentChips());
-    console.log("This player bets : " + this.getCurrentBets());
+    console.log("This player bet : " + this.getCurrentBet());
     console.log("This player total score : " + this.getTotalHandsScore());
     console.log("This player is blackjack : " + this.isBlackjack());
   }

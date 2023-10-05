@@ -144,7 +144,7 @@ class BlackjackController {
 
   loadDealerDataToView() {
     const dealer = this.blackJackTable.getCurrentDealer();
-    const dealerHand = dealer.getCurrentHands()[0].getCardInfoObj();
+    const dealerHand = dealer.getHands()[0].getCardInfoObj();
     this.blackjackView.addDealerElement(dealerHand);
   }
 
@@ -153,14 +153,14 @@ class BlackjackController {
 
     for (const player of players) {
       const playerInfo = {
-        playerName: player.getCurrentPlayerName(),
-        playerStatus: player.getCurrentStatus(),
+        playerName: player.getPlayerName(),
+        playerStatus: player.getStatus(),
         playerHands: {
-          hand1: player.getCurrentHands()[0].getCardInfoObj(),
-          hand2: player.getCurrentHands()[1].getCardInfoObj(),
+          hand1: player.getHands()[0].getCardInfoObj(),
+          hand2: player.getHands()[1].getCardInfoObj(),
         },
         playerChips: player.getCurrentChips(),
-        playerBets: player.getCurrentBets(),
+        playerBets: player.getCurrentBet(),
         playerScore: player.getTotalHandsScore(),
       };
 
@@ -190,13 +190,13 @@ class BlackjackController {
     let confirmText = "";
 
     for (const player of players) {
-      if (player.getCurrentPlayerType() === "ai") continue;
+      if (player.getPlayerType() === "ai") continue;
 
       confirmText +=
         "\n" +
-        player.getCurrentPlayerName() +
+        player.getPlayerName() +
         " : " +
-        String(player.getCurrentBets()) +
+        String(player.getCurrentBet()) +
         " ";
     }
 
@@ -223,10 +223,10 @@ class BlackjackController {
         let unbetPlayers = "";
 
         for (const player of players) {
-          const betData = player.getCurrentBets();
+          const betData = player.getCurrentBet();
 
           if (betData === 0) {
-            unbetPlayers += "\n" + player.getCurrentPlayerName();
+            unbetPlayers += "\n" + player.getPlayerName();
           }
         }
 
@@ -295,7 +295,7 @@ class BlackjackController {
 
         const currentPlayer =
           this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-        currentPlayer.initializeBets();
+        currentPlayer.initializeBet();
 
         this.updateBetTotalElement();
 
@@ -311,7 +311,7 @@ class BlackjackController {
 
     const currentPlayer =
       this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-    currentPlayer.initializeBets();
+    currentPlayer.initializeBet();
 
     this.updateBetTotalElement();
   }
@@ -346,7 +346,7 @@ class BlackjackController {
           this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
 
         if (currentPlayer.canBet(this.betAmount)) {
-          currentPlayer.addBets(this.betAmount);
+          currentPlayer.addBet(this.betAmount);
 
           this.updateBetTotalElement();
           alert("ベット完了 : " + String(this.betAmount) + "bet");
@@ -371,7 +371,7 @@ class BlackjackController {
 
       const currentPlayer =
         this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-      const betData = currentPlayer.getCurrentBets();
+      const betData = currentPlayer.getCurrentBet();
 
       this.changeBetAmount(betData);
       this.updateBetTotalElement();
