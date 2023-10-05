@@ -90,7 +90,7 @@ export class BlackjackPlayer extends Player {
     this.bets = 0;
   }
 
-  canBets(betsToAdd) {
+  canBet(betsToAdd) {
     return betsToAdd >= 0 && this.chips >= betsToAdd;
   }
 

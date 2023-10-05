@@ -1,7 +1,6 @@
 import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
-// 各ベットボタンの制御 → +した場合にchipsを超える場合は+する前にalertをかけるようにする
 // どのプレイヤーがベットしていないのか見れるようにする
 
 class Controller {
@@ -220,15 +219,31 @@ class BlackjackController {
           this.loadPlayerDataToView();
         }
       } else {
-        alert(
-          "ベットが完了していないプレーヤーがいます。(ベット額は0以上にして下さい。)"
-        );
+        const players = this.blackJackTable.getCurrentPlayers();
+        let unbetPlayers = "";
+
+        for (const player of players) {
+          const betData = player.getCurrentBets();
+
+          if (betData === 0) {
+            unbetPlayers += "\n" + player.getCurrentPlayerName();
+          }
+        }
+
+        alert("ベットが完了していないプレーヤーがいます。" + unbetPlayers);
       }
     });
   }
 
   addBetAmount(bet) {
-    this.betAmount += bet;
+    const currentPlayer =
+      this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+
+    if (currentPlayer.canBet(this.betAmount + bet)) {
+      this.betAmount += bet;
+    } else {
+      alert("ベット額が所持金を上回ります。");
+    }
   }
 
   changeBetAmount(bet) {
@@ -293,7 +308,6 @@ class BlackjackController {
 
   resetCurrentBet() {
     this.changeBetAmount(0);
-    console.log(1);
 
     const currentPlayer =
       this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
@@ -310,7 +324,7 @@ class BlackjackController {
         this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
       const betTotal = Number(betTotalEle.value);
 
-      if (currentPlayer.canBets(betTotal)) {
+      if (currentPlayer.canBet(betTotal)) {
         this.changeBetAmount(betTotal);
       } else {
         alert("ベット額がマイナス値か、ベット額が所持金を上回ります。");
@@ -331,7 +345,7 @@ class BlackjackController {
         const currentPlayer =
           this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
 
-        if (currentPlayer.canBets(this.betAmount)) {
+        if (currentPlayer.canBet(this.betAmount)) {
           currentPlayer.addBets(this.betAmount);
 
           this.updateBetTotalElement();
