@@ -108,179 +108,6 @@ class BlackjackController {
     this.displayBetScreen();
   }
 
-  loadDealerDataToView() {
-    const dealer = this.blackJackTable.getCurrentDealer();
-    const dealerHand = dealer.getCurrentHands()[0].getCardInfoObj();
-    this.blackjackView.addDealerElement(dealerHand);
-  }
-
-  loadPlayerDataToView() {
-    const players = this.blackJackTable.getCurrentPlayers();
-
-    for (const player of players) {
-      const playerInfo = {
-        playerName: player.getCurrentPlayerName(),
-        playerStatus: player.getCurrentStatus(),
-        playerHands: {
-          hand1: player.getCurrentHands()[0].getCardInfoObj(),
-          hand2: player.getCurrentHands()[1].getCardInfoObj(),
-        },
-        playerChips: player.getCurrentChips(),
-        playerBets: player.getCurrentBets(),
-        playerScore: player.getTotalHandsScore(),
-      };
-
-      this.blackjackView.addPlayerElement(playerInfo);
-    }
-  }
-
-  switchGameDisplay() {
-    this.blackjackView.addGameDisplay();
-  }
-
-  playersBetsCompleted() {
-    const players = this.blackJackTable.getCurrentPlayers();
-
-    for (const player of players) {
-      if (!player.isBetCompleted()) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  startBtnClick() {
-    const startBtn = document.getElementById("startBtn");
-
-    startBtn.addEventListener("click", () => {
-      if (this.playersBetsCompleted()) {
-        const gameBetModal = document.getElementById("gameBetModal");
-        this.blackjackView.removeDisplay(gameBetModal);
-        this.switchGameDisplay();
-        this.loadDealerDataToView();
-        this.loadPlayerDataToView();
-      } else {
-        alert(
-          "ベットが完了していないプレーヤーがいます。(ベット額は0以上にして下さい。)"
-        );
-      }
-    });
-  }
-
-  updateSelectedPlayer() {
-    const betsSelect = document.getElementById("playerSelect");
-
-    betsSelect.addEventListener("change", () => {
-      const playerIndex = Number(betsSelect.value);
-
-      this.selectedPlayerIndex = playerIndex;
-
-      const currentPlayer =
-        this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-
-      this.betAmount = currentPlayer.getCurrentBets();
-
-      this.updateBetTotalElement();
-    });
-  }
-
-  updatePlayerBets() {
-    const betTotal = document.getElementById("betTotal");
-
-    betTotal.addEventListener("change", () => {
-      const currentPlayer =
-        this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-
-      this.betAmount = Number(betTotal.value);
-    });
-  }
-
-  updateBetTotalElement() {
-    this.blackjackView.updateBetTotal(this.betAmount);
-  }
-
-  betConfirmBtnClick() {
-    const betConfirmBtn = document.getElementById("betConfirmBtn");
-
-    betConfirmBtn.addEventListener("click", () => {
-      const currentPlayer =
-        this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-
-      if (currentPlayer.canBets(this.betAmount)) {
-        currentPlayer.addBets(this.betAmount);
-
-        this.updateBetTotalElement();
-
-        console.log(currentPlayer.getCurrentBets());
-      } else {
-        alert("ベッド額がマイナス値か、ベッド額の合計が所持金を上回ります。");
-      }
-    });
-  }
-
-  resetBtnClick() {
-    const resetBetBtn = document.getElementById("resetBetBtn");
-
-    resetBetBtn.addEventListener("click", () => {
-      if (confirm("ベッド額をリセットしますか？")) {
-        this.betAmount = 0;
-
-        const currentPlayer =
-          this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-
-        currentPlayer.initializeBets();
-
-        this.blackjackView.updateBetTotal(
-          String(currentPlayer.getCurrentBets())
-        );
-
-        alert("ベッド額のリセットを完了しました。");
-      } else {
-        alert("ベッド額のリセットを中止しました。");
-      }
-    });
-  }
-
-  bet5BtnClick() {
-    const bet5Btn = document.getElementById("bet5");
-
-    bet5Btn.addEventListener("click", () => {
-      this.betAmount += 5;
-
-      this.updateBetTotalElement();
-    });
-  }
-
-  bet20BtnClick() {
-    const bet20Btn = document.getElementById("bet20");
-
-    bet20Btn.addEventListener("click", () => {
-      this.betAmount += 20;
-
-      this.updateBetTotalElement();
-    });
-  }
-
-  bet50BtnClick() {
-    const bet50Btn = document.getElementById("bet50");
-
-    bet50Btn.addEventListener("click", () => {
-      this.betAmount += 50;
-
-      this.updateBetTotalElement();
-    });
-  }
-
-  bet100BtnClick() {
-    const bet100Btn = document.getElementById("bet100");
-
-    bet100Btn.addEventListener("click", () => {
-      this.betAmount += 100;
-      this.updateBetTotalElement();
-    });
-  }
-
   hitBtnClick() {
     const hitBtn = document.getElementById("hitBtn");
 
@@ -313,11 +140,203 @@ class BlackjackController {
     });
   }
 
-  removeStartScreen() {
+  loadDealerDataToView() {
+    const dealer = this.blackJackTable.getCurrentDealer();
+    const dealerHand = dealer.getCurrentHands()[0].getCardInfoObj();
+    this.blackjackView.addDealerElement(dealerHand);
+  }
+
+  loadPlayerDataToView() {
+    const players = this.blackJackTable.getCurrentPlayers();
+
+    for (const player of players) {
+      const playerInfo = {
+        playerName: player.getCurrentPlayerName(),
+        playerStatus: player.getCurrentStatus(),
+        playerHands: {
+          hand1: player.getCurrentHands()[0].getCardInfoObj(),
+          hand2: player.getCurrentHands()[1].getCardInfoObj(),
+        },
+        playerChips: player.getCurrentChips(),
+        playerBets: player.getCurrentBets(),
+        playerScore: player.getTotalHandsScore(),
+      };
+
+      this.blackjackView.addPlayerElement(playerInfo);
+    }
+  }
+
+  gameDisplayMethod() {
+    this.blackjackView.addGameDisplay();
+  }
+
+  playersBetsCompleted() {
+    const players = this.blackJackTable.getCurrentPlayers();
+
+    for (const player of players) {
+      // AIの場合どうするか
+      if (!player.isBetCompleted()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  getStartConfirmation() {
+    const players = this.blackJackTable.getCurrentPlayers();
+    let confirmText = "";
+
+    for (const player of players) {
+      if (player.getCurrentPlayerType() === "ai") continue;
+
+      confirmText +=
+        "\n" +
+        player.getCurrentPlayerName() +
+        " : " +
+        String(player.getCurrentBets()) +
+        " ";
+    }
+
+    confirmText = "ゲームを開始しますか？ " + confirmText;
+
+    return confirm(confirmText);
+  }
+
+  startBtnClick() {
+    const startBtn = document.getElementById("startBtn");
+
+    startBtn.addEventListener("click", () => {
+      if (this.playersBetsCompleted() && this.getStartConfirmation()) {
+        const gameBetModal = document.getElementById("gameBetModal");
+        this.blackjackView.removeDisplay(gameBetModal);
+
+        this.gameDisplayMethod();
+        this.loadDealerDataToView();
+        this.loadPlayerDataToView();
+      } else {
+        alert(
+          "ベットが完了していないプレーヤーがいます。(ベット額は0以上にして下さい。)"
+        );
+      }
+    });
+  }
+
+  addBetAmount(bet) {
+    this.betAmount += bet;
+  }
+
+  changeBetAmount(bet) {
+    this.betAmount = bet;
+  }
+
+  bet5BtnClick() {
+    const bet5Btn = document.getElementById("bet5");
+
+    bet5Btn.addEventListener("click", () => {
+      this.addBetAmount(5);
+      this.updateBetTotalElement();
+    });
+  }
+
+  bet20BtnClick() {
+    const bet20Btn = document.getElementById("bet20");
+
+    bet20Btn.addEventListener("click", () => {
+      this.addBetAmount(20);
+      this.updateBetTotalElement();
+    });
+  }
+
+  bet50BtnClick() {
+    const bet50Btn = document.getElementById("bet50");
+
+    bet50Btn.addEventListener("click", () => {
+      this.addBetAmount(50);
+      this.updateBetTotalElement();
+    });
+  }
+
+  bet100BtnClick() {
+    const bet100Btn = document.getElementById("bet100");
+
+    bet100Btn.addEventListener("click", () => {
+      this.addBetAmount(100);
+      this.updateBetTotalElement();
+    });
+  }
+
+  resetBtnClick() {
+    const resetBetBtn = document.getElementById("resetBetBtn");
+
+    resetBetBtn.addEventListener("click", () => {
+      if (confirm("ベッド額をリセットしますか？")) {
+        this.changeBetAmount(0);
+
+        const currentPlayer =
+          this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+        currentPlayer.initializeBets();
+
+        this.blackjackView.updateBetTotal("0");
+
+        alert("ベッド額のリセットを完了しました。");
+      } else {
+        alert("ベッド額のリセットを中止しました。");
+      }
+    });
+  }
+
+  updatePlayerBet() {
+    const betTotal = document.getElementById("betTotal");
+
+    betTotal.addEventListener("change", () => {
+      this.changeBetAmount(Number(betTotal.value));
+    });
+  }
+
+  updateBetTotalElement() {
+    this.blackjackView.updateBetTotal(this.betAmount);
+  }
+
+  betConfirmBtnClick() {
+    const betConfirmBtn = document.getElementById("betConfirmBtn");
+
+    betConfirmBtn.addEventListener("click", () => {
+      const currentPlayer =
+        this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+
+      if (currentPlayer.canBets(this.betAmount)) {
+        currentPlayer.addBets(this.betAmount);
+
+        this.updateBetTotalElement();
+      } else {
+        alert("ベッド額がマイナス値か、ベッド額の合計が所持金を上回ります。");
+      }
+    });
+  }
+
+  updateSelectedPlayer() {
+    const playerSelect = document.getElementById("playerSelect");
+
+    playerSelect.addEventListener("change", () => {
+      const playerIndex = Number(playerSelect.value);
+
+      this.selectedPlayerIndex = playerIndex;
+
+      const currentPlayer =
+        this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+      const betData = currentPlayer.getCurrentBets();
+
+      this.changeBetAmount(betData);
+      this.updateBetTotalElement();
+    });
+  }
+
+  removeStartScreenMethod() {
     this.blackjackView.removeStartScreen();
   }
 
-  processBet() {
+  addBetModalMethod() {
     this.blackjackView.addBetModal();
 
     if (this.gameMode === "ai") {
@@ -325,21 +344,24 @@ class BlackjackController {
     } else {
       this.blackjackView.addBetOption(this.playerCount);
     }
+  }
 
+  callBetModalEventListeners() {
     this.startBtnClick();
     this.bet5BtnClick();
     this.bet20BtnClick();
     this.bet50BtnClick();
     this.bet100BtnClick();
     this.resetBtnClick();
-    this.updatePlayerBets();
+    this.updatePlayerBet();
     this.betConfirmBtnClick();
     this.updateSelectedPlayer();
   }
 
   displayBetScreen() {
-    this.removeStartScreen();
-    this.processBet();
+    this.removeStartScreenMethod();
+    this.addBetModalMethod();
+    this.callBetModalEventListeners();
   }
 }
 

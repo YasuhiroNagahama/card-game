@@ -125,7 +125,7 @@ export const templates = {
     </ul>
   </div>
   <div id="betConfirmBtn" class="game-bet-confirm-btn-wrapper">
-    <button class="game-bet-confirm-btn">Bet</button>
+    <button class="game-bet-confirm-btn">BET</button>
   </div>
   <div class="game-bet-controller-wrapper">
     <div id="resetBetBtn" class="game-bet-reset-btn-wrapper">
