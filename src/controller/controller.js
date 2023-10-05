@@ -1,6 +1,9 @@
 import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
+// 各ベットボタンの制御 → +した場合にchipsを超える場合は+する前にalertをかけるようにする
+// どのプレイヤーがベットしていないのか見れるようにする
+
 class Controller {
   constructor() {
     this.gameMode = "player";
@@ -207,13 +210,15 @@ class BlackjackController {
     const startBtn = document.getElementById("startBtn");
 
     startBtn.addEventListener("click", () => {
-      if (this.playersBetsCompleted() && this.getStartConfirmation()) {
-        const gameBetModal = document.getElementById("gameBetModal");
-        this.blackjackView.removeDisplay(gameBetModal);
+      if (this.playersBetsCompleted()) {
+        if (this.getStartConfirmation()) {
+          const gameBetModal = document.getElementById("gameBetModal");
+          this.blackjackView.removeDisplay(gameBetModal);
 
-        this.gameDisplayMethod();
-        this.loadDealerDataToView();
-        this.loadPlayerDataToView();
+          this.gameDisplayMethod();
+          this.loadDealerDataToView();
+          this.loadPlayerDataToView();
+        }
       } else {
         alert(
           "ベットが完了していないプレーヤーがいます。(ベット額は0以上にして下さい。)"
@@ -277,13 +282,24 @@ class BlackjackController {
           this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
         currentPlayer.initializeBets();
 
-        this.blackjackView.updateBetTotal("0");
+        this.updateBetTotalElement();
 
         alert("ベット額のリセットを完了しました。");
       } else {
         alert("ベット額のリセットを中止しました。");
       }
     });
+  }
+
+  resetCurrentBet() {
+    this.changeBetAmount(0);
+    console.log(1);
+
+    const currentPlayer =
+      this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+    currentPlayer.initializeBets();
+
+    this.updateBetTotalElement();
   }
 
   updatePlayerBet() {
@@ -298,9 +314,7 @@ class BlackjackController {
         this.changeBetAmount(betTotal);
       } else {
         alert("ベット額がマイナス値か、ベット額が所持金を上回ります。");
-
-        this.changeBetAmount(0);
-        this.updateBetTotalElement();
+        this.resetCurrentBet();
       }
     });
   }
@@ -313,15 +327,22 @@ class BlackjackController {
     const betConfirmBtn = document.getElementById("betConfirmBtn");
 
     betConfirmBtn.addEventListener("click", () => {
-      const currentPlayer =
-        this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+      if (this.betAmount !== 0) {
+        const currentPlayer =
+          this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
 
-      if (currentPlayer.canBets(this.betAmount)) {
-        currentPlayer.addBets(this.betAmount);
+        if (currentPlayer.canBets(this.betAmount)) {
+          currentPlayer.addBets(this.betAmount);
 
-        this.updateBetTotalElement();
+          this.updateBetTotalElement();
+          alert("ベット完了 : " + String(this.betAmount) + "bet");
+        } else {
+          alert("ベット額がマイナス値か、ベット額が所持金を上回ります。");
+          this.resetCurrentBet();
+        }
       } else {
-        alert("ベット額がマイナス値か、ベット額が所持金を上回ります。");
+        alert("ベット額は1以上にして下さい。");
+        this.resetCurrentBet();
       }
     });
   }
