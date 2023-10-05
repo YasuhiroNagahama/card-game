@@ -270,7 +270,7 @@ class BlackjackController {
     const resetBetBtn = document.getElementById("resetBetBtn");
 
     resetBetBtn.addEventListener("click", () => {
-      if (confirm("ベッド額をリセットしますか？")) {
+      if (confirm("ベット額をリセットしますか？")) {
         this.changeBetAmount(0);
 
         const currentPlayer =
@@ -279,18 +279,29 @@ class BlackjackController {
 
         this.blackjackView.updateBetTotal("0");
 
-        alert("ベッド額のリセットを完了しました。");
+        alert("ベット額のリセットを完了しました。");
       } else {
-        alert("ベッド額のリセットを中止しました。");
+        alert("ベット額のリセットを中止しました。");
       }
     });
   }
 
   updatePlayerBet() {
-    const betTotal = document.getElementById("betTotal");
+    const betTotalEle = document.getElementById("betTotal");
 
-    betTotal.addEventListener("change", () => {
-      this.changeBetAmount(Number(betTotal.value));
+    betTotalEle.addEventListener("change", () => {
+      const currentPlayer =
+        this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+      const betTotal = Number(betTotalEle.value);
+
+      if (currentPlayer.canBets(betTotal)) {
+        this.changeBetAmount(betTotal);
+      } else {
+        alert("ベット額がマイナス値か、ベット額が所持金を上回ります。");
+
+        this.changeBetAmount(0);
+        this.updateBetTotalElement();
+      }
     });
   }
 
@@ -310,7 +321,7 @@ class BlackjackController {
 
         this.updateBetTotalElement();
       } else {
-        alert("ベッド額がマイナス値か、ベッド額の合計が所持金を上回ります。");
+        alert("ベット額がマイナス値か、ベット額が所持金を上回ります。");
       }
     });
   }
