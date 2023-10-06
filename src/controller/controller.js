@@ -102,9 +102,9 @@ class BlackjackController {
   constructor(gameMode, playerCount) {
     this.gameMode = gameMode;
     this.playerCount = playerCount;
-    this.currentPlayer = new Object();
-    this.selectedPlayerIndex = 0;
     this.betAmount = 0;
+    this.currenPlayerIndex = 0;
+    this.selectedPlayerIndex = 0;
     this.blackjackView = new BlackjackView();
     this.blackjackTable = new BlackjackTable(this.gameMode, this.playerCount);
 
@@ -177,8 +177,18 @@ class BlackjackController {
     return confirm(confirmText);
   }
 
+  removeGameBetModal() {
+    const gameBetModal = document.getElementById("gameBetModal");
+    this.blackjackView.removeDisplay(gameBetModal);
+  }
+
   gameDisplayMethod() {
     this.blackjackView.addGameDisplay();
+  }
+
+  displayGameScreen() {
+    this.removeGameBetModal();
+    this.gameDisplayMethod();
   }
 
   loadDealerDataToView() {
@@ -207,6 +217,18 @@ class BlackjackController {
     }
   }
 
+  loadDataToView() {
+    this.loadDealerDataToView();
+    this.loadPlayerDataToView();
+  }
+
+  callBlackjackEventListener() {
+    this.hitBtnClick();
+    this.doubleBtnClick();
+    this.standBtnClick();
+    this.surrenderBtnClick();
+  }
+
   alertUnbetPlayers() {
     const players = this.blackjackTable.getCurrentPlayers();
     let unbetPlayers = "";
@@ -222,25 +244,14 @@ class BlackjackController {
     alert("ベットが完了していないプレーヤーがいます。" + unbetPlayers);
   }
 
-  callBlackjackEventListener() {
-    this.hitBtnClick();
-    this.doubleBtnClick();
-    this.standBtnClick();
-    this.surrenderBtnClick();
-  }
-
   startBtnClick() {
     const startBtn = document.getElementById("startBtn");
 
     startBtn.addEventListener("click", () => {
       if (this.playersBetsCompleted()) {
         if (this.getStartConfirmation()) {
-          const gameBetModal = document.getElementById("gameBetModal");
-          this.blackjackView.removeDisplay(gameBetModal);
-
-          this.gameDisplayMethod();
-          this.loadDealerDataToView();
-          this.loadPlayerDataToView();
+          this.displayGameScreen();
+          this.loadDataToView();
           this.callBlackjackEventListener();
         }
       } else {
@@ -389,8 +400,9 @@ class BlackjackController {
     });
   }
 
-  removeStartScreenMethod() {
-    this.blackjackView.removeStartScreen();
+  removeStartScreen() {
+    const startScreen = document.getElementById("startScreen");
+    this.blackjackView.removeDisplay(startScreen);
   }
 
   addBetModalMethod() {
@@ -413,7 +425,7 @@ class BlackjackController {
   }
 
   displayBetScreen() {
-    this.removeStartScreenMethod();
+    this.removeStartScreen();
     this.addBetModalMethod();
   }
 }

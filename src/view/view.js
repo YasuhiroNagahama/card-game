@@ -5,11 +5,6 @@ export class View {
     display.remove();
   }
 
-  removeStartScreen() {
-    const startScreen = document.getElementById("startScreen");
-    this.removeDisplay(startScreen);
-  }
-
   createStartScreen() {
     const startScreenWrap = document.createElement("div");
     startScreenWrap.id = "startScreen";
