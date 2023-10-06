@@ -59,9 +59,7 @@ export class BlackjackTable extends Table {
   }
 
   setPlayer(playerName, playerType) {
-    const gameType = super.getCurrentGameType();
-
-    this.players.push(new BlackjackPlayer(playerName, playerType, gameType));
+    this.players.push(new BlackjackPlayer(playerName, playerType));
   }
 
   setAIPlayers() {

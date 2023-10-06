@@ -2,10 +2,9 @@ import { Card } from "./card.js";
 import { Deck } from "./deck.js";
 
 export class Player {
-  constructor(playerName, playerType, gameType) {
+  constructor(playerName, playerType) {
     this.playerName = playerName;
     this.playerType = playerType;
-    this.gameType = gameType;
     this.winAmounts = 0;
     this.status = "";
     this.hands = [];
@@ -58,8 +57,8 @@ export class Player {
 }
 
 export class BlackjackPlayer extends Player {
-  constructor(playerName, playerType, gameType) {
-    super(playerName, playerType, gameType);
+  constructor(playerName, playerType) {
+    super(playerName, playerType);
     this.chips = playerType === "dealer" ? 0 : 400;
     this.bet = 0;
     this.score = 0;

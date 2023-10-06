@@ -1,7 +1,7 @@
 import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
-// どのプレイヤーがベットしていないのか見れるようにする
+// vs AI時の処理の追加
 
 class Controller {
   constructor() {
@@ -101,13 +101,13 @@ class BlackjackController {
   constructor(gameMode, playerCount) {
     this.gameMode = gameMode;
     this.playerCount = playerCount;
-    this.currentPlayerIndex = 0;
     this.selectedPlayerIndex = 0;
     this.betAmount = 0;
-    this.blackJackTable = new BlackjackTable(this.gameMode, this.playerCount);
     this.blackjackView = new BlackjackView();
+    this.blackJackTable = new BlackjackTable(this.gameMode, this.playerCount);
 
     this.displayBetScreen();
+    this.callBetModalEventListeners();
   }
 
   hitBtnClick() {
@@ -316,6 +316,27 @@ class BlackjackController {
     this.updateBetTotalElement();
   }
 
+  betConfirmBtnClick() {
+    const betConfirmBtn = document.getElementById("betConfirmBtn");
+
+    betConfirmBtn.addEventListener("click", () => {
+      if (this.betAmount !== 0) {
+        const currentPlayer =
+          this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+
+        if (currentPlayer.canBet(this.betAmount)) {
+          currentPlayer.addBet(this.betAmount);
+
+          this.updateBetTotalElement();
+          alert("ベット完了 : " + String(this.betAmount) + "bet");
+        } else {
+          alert("ベット額がマイナス値か、ベット額が所持金を上回ります。");
+          this.resetCurrentBet();
+        }
+      }
+    });
+  }
+
   updatePlayerBet() {
     const betTotalEle = document.getElementById("betTotal");
 
@@ -335,30 +356,6 @@ class BlackjackController {
 
   updateBetTotalElement() {
     this.blackjackView.updateBetTotal(this.betAmount);
-  }
-
-  betConfirmBtnClick() {
-    const betConfirmBtn = document.getElementById("betConfirmBtn");
-
-    betConfirmBtn.addEventListener("click", () => {
-      if (this.betAmount !== 0) {
-        const currentPlayer =
-          this.blackJackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-
-        if (currentPlayer.canBet(this.betAmount)) {
-          currentPlayer.addBet(this.betAmount);
-
-          this.updateBetTotalElement();
-          alert("ベット完了 : " + String(this.betAmount) + "bet");
-        } else {
-          alert("ベット額がマイナス値か、ベット額が所持金を上回ります。");
-          this.resetCurrentBet();
-        }
-      } else {
-        alert("ベット額は1以上にして下さい。");
-        this.resetCurrentBet();
-      }
-    });
   }
 
   updateSelectedPlayer() {
@@ -385,11 +382,8 @@ class BlackjackController {
   addBetModalMethod() {
     this.blackjackView.addBetModal();
 
-    if (this.gameMode === "ai") {
-      this.blackjackView.addBetOption(1);
-    } else {
-      this.blackjackView.addBetOption(this.playerCount);
-    }
+    if (this.gameMode === "ai") this.blackjackView.addBetOption(1);
+    else this.blackjackView.addBetOption(this.playerCount);
   }
 
   callBetModalEventListeners() {
@@ -407,7 +401,6 @@ class BlackjackController {
   displayBetScreen() {
     this.removeStartScreenMethod();
     this.addBetModalMethod();
-    this.callBetModalEventListeners();
   }
 }
 
