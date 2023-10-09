@@ -1,7 +1,6 @@
 import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
-// currentPlayerをメンバ変数に保存しておく
 // vs AI時の処理の追加
 
 class Controller {
@@ -400,16 +399,15 @@ class BlackjackController {
     });
   }
 
-  removeStartScreen() {
-    const startScreen = document.getElementById("startScreen");
-    this.blackjackView.removeDisplay(startScreen);
-  }
+  betAi() {
+    const players = this.blackjackTable.getCurrentPlayers();
 
-  addBetModalMethod() {
-    this.blackjackView.addBetModal();
+    for (const player of players) {
+      const playerType = player.getPlayerType();
 
-    if (this.gameMode === "ai") this.blackjackView.addBetOption(1);
-    else this.blackjackView.addBetOption(this.playerCount);
+      if (playerType === "ai") {
+      }
+    }
   }
 
   callBetModalEventListeners() {
@@ -422,6 +420,18 @@ class BlackjackController {
     this.updatePlayerBet();
     this.betConfirmBtnClick();
     this.updateSelectedPlayer();
+  }
+
+  removeStartScreen() {
+    const startScreen = document.getElementById("startScreen");
+    this.blackjackView.removeDisplay(startScreen);
+  }
+
+  addBetModalMethod() {
+    this.blackjackView.addBetModal();
+
+    if (this.gameMode === "ai") this.blackjackView.addBetOption(1);
+    else this.blackjackView.addBetOption(this.playerCount);
   }
 
   displayBetScreen() {

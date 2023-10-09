@@ -68,8 +68,12 @@ export class BlackjackPlayer extends Player {
   initializeBlackjackPlayer() {
     const currentPlayerType = super.getCurrentPlayerType();
     this.chips = currentPlayerType === "dealer" ? 0 : 400;
-    this.bet = 0;
+    this.initializeBet();
     super.setPlayerStatus("betting");
+  }
+
+  initializeBet() {
+    this.bet = 0;
   }
 
   addChips(chipsToAdd) {
@@ -78,11 +82,6 @@ export class BlackjackPlayer extends Player {
 
   addBet(betToAdd) {
     this.bet = betToAdd;
-  }
-
-  initializeBet() {
-    // ディーラーを考慮すべきか
-    this.bet = 0;
   }
 
   canBet(betToAdd) {
