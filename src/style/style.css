@@ -4,6 +4,7 @@
   --primary-color: #0000ff;
   --danger-color: #ff0000;
   --success-color: #008000;
+  --success-color-light: #00ff00;
   --warning-color: #ffff00;
   --dark-color: black;
   --white-color: white;
@@ -536,6 +537,12 @@ body {
   .game-btn {
     font-size: 24px;
   }
+}
+
+/* 追加されたクラスに対するstyle */
+
+.player-name-color-green {
+  color: var(--success-color-light);
 }
 
 /* favicon */

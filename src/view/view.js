@@ -50,6 +50,12 @@ export class View {
 
     return resultBtnWrap;
   }
+
+  togglePlayerNameColor(index) {
+    const playerNameEle = document.querySelectorAll(".game-player-name")[index];
+
+    playerNameEle.classList.toggle("player-name-color-green");
+  }
 }
 
 export class BlackjackView extends View {

@@ -80,6 +80,16 @@ export class BlackjackPlayer extends Player {
     this.chips += chipsToAdd;
   }
 
+  getAiBet() {
+    const currentChips = this.getCurrentChips();
+
+    if(currentChips <= 50) {
+      return Math.floor(Math.random() * (currentChips + 1));
+    }
+
+    return Math.floor(Math.random() * ((currentChips / 3) + 1));
+  }
+
   addBet(betToAdd) {
     this.bet = betToAdd;
   }

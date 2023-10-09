@@ -102,7 +102,7 @@ class BlackjackController {
     this.gameMode = gameMode;
     this.playerCount = playerCount;
     this.betAmount = 0;
-    this.currenPlayerIndex = 0;
+    this.currenPlayerIndex = 1;
     this.selectedPlayerIndex = 0;
     this.blackjackView = new BlackjackView();
     this.blackjackTable = new BlackjackTable(this.gameMode, this.playerCount);
@@ -141,6 +141,10 @@ class BlackjackController {
     surrenderBtn.addEventListener("click", () => {
       console.log("push surrender btn");
     });
+  }
+
+  changePlayerNameColor() {
+    this.blackjackView.togglePlayerNameColor(this.currenPlayerIndex);
   }
 
   playersBetsCompleted() {
@@ -251,6 +255,7 @@ class BlackjackController {
         if (this.getStartConfirmation()) {
           this.displayGameScreen();
           this.loadDataToView();
+          this.changePlayerNameColor();
           this.callBlackjackEventListener();
         }
       } else {
@@ -406,6 +411,9 @@ class BlackjackController {
       const playerType = player.getPlayerType();
 
       if (playerType === "ai") {
+        const aiBetAmount = player.getAiBet();
+
+        if (player.canBet(aiBetAmount)) player.addBet(aiBetAmount);
       }
     }
   }
@@ -420,6 +428,10 @@ class BlackjackController {
     this.updatePlayerBet();
     this.betConfirmBtnClick();
     this.updateSelectedPlayer();
+
+    const currentGameMode = this.blackjackTable.getCurrentGameMode();
+
+    if (this.gameMode === "ai") this.betAi();
   }
 
   removeStartScreen() {
