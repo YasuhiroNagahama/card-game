@@ -52,9 +52,15 @@ export class View {
   }
 
   togglePlayerNameColor(index) {
-    const playerNameEle = document.querySelectorAll(".game-player-name")[index];
+    const playerNameEle = document.querySelectorAll("#playerName")[index];
 
     playerNameEle.classList.toggle("player-name-color-green");
+  }
+
+  updatePlayerStatus(index, status) {
+    const playerStatus = document.querySelectorAll("#playerStatus")[index];
+
+    playerStatus.innerHTML = status;
   }
 }
 
@@ -171,7 +177,7 @@ export class BlackjackView extends View {
     );
 
     playerInfoWrap.innerHTML = `<div class="game-player-about-wrapper">
-    <p class="game-player-name">${playerInfo.playerName}</p>
+    <p id="playerName" class="game-player-name">${playerInfo.playerName}</p>
     <span id="playerStatus" class="game-player-status">${playerInfo.playerStatus}</span>
   </div>
   <div

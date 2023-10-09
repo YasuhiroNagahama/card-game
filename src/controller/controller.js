@@ -102,7 +102,7 @@ class BlackjackController {
     this.gameMode = gameMode;
     this.playerCount = playerCount;
     this.betAmount = 0;
-    this.currenPlayerIndex = 1;
+    this.currenPlayerIndex = 0;
     this.selectedPlayerIndex = 0;
     this.blackjackView = new BlackjackView();
     this.blackjackTable = new BlackjackTable(this.gameMode, this.playerCount);
@@ -131,7 +131,15 @@ class BlackjackController {
     const standBtn = document.getElementById("standBtn");
 
     standBtn.addEventListener("click", () => {
-      console.log("push stand btn");
+      const player =
+        this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
+
+      player.setStand();
+      this.updatePlayerStatus(player);
+
+      this.togglePlayerNameColor();
+      this.updateCurrenPlayerIndex();
+      this.togglePlayerNameColor();
     });
   }
 
@@ -143,7 +151,21 @@ class BlackjackController {
     });
   }
 
-  changePlayerNameColor() {
+  updateCurrenPlayerIndex() {
+    if (this.currenPlayerIndex + 1 >= this.playerCount) {
+      this.currenPlayerIndex = 0;
+    } else {
+      this.currenPlayerIndex++;
+    }
+  }
+
+  updatePlayerStatus(player) {
+    const playerStatus = player.getPlayerStatus();
+
+    this.blackjackView.updatePlayerStatus(this.currenPlayerIndex, playerStatus);
+  }
+
+  togglePlayerNameColor() {
     this.blackjackView.togglePlayerNameColor(this.currenPlayerIndex);
   }
 
@@ -206,7 +228,7 @@ class BlackjackController {
     for (const player of players) {
       const playerInfo = {
         playerName: player.getPlayerName(),
-        playerStatus: player.getStatus(),
+        playerStatus: player.getPlayerStatus(),
         playerHands: {
           hand1: player.getHands()[0].getCardInfoObj(),
           hand2: player.getHands()[1].getCardInfoObj(),
@@ -255,7 +277,7 @@ class BlackjackController {
         if (this.getStartConfirmation()) {
           this.displayGameScreen();
           this.loadDataToView();
-          this.changePlayerNameColor();
+          this.togglePlayerNameColor();
           this.callBlackjackEventListener();
         }
       } else {

@@ -27,7 +27,7 @@ export class Player {
     return this.winAmounts;
   }
 
-  getStatus() {
+  getPlayerStatus() {
     return this.status;
   }
 
@@ -80,18 +80,18 @@ export class BlackjackPlayer extends Player {
     this.chips += chipsToAdd;
   }
 
+  addBet(betToAdd) {
+    this.bet = betToAdd;
+  }
+
   getAiBet() {
     const currentChips = this.getCurrentChips();
 
-    if(currentChips <= 50) {
+    if (currentChips <= 50) {
       return Math.floor(Math.random() * (currentChips + 1));
     }
 
-    return Math.floor(Math.random() * ((currentChips / 3) + 1));
-  }
-
-  addBet(betToAdd) {
-    this.bet = betToAdd;
+    return Math.floor(Math.random() * (currentChips / 3 + 1));
   }
 
   canBet(betToAdd) {
@@ -135,6 +135,10 @@ export class BlackjackPlayer extends Player {
   isBust() {
     const totalScore = this.getTotalHandsScore();
     return totalScore > 21;
+  }
+
+  canHit() {
+    
   }
 
   canDouble() {
