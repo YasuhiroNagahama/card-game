@@ -128,8 +128,23 @@ class BlackjackController {
       const player =
         this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
 
-      player.setToHit();
-      this.updatePlayerAndViewState(player);
+      if (player.canHit()) {
+        player.setToHit();
+
+        this.blackjackTable.setPlayerHands(player);
+
+        const playerHands = player.getCurrentHands();
+        const playerScore = player.getCurrentScore();
+
+        this.blackjackView.addPlayerCard(
+          this.currenPlayerIndex,
+          playerHands.slice(-1)[0]
+        );
+        this.blackjackView.updatePlayerScore(
+          this.currenPlayerIndex,
+          playerScore
+        );
+      }
     });
   }
 
@@ -233,7 +248,7 @@ class BlackjackController {
 
   loadDealerDataToView() {
     const dealer = this.blackjackTable.getCurrentDealer();
-    const dealerHand = dealer.getHands()[0].getCardInfoObj();
+    const dealerHand = dealer.getCurrentHands()[0].getCardInfoObj();
     this.blackjackView.addDealerElement(dealerHand);
   }
 
@@ -245,8 +260,8 @@ class BlackjackController {
         playerName: player.getPlayerName(),
         playerStatus: player.getPlayerStatus(),
         playerHands: {
-          hand1: player.getHands()[0].getCardInfoObj(),
-          hand2: player.getHands()[1].getCardInfoObj(),
+          hand1: player.getCurrentHands()[0].getCardInfoObj(),
+          hand2: player.getCurrentHands()[1].getCardInfoObj(),
         },
         playerChips: player.getCurrentChips(),
         playerBets: player.getCurrentBet(),

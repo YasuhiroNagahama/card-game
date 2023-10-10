@@ -43,6 +43,27 @@ export class View {
     return cardBackWrap;
   }
 
+  createCardFront(card) {
+    const playerCard = document.createElement("div");
+    playerCard.classList.add("game-player-card");
+
+    playerCard.innerHTML = `
+    <ul class="game-player-card-element-list">
+      <li
+        id="cardSuit"
+        class="game-card-element-item game-card-suit"
+      >
+        ${card.suit}
+      </li>
+      <li id="cardRank" class="game-card-element-item game-card-rank">
+        ${card.rank}
+      </li>
+    </ul>
+    `;
+
+    return playerCard;
+  }
+
   createResultBtn() {
     const resultBtnWrap = document.createElement("div");
     resultBtnWrap.classList.add("game-result-btn-wrapper");
@@ -61,6 +82,18 @@ export class View {
     const playerStatus = document.querySelectorAll("#playerStatus")[index];
 
     playerStatus.innerHTML = status;
+  }
+
+  updatePlayerScore(index, score) {
+    const playerScore = document.querySelectorAll("#playerScore")[index];
+    playerScore.innerHTML = String(score);
+  }
+
+  addPlayerCard(index, card) {
+    const playerCardsEle = document.querySelectorAll("#playerCards")[index];
+    const playerCard = this.createCardFront(card);
+
+    playerCardsEle.append(playerCard);
   }
 }
 

@@ -31,7 +31,7 @@ export class Player {
     return this.status;
   }
 
-  getHands() {
+  getCurrentHands() {
     return this.hands;
   }
 
@@ -161,8 +161,12 @@ export class BlackjackPlayer extends Player {
     return currentPlayer === "player";
   }
 
+  addScore(scoreToAdd) {
+    this.score += scoreToAdd;
+  }
+
   setTotalHandsScore() {
-    const currentHands = super.getHands();
+    const currentHands = super.getCurrentHands();
     const playerHands = currentHands.map((hand) => hand.getCardRank());
 
     if (this.isBlackjack(playerHands)) {
@@ -205,12 +209,16 @@ export class BlackjackPlayer extends Player {
     super.setPlayerStatus("surrender");
   }
 
+  setToBust() {
+    super.setPlayerStatus("bust");
+  }
+
   setToBlackjack() {
     super.setPlayerStatus("blackjack");
   }
 
   print() {
-    const hands = this.getHands();
+    const hands = this.getCurrentHands();
     console.log("\n");
     console.log("This player name : " + this.getCurrentPlayerName());
     console.log("This player type : " + this.getCurrentPlayerType());

@@ -92,6 +92,9 @@ export class BlackjackTable extends Table {
     const newCard = super.getCurrentDeck().drawOne();
 
     player.addHand(newCard);
+    // scoreの更新をどうするか
+    const score = newCard.getCardRankNumberBlackjack();
+    player.addScore(score);
   }
 
   initializePlayersHands() {
