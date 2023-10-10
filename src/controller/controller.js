@@ -1,8 +1,6 @@
 import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
-// vs AI時の処理の追加
-
 class Controller {
   constructor() {
     this.gameMode = "player";
@@ -111,22 +109,6 @@ class BlackjackController {
     this.callBetModalEventListeners();
   }
 
-  hitBtnClick() {
-    const hitBtn = document.getElementById("hitBtn");
-
-    hitBtn.addEventListener("click", () => {
-      console.log("push hit btn");
-    });
-  }
-
-  doubleBtnClick() {
-    const doubleBtn = document.getElementById("doubleBtn");
-
-    doubleBtn.addEventListener("click", () => {
-      console.log("push double btn");
-    });
-  }
-
   standBtnClick() {
     const standBtn = document.getElementById("standBtn");
 
@@ -134,12 +116,32 @@ class BlackjackController {
       const player =
         this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
 
-      player.setStand();
-      this.updatePlayerStatus(player);
+      player.setToStand();
+      this.updatePlayerAndViewState(player);
+    });
+  }
 
-      this.togglePlayerNameColor();
-      this.updateCurrenPlayerIndex();
-      this.togglePlayerNameColor();
+  hitBtnClick() {
+    const hitBtn = document.getElementById("hitBtn");
+
+    hitBtn.addEventListener("click", () => {
+      const player =
+        this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
+
+      player.setToHit();
+      this.updatePlayerAndViewState(player);
+    });
+  }
+
+  doubleBtnClick() {
+    const doubleBtn = document.getElementById("doubleBtn");
+
+    doubleBtn.addEventListener("click", () => {
+      const player =
+        this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
+
+      player.setToDouble();
+      this.updatePlayerAndViewState(player);
     });
   }
 
@@ -147,22 +149,35 @@ class BlackjackController {
     const surrenderBtn = document.getElementById("surrenderBtn");
 
     surrenderBtn.addEventListener("click", () => {
-      console.log("push surrender btn");
+      const player =
+        this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
+
+      player.setToSurrender();
+      this.updatePlayerAndViewState(player);
     });
   }
 
-  updateCurrenPlayerIndex() {
-    if (this.currenPlayerIndex + 1 >= this.playerCount) {
-      this.currenPlayerIndex = 0;
-    } else {
-      this.currenPlayerIndex++;
-    }
+  updatePlayerAndViewState(player) {
+    this.updatePlayerStatus(player);
+
+    this.togglePlayerNameColor();
+    this.updateCurrenPlayerIndex();
+    this.togglePlayerNameColor();
   }
 
   updatePlayerStatus(player) {
     const playerStatus = player.getPlayerStatus();
 
     this.blackjackView.updatePlayerStatus(this.currenPlayerIndex, playerStatus);
+  }
+
+  updateCurrenPlayerIndex() {
+    if (this.currenPlayerIndex + 1 >= this.playerCount) {
+      // 仮のゼロ
+      this.currenPlayerIndex = 0;
+    } else {
+      this.currenPlayerIndex++;
+    }
   }
 
   togglePlayerNameColor() {
@@ -235,7 +250,7 @@ class BlackjackController {
         },
         playerChips: player.getCurrentChips(),
         playerBets: player.getCurrentBet(),
-        playerScore: player.getTotalHandsScore(),
+        playerScore: player.getCurrentScore(),
       };
 
       this.blackjackView.addPlayerElement(playerInfo);
@@ -396,10 +411,14 @@ class BlackjackController {
         this.blackjackTable.getCurrentPlayers()[this.selectedPlayerIndex];
       const betTotal = Number(betTotalEle.value);
 
-      if (currentPlayer.canBet(betTotal)) {
+      if (
+        betTotal > 0 &&
+        !Number.isInteger(betTotal) &&
+        currentPlayer.canBet(betTotal)
+      ) {
         this.changeBetAmount(betTotal);
       } else {
-        alert("ベット額がマイナス値か、ベット額が所持金を上回ります。");
+        alert("ベット不可能です。");
         this.resetCurrentBet();
       }
     });

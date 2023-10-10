@@ -62,14 +62,14 @@ export class BlackjackPlayer extends Player {
     this.chips = playerType === "dealer" ? 0 : 400;
     this.bet = 0;
     this.score = 0;
-    super.setPlayerStatus("betting");
+    super.setPlayerStatus("waiting");
   }
 
   initializeBlackjackPlayer() {
     const currentPlayerType = super.getCurrentPlayerType();
     this.chips = currentPlayerType === "dealer" ? 0 : 400;
     this.initializeBet();
-    super.setPlayerStatus("betting");
+    super.setPlayerStatus("waiting");
   }
 
   initializeBet() {
@@ -114,10 +114,6 @@ export class BlackjackPlayer extends Player {
     }
   }
 
-  setStand() {
-    super.setPlayerStatus("stand");
-  }
-
   setSurrender() {
     this.removeBet(Math.floor(this.bet / 2));
     super.setPlayerStatus("surrender");
@@ -133,12 +129,15 @@ export class BlackjackPlayer extends Player {
   }
 
   isBust() {
-    const totalScore = this.getTotalHandsScore();
+    const totalScore = this.getCurrentScore();
     return totalScore > 21;
   }
 
   canHit() {
-    
+    const playerStatus = super.getPlayerStatus();
+    const playerScore = this.getCurrentScore();
+
+    return playerStatus !== "blackjack" && playerScore < 21;
   }
 
   canDouble() {
@@ -147,22 +146,13 @@ export class BlackjackPlayer extends Player {
     return currentBet * 2 < currentChips;
   }
 
-  getCurrentChips() {
-    return this.chips;
-  }
-
-  getCurrentBet() {
-    return this.bet;
-  }
-
   isBetCompleted() {
     return this.bet > 0;
   }
 
-  isBlackjack(playerHandsArr) {
+  isBlackjack(playerHands) {
     return (
-      playerHandsArr.includes("A") &&
-      /(10|J|Q|K)/.test(playerHandsArr.join(" "))
+      playerHands.includes("A") && /(10|J|Q|K)/.test(playerHands.join(" "))
     );
   }
 
@@ -173,11 +163,11 @@ export class BlackjackPlayer extends Player {
 
   setTotalHandsScore() {
     const currentHands = super.getHands();
-    const playerHandsArr = currentHands.map((hand) => hand.getCardRank());
+    const playerHands = currentHands.map((hand) => hand.getCardRank());
 
-    if (this.isBlackjack(playerHandsArr)) {
-      // bustにするコード
+    if (this.isBlackjack(playerHands)) {
       this.score = 21;
+      this.setToBlackjack();
     } else {
       const totalScore = currentHands
         .map((hand) => hand.getCardRankNumberBlackjack())
@@ -187,8 +177,36 @@ export class BlackjackPlayer extends Player {
     }
   }
 
-  getTotalHandsScore() {
+  getCurrentChips() {
+    return this.chips;
+  }
+
+  getCurrentBet() {
+    return this.bet;
+  }
+
+  getCurrentScore() {
     return this.score;
+  }
+
+  setToStand() {
+    super.setPlayerStatus("stand");
+  }
+
+  setToHit() {
+    super.setPlayerStatus("hit");
+  }
+
+  setToDouble() {
+    super.setPlayerStatus("double");
+  }
+
+  setToSurrender() {
+    super.setPlayerStatus("surrender");
+  }
+
+  setToBlackjack() {
+    super.setPlayerStatus("blackjack");
   }
 
   print() {
@@ -204,7 +222,7 @@ export class BlackjackPlayer extends Player {
     });
     console.log("This player chips : " + this.getCurrentChips());
     console.log("This player bet : " + this.getCurrentBet());
-    console.log("This player total score : " + this.getTotalHandsScore());
+    console.log("This player total score : " + this.getCurrentScore());
     console.log("This player is blackjack : " + this.isBlackjack());
   }
 }
