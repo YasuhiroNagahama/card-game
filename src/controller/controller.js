@@ -1,6 +1,8 @@
 import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
+// Blackjackの時の処理
+
 class Controller {
   constructor() {
     this.gameMode = "player";
@@ -109,42 +111,58 @@ class BlackjackController {
     this.callBetModalEventListeners();
   }
 
+  handleBust(player) {
+    player.setToBust();
+    this.updatePlayerAndViewState(player);
+    this.skipBlackjackPlayer();
+  }
+
+  standAction() {
+    const player =
+      this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
+
+    player.setToStand();
+    this.updatePlayerAndViewState(player);
+    this.skipBlackjackPlayer();
+  }
+
+  hitAction() {
+    const player =
+      this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
+
+    if (player.canHit()) {
+      player.setToHit();
+
+      this.blackjackTable.setPlayerHands(player);
+
+      const playerHands = player.getCurrentHands();
+      const playerScore = player.getCurrentScore();
+
+      this.blackjackView.addPlayerCard(
+        this.currenPlayerIndex,
+        playerHands.slice(-1)[0]
+      );
+      this.blackjackView.updatePlayerScore(this.currenPlayerIndex, playerScore);
+
+      if (playerScore === 21) this.standAction();
+      else if (player.isBust()) this.handleBust(player);
+    }
+  }
+
   standBtnClick() {
     const standBtn = document.getElementById("standBtn");
 
     standBtn.addEventListener("click", () => {
-      const player =
-        this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
-
-      player.setToStand();
-      this.updatePlayerAndViewState(player);
+      this.standAction();
     });
   }
 
   hitBtnClick() {
     const hitBtn = document.getElementById("hitBtn");
 
+    // HITできない場合で、HITボタンが押せることはないと思う
     hitBtn.addEventListener("click", () => {
-      const player =
-        this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
-
-      if (player.canHit()) {
-        player.setToHit();
-
-        this.blackjackTable.setPlayerHands(player);
-
-        const playerHands = player.getCurrentHands();
-        const playerScore = player.getCurrentScore();
-
-        this.blackjackView.addPlayerCard(
-          this.currenPlayerIndex,
-          playerHands.slice(-1)[0]
-        );
-        this.blackjackView.updatePlayerScore(
-          this.currenPlayerIndex,
-          playerScore
-        );
-      }
+      this.hitAction();
     });
   }
 
@@ -188,7 +206,7 @@ class BlackjackController {
 
   updateCurrenPlayerIndex() {
     if (this.currenPlayerIndex + 1 >= this.playerCount) {
-      // 仮のゼロ
+      // dealerに切り替わるようにする
       this.currenPlayerIndex = 0;
     } else {
       this.currenPlayerIndex++;
@@ -284,6 +302,21 @@ class BlackjackController {
     this.surrenderBtnClick();
   }
 
+  // 非 blackjack_playerからのskipはうまく行く
+  // blackjack_playerからの切り替えがうまくいかない
+  // 動作はうまく行くが、最初から全員がblackjack、もしくは二人がblackjackだった場合に
+  skipBlackjackPlayer() {
+
+    const currentPlayer =
+      this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
+
+    const playersHands = currentPlayer.getCurrentHands();
+
+    if (currentPlayer.isBlackjack(playersHands)) {
+      this.updateCurrenPlayerIndex();
+    }
+  }
+
   alertUnbetPlayers() {
     const players = this.blackjackTable.getCurrentPlayers();
     let unbetPlayers = "";
@@ -309,6 +342,7 @@ class BlackjackController {
           this.loadDataToView();
           this.togglePlayerNameColor();
           this.callBlackjackEventListener();
+          this.skipBlackjackPlayer();
         }
       } else {
         this.alertUnbetPlayers();

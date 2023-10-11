@@ -129,8 +129,8 @@ export class BlackjackPlayer extends Player {
   }
 
   isBust() {
-    const totalScore = this.getCurrentScore();
-    return totalScore > 21;
+    const currentScore = this.getCurrentScore();
+    return currentScore > 21;
   }
 
   canHit() {
