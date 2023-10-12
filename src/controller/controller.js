@@ -2,6 +2,7 @@ import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
 // dealer時のクリック制御
+// 多少リファクタリングする
 
 class Controller {
   constructor() {
@@ -143,6 +144,7 @@ class BlackjackController {
         playerHands.slice(-1)[0]
       );
       this.blackjackView.updatePlayerScore(this.currenPlayerIndex, playerScore);
+      this.updatePlayerStatus(player);
 
       if (playerScore === 21) this.standAction();
       else if (player.isBust()) this.handleBust(player);
@@ -311,7 +313,7 @@ class BlackjackController {
       const playersHands = player.getCurrentHands();
 
       if (player.isBlackjack(playersHands)) {
-        this.updateCurrenPlayerIndex();
+        this.updatePlayerAndViewState(player);
       } else {
         break;
       }

@@ -75,7 +75,7 @@ export class View {
   togglePlayerNameColor(index) {
     const playerNameEle = document.querySelectorAll("#playerName")[index];
 
-    playerNameEle.classList.toggle("player-name-color-green");
+    playerNameEle.classList.toggle("current-turn-player");
   }
 
   updatePlayerStatus(index, status) {

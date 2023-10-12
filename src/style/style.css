@@ -6,7 +6,9 @@
   --success-color: #008000;
   --success-color-light: #00ff00;
   --warning-color: #ffff00;
+  --purple-color: purple;
   --dark-color: black;
+  --gold-color: gold;
   --white-color: white;
   --secondary-color: gray;
 }
@@ -541,8 +543,32 @@ body {
 
 /* 追加されたクラスに対するstyle */
 
-.player-name-color-green {
+.current-turn-player {
   color: var(--success-color-light);
+}
+
+.blackjack-player {
+  color: var(--gold-color);
+}
+
+.bust-player {
+  color: var(--danger-color);
+}
+
+.stand-player {
+  color: var(--warning-color);
+}
+
+.hit-player {
+  color: var(--secondary-color);
+}
+
+.double-player {
+  color: var(--success-color);
+}
+
+.surrender-player {
+  color: var(--purple-color);
 }
 
 /* favicon */
