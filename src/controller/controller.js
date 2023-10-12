@@ -1,7 +1,7 @@
 import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
-// Blackjackの時の処理
+// dealer時のクリック制御
 
 class Controller {
   constructor() {
@@ -193,9 +193,13 @@ class BlackjackController {
   updatePlayerAndViewState(player) {
     this.updatePlayerStatus(player);
 
-    this.togglePlayerNameColor();
-    this.updateCurrenPlayerIndex();
-    this.togglePlayerNameColor();
+    if (this.currenPlayerIndex === this.playerCount - 1) {
+      this.togglePlayerNameColor();
+    } else {
+      this.togglePlayerNameColor();
+      this.updateCurrenPlayerIndex();
+      this.togglePlayerNameColor();
+    }
   }
 
   updatePlayerStatus(player) {
@@ -205,10 +209,7 @@ class BlackjackController {
   }
 
   updateCurrenPlayerIndex() {
-    if (this.currenPlayerIndex + 1 >= this.playerCount) {
-      // dealerに切り替わるようにする
-      this.currenPlayerIndex = 0;
-    } else {
+    if (this.currenPlayerIndex + 1 < this.playerCount) {
       this.currenPlayerIndex++;
     }
   }
@@ -302,18 +303,18 @@ class BlackjackController {
     this.surrenderBtnClick();
   }
 
-  // 非 blackjack_playerからのskipはうまく行く
-  // blackjack_playerからの切り替えがうまくいかない
-  // 動作はうまく行くが、最初から全員がblackjack、もしくは二人がblackjackだった場合に
   skipBlackjackPlayer() {
+    const players = this.blackjackTable.getCurrentPlayers();
 
-    const currentPlayer =
-      this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
+    for (let i = this.currenPlayerIndex; i < players.length; i++) {
+      const player = players[i];
+      const playersHands = player.getCurrentHands();
 
-    const playersHands = currentPlayer.getCurrentHands();
-
-    if (currentPlayer.isBlackjack(playersHands)) {
-      this.updateCurrenPlayerIndex();
+      if (player.isBlackjack(playersHands)) {
+        this.updateCurrenPlayerIndex();
+      } else {
+        break;
+      }
     }
   }
 
