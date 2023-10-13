@@ -13,6 +13,18 @@ class Controller {
     this.initialize();
   }
 
+  setGameMode(gameMode) {
+    this.gameMode = gameMode;
+  }
+
+  setGameType(gameType) {
+    this.gameType = gameType;
+  }
+
+  setPlayerCount(playerCount) {
+    this.playerCount = playerCount;
+  }
+
   hiddenPlayerCount() {
     const playerCountEle = document.getElementById("playerCount");
 
@@ -25,46 +37,54 @@ class Controller {
     playerCountEle.style.display = "flex";
   }
 
-  updateGameMode() {
+  addGameModeChangeListeners() {
     const gameModeSelect = document.getElementById("gameModeSelect");
 
     gameModeSelect.addEventListener("change", () => {
-      this.gameMode = gameModeSelect.value;
+      const gameMode = gameModeSelect.value;
+      this.setGameMode(gameMode);
 
       if (this.gameMode === "ai") {
         this.hiddenPlayerCount();
-        this.playerCount = 3;
+        this.setPlayerCount(3);
       } else {
         this.displayPlayerCount();
-
-        const playerCountsEle = document.querySelectorAll(
-          ".game-player-count-input"
-        );
-
-        playerCountsEle.forEach((playerCountEle) => {
-          if (playerCountEle.checked)
-            this.playerCount = Number(playerCountEle.value);
-        });
+        this.addPlayerCountCheckedElemment();
       }
     });
   }
 
-  updateGameType() {
+  addGameTypeChangeListeners() {
     const gameTypeSelect = document.getElementById("gameTypeSelect");
 
     gameTypeSelect.addEventListener("change", () => {
-      this.gameType = gameTypeSelect.value;
+      const gameType = gameTypeSelect.value;
+      this.setGameType(gameType);
     });
   }
 
-  updatePlayerCount() {
-    const playerCountsEle = document.querySelectorAll(
+  addPlayerCountCheckedElemment() {
+    const playerCountElemments = document.querySelectorAll(
       ".game-player-count-input"
     );
 
-    playerCountsEle.forEach((playerCountEle) => {
-      playerCountEle.addEventListener("change", () => {
-        this.playerCount = Number(playerCountEle.value);
+    playerCountElemments.forEach((playerCountElemment) => {
+      if (playerCountElemment.checked) {
+        const playerCount = Number(playerCountElemment.value);
+        this.setPlayerCount(playerCount);
+      }
+    });
+  }
+
+  addPlayerCountChangeListeners() {
+    const playerCountElemments = document.querySelectorAll(
+      ".game-player-count-input"
+    );
+
+    playerCountElemments.forEach((playerCountElemment) => {
+      playerCountElemment.addEventListener("change", () => {
+        const playerCount = Number(playerCountElemment.value);
+        this.setPlayerCount(playerCount);
       });
     });
   }
@@ -85,9 +105,9 @@ class Controller {
   }
 
   initialize() {
-    this.updateGameMode();
-    this.updateGameType();
-    this.updatePlayerCount();
+    this.addGameModeChangeListeners();
+    this.addGameTypeChangeListeners();
+    this.addPlayerCountChangeListeners();
     this.gameStartBtnClick();
   }
 
@@ -102,8 +122,8 @@ class BlackjackController {
   constructor(gameMode, playerCount) {
     this.gameMode = gameMode;
     this.playerCount = playerCount;
-    this.betAmount = 0;
     this.currenPlayerIndex = 0;
+    this.betAmount = 0;
     this.selectedPlayerIndex = 0;
     this.blackjackView = new BlackjackView();
     this.blackjackTable = new BlackjackTable(this.gameMode, this.playerCount);
