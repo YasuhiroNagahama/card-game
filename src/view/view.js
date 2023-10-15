@@ -36,7 +36,8 @@ export class View {
 
   createCardBack() {
     const cardBackWrap = document.createElement("div");
-    cardBackWrap.classList("game-card-back-wrapper");
+    cardBackWrap.classList("game-player-card");
+    cardBackWrap.id = "dealerCardBack";
 
     cardBackWrap.innerHTML = templates.cardBack;
 
@@ -89,11 +90,28 @@ export class View {
     playerScore.innerHTML = String(score);
   }
 
+  updateDealerScore(score) {
+    const dealerScore = document.getElementById("dealerScore");
+    dealerScore.innerHTML = String(score);
+  }
+
   addPlayerCard(index, card) {
     const playerCardsEle = document.querySelectorAll("#playerCards")[index];
     const playerCard = this.createCardFront(card);
 
     playerCardsEle.append(playerCard);
+  }
+
+  addDealerCard(card) {
+    const dealerCardsEle = document.getElementById("dealerCards");
+    const dealerCard = this.createCardFront(card);
+
+    dealerCardsEle.append(dealerCard);
+  }
+
+  removeDealerCardBack() {
+    const dealerCardBack = document.getElementById("dealerCardBack");
+    dealerCardBack.remove();
   }
 }
 
@@ -173,7 +191,7 @@ export class BlackjackView extends View {
           <li id="cardRank" class="game-card-element-item game-card-rank">${dealerHand.rank}</li>
         </ul>
       </div>
-      <div class="game-player-card">
+      <div id="dealerCardBack" class="game-player-card">
         <ul class="game-card-back-list">
           <li class="game-card-back-item card-back-top">&#x2588;</li>
           <li class="game-card-back-item card-back-bottom">&#x2588;</li>

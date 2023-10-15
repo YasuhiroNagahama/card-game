@@ -132,6 +132,16 @@ class BlackjackController {
     this.callBetModalEventListeners();
   }
 
+  dealerTurn() {
+    const dealer = this.blackjackTable.getCurrentDealer();
+    const dealerHand = dealer.getCurrentHands()[1].getCardInfoObj();
+    const dealerScore = dealer.getCurrentScore();
+
+    this.blackjackView.removeDealerCardBack();
+    this.blackjackView.addDealerCard(dealerHand);
+    this.blackjackView.updateDealerScore(dealerScore);
+  }
+
   handleBust(player) {
     player.setToBust();
     this.updatePlayerAndViewState(player);
@@ -217,6 +227,7 @@ class BlackjackController {
 
     if (this.currenPlayerIndex === this.playerCount - 1) {
       this.togglePlayerNameColor();
+      this.dealerTurn();
     } else {
       this.togglePlayerNameColor();
       this.updateCurrenPlayerIndex();
@@ -332,11 +343,9 @@ class BlackjackController {
       const player = players[i];
       const playersHands = player.getCurrentHands();
 
-      if (player.isBlackjack(playersHands)) {
+      if (player.isBlackjack(playersHands))
         this.updatePlayerAndViewState(player);
-      } else {
-        break;
-      }
+      else break;
     }
   }
 

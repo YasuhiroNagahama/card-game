@@ -138,12 +138,11 @@ export const templates = {
   </div>
 `,
   cardBack: `
-<div class="game-player-card">
 <ul class="game-card-back-list">
   <li class="game-card-back-item card-back-top">&#x2588;</li>
   <li class="game-card-back-item card-back-bottom">&#x2588;</li>
 </ul>
-</div>`,
+`,
   resultBtn: `<button class="game-result-btn">
   <i class="fa-solid fa-square-poll-horizontal"></i>
 </button>`,

@@ -137,6 +137,7 @@ export class BlackjackPlayer extends Player {
     const playerStatus = super.getPlayerStatus();
     const playerScore = this.getCurrentScore();
 
+    // hit以外の時どうする
     return playerStatus !== "blackjack" && playerScore < 21;
   }
 
