@@ -1,6 +1,7 @@
 import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
+// Tableで行うべきことをControllerに書いてしまったので、書き換える
 // dealer時のクリック制御
 // 多少リファクタリングする
 
@@ -132,14 +133,32 @@ class BlackjackController {
     this.callBetModalEventListeners();
   }
 
-  dealerTurn() {
+  updateDealerView() {
+    const dealer = this.blackjackTable.getCurrentDealer();
+    const dealerHand = dealer.getCurrentHands()[1].getCardInfoObj();
+    const dealerScore = dealer.getCurrentScore();
+    
+    this.blackjackView.removeDealerCardBack();
+    this.blackjackView.addDealerCard(dealerHand);
+    this.blackjackView.updateDealerScore(dealerScore);
+  }
+
+  // dealerTurn(dealer, dealerScore) {
+  //   let score = dealerScore;
+
+  //   while(score < 18) {
+
+  //     break;
+  //   }
+  // }
+
+  changeDealerTurn() {
     const dealer = this.blackjackTable.getCurrentDealer();
     const dealerHand = dealer.getCurrentHands()[1].getCardInfoObj();
     const dealerScore = dealer.getCurrentScore();
 
-    this.blackjackView.removeDealerCardBack();
-    this.blackjackView.addDealerCard(dealerHand);
-    this.blackjackView.updateDealerScore(dealerScore);
+    this.updateDealerView(dealerHand, dealerScore);
+    // this.dealerTurn(dealer, dealerScore);
   }
 
   handleBust(player) {
@@ -164,7 +183,7 @@ class BlackjackController {
     if (player.canHit()) {
       player.setToHit();
 
-      this.blackjackTable.setPlayerHands(player);
+      this.blackjackTable.updatePlayerHands(player);
 
       const playerHands = player.getCurrentHands();
       const playerScore = player.getCurrentScore();
@@ -227,7 +246,7 @@ class BlackjackController {
 
     if (this.currenPlayerIndex === this.playerCount - 1) {
       this.togglePlayerNameColor();
-      this.dealerTurn();
+      this.changeDealerTurn();
     } else {
       this.togglePlayerNameColor();
       this.updateCurrenPlayerIndex();
@@ -550,8 +569,6 @@ class BlackjackController {
     this.updatePlayerBet();
     this.betConfirmBtnClick();
     this.updateSelectedPlayer();
-
-    const currentGameMode = this.blackjackTable.getCurrentGameMode();
 
     if (this.gameMode === "ai") this.betAi();
   }

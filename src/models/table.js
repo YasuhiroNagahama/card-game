@@ -55,78 +55,77 @@ export class BlackjackTable extends Table {
     this.initializePlayers();
     this.setDealer();
     this.initializePlayersHands();
-    this.setPlayersScore();
+  }
+
+  getCurrentGameMode() {
+    return this.gameMode;
+  }
+
+  getCurrentPlayerNumber() {
+    return this.playerNumber;
+  }
+
+  getCurrentBetDenominations() {
+    return this.betDenominations;
+  }
+
+  getCurrentPlayers() {
+    return this.players;
+  }
+
+  getCurrentDealer() {
+    return this.dealer;
   }
 
   setPlayer(playerName, playerType) {
     this.players.push(new BlackjackPlayer(playerName, playerType));
   }
 
-  setAIPlayers() {
-    this.setPlayer("Player", "player");
-    this.setPlayer("AI", "ai");
-    this.setPlayer("AI", "ai");
-  }
-
   setHumanPlayers() {
     for (let i = 1; i <= this.playerNumber; i++) {
       this.setPlayer("Player_" + String(i), "player");
+
+      if (this.gameMode === "ai") break;
     }
   }
 
+  setAIPlayers() {
+    this.setPlayer("AI", "ai");
+    this.setPlayer("AI", "ai");
+  }
+
   initializePlayers() {
-    if (this.gameMode === "ai") {
-      this.setAIPlayers();
-    } else {
-      this.setHumanPlayers();
-    }
+    this.setHumanPlayers();
+    if (this.gameMode === "ai") this.setAIPlayers();
   }
 
   setDealer() {
     const gameType = super.getCurrentGameType();
-
     this.dealer = new BlackjackPlayer("Dealer", "dealer", gameType);
   }
 
-  setPlayerHands(player) {
+  updatePlayerHands(player) {
     const newCard = super.getCurrentDeck().drawOne();
+    const score = newCard.getCardRankNumberBlackjack();
 
     player.addHand(newCard);
-    // scoreの更新をどうするか
-    const score = newCard.getCardRankNumberBlackjack();
     player.addScore(score);
   }
 
   initializePlayersHands() {
     for (const player of this.players) {
       for (let i = 0; i < 2; i++) {
-        this.setPlayerHands(player);
+        this.updatePlayerHands(player);
       }
     }
 
     for (let i = 0; i < 2; i++) {
-      this.setPlayerHands(this.dealer);
+      this.updatePlayerHands(this.dealer);
     }
   }
 
-  setPlayersScore() {
-    for (const player of this.players) {
-      player.setTotalHandsScore();
-    }
-
-    this.dealer.setTotalHandsScore();
-  }
-
-  clearPlayersBets() {
-    for (const player of this.players) {
-      player.clearBets();
-    }
-  }
-
-  clearPlayersCards() {
-    for (const player of this.players) {
-      player.clearHands();
-    }
+  updateDealerHands() {
+    this.updatePlayerHands(this.dealer);
   }
 
   allPlayerActionsResolved() {
@@ -168,26 +167,6 @@ export class BlackjackTable extends Table {
     return currentGameMode === "ai";
   }
 
-  getCurrentGameMode() {
-    return this.gameMode;
-  }
-
-  getCurrentPlayerNumber() {
-    return this.playerNumber;
-  }
-
-  getCurrentBetDenominations() {
-    return this.betDenominations;
-  }
-
-  getCurrentPlayers() {
-    return this.players;
-  }
-
-  getCurrentDealer() {
-    return this.dealer;
-  }
-
   print() {
     console.log("\n");
     console.log("----- Start Game -----");
@@ -204,15 +183,12 @@ export class BlackjackTable extends Table {
     console.log("----- Players -----");
     console.log("\n");
 
-    let i = 1;
-
-    this.players.forEach((player) => {
+    for (let i = 0; i < this.players.length; i++) {
       console.log("Player_" + i);
       console.log("\n");
-      player.print();
+      this.players[i].print();
       console.log("\n");
-      i++;
-    });
+    }
 
     console.log("----- Dealer -----");
     console.log("\n");

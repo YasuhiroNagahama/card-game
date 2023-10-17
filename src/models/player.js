@@ -72,6 +72,42 @@ export class BlackjackPlayer extends Player {
     super.setPlayerStatus("waiting");
   }
 
+  getCurrentChips() {
+    return this.chips;
+  }
+
+  getCurrentBet() {
+    return this.bet;
+  }
+
+  getCurrentScore() {
+    return this.score;
+  }
+
+  setToStand() {
+    super.setPlayerStatus("stand");
+  }
+
+  setToHit() {
+    super.setPlayerStatus("hit");
+  }
+
+  setToDouble() {
+    super.setPlayerStatus("double");
+  }
+
+  setToSurrender() {
+    super.setPlayerStatus("surrender");
+  }
+
+  setToBust() {
+    super.setPlayerStatus("bust");
+  }
+
+  setToBlackjack() {
+    super.setPlayerStatus("blackjack");
+  }
+
   initializeBet() {
     this.bet = 0;
   }
@@ -82,6 +118,10 @@ export class BlackjackPlayer extends Player {
 
   addBet(betToAdd) {
     this.bet = betToAdd;
+  }
+
+  addScore(scoreToAdd) {
+    this.score += scoreToAdd;
   }
 
   getAiBet() {
@@ -160,62 +200,6 @@ export class BlackjackPlayer extends Player {
   isPlayer() {
     const currentPlayer = this.getCurrentPlayerType();
     return currentPlayer === "player";
-  }
-
-  addScore(scoreToAdd) {
-    this.score += scoreToAdd;
-  }
-
-  setTotalHandsScore() {
-    const currentHands = super.getCurrentHands();
-    const playerHands = currentHands.map((hand) => hand.getCardRank());
-
-    if (this.isBlackjack(playerHands)) {
-      this.score = 21;
-      this.setToBlackjack();
-    } else {
-      const totalScore = currentHands
-        .map((hand) => hand.getCardRankNumberBlackjack())
-        .reduce((sum, element) => sum + element, 0);
-
-      this.score = totalScore;
-    }
-  }
-
-  getCurrentChips() {
-    return this.chips;
-  }
-
-  getCurrentBet() {
-    return this.bet;
-  }
-
-  getCurrentScore() {
-    return this.score;
-  }
-
-  setToStand() {
-    super.setPlayerStatus("stand");
-  }
-
-  setToHit() {
-    super.setPlayerStatus("hit");
-  }
-
-  setToDouble() {
-    super.setPlayerStatus("double");
-  }
-
-  setToSurrender() {
-    super.setPlayerStatus("surrender");
-  }
-
-  setToBust() {
-    super.setPlayerStatus("bust");
-  }
-
-  setToBlackjack() {
-    super.setPlayerStatus("blackjack");
   }
 
   print() {
