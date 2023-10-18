@@ -97,6 +97,51 @@ export class BlackjackTable extends Table {
     return player.getCurrentBet();
   }
 
+  getDealerHands() {
+    const dealerHands = this.dealer.getCurrentHands()[0].getCardInfoObj();
+    return dealerHands;
+  }
+
+  getPlayerInfoObjArr() {
+    const playerInfoObjArr = [];
+
+    for (const player of this.players) {
+      const playerInfoObj = {
+        playerName: player.getPlayerName(),
+        playerStatus: player.getPlayerStatus(),
+        playerHands: {
+          hand1: player.getCurrentHands()[0].getCardInfoObj(),
+          hand2: player.getCurrentHands()[1].getCardInfoObj(),
+        },
+        playerChips: player.getCurrentChips(),
+        playerBets: player.getCurrentBet(),
+        playerScore: player.getCurrentScore(),
+      };
+
+      playerInfoObjArr.push(playerInfoObj);
+    }
+
+    return playerInfoObjArr;
+  }
+
+  getConfirmText() {
+    const confirmTextArr = [];
+
+    for (const player of this.players) {
+      if (player.getPlayerType() === "ai") continue;
+
+      confirmTextArr.push(
+        "\n" +
+          player.getPlayerName() +
+          " : " +
+          String(player.getCurrentBet()) +
+          " "
+      );
+    }
+
+    return "ゲームを開始しますか？ " + confirmTextArr.join("");
+  }
+
   setPlayer(playerName, playerType) {
     this.players.push(new BlackjackPlayer(playerName, playerType));
   }

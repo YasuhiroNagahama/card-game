@@ -165,7 +165,7 @@ class BlackjackController {
   handleBust(player) {
     player.setToBust();
     this.updatePlayerAndViewState(player);
-    this.skipBlackjackPlayer();
+    this.skipBlackjackPlayers();
   }
 
   standAction() {
@@ -174,7 +174,7 @@ class BlackjackController {
 
     player.setToStand();
     this.updatePlayerAndViewState(player);
-    this.skipBlackjackPlayer();
+    this.skipBlackjackPlayers();
   }
 
   hitAction() {
@@ -244,12 +244,11 @@ class BlackjackController {
 
   updatePlayerAndViewState(player) {
     this.updatePlayerStatus(player);
+    this.togglePlayerNameColor();
 
     if (this.currenPlayerIndex === this.playerCount - 1) {
-      this.togglePlayerNameColor();
       this.changeDealerTurn();
     } else {
-      this.togglePlayerNameColor();
       this.updateCurrenPlayerIndex();
       this.togglePlayerNameColor();
     }
@@ -285,22 +284,7 @@ class BlackjackController {
   }
 
   getStartConfirmation() {
-    const players = this.blackjackTable.getCurrentPlayers();
-    let confirmText = "";
-
-    for (const player of players) {
-      if (player.getPlayerType() === "ai") continue;
-
-      confirmText +=
-        "\n" +
-        player.getPlayerName() +
-        " : " +
-        String(player.getCurrentBet()) +
-        " ";
-    }
-
-    confirmText = "ゲームを開始しますか？ " + confirmText;
-
+    const confirmText = this.blackjackTable.getConfirmText();
     return confirm(confirmText);
   }
 
@@ -319,28 +303,15 @@ class BlackjackController {
   }
 
   loadDealerDataToView() {
-    const dealer = this.blackjackTable.getCurrentDealer();
-    const dealerHand = dealer.getCurrentHands()[0].getCardInfoObj();
-    this.blackjackView.addDealerElement(dealerHand);
+    const dealerHands = this.blackjackTable.getDealerHands();
+    this.blackjackView.addDealerElement(dealerHands);
   }
 
   loadPlayerDataToView() {
-    const players = this.blackjackTable.getCurrentPlayers();
+    const playerInfoObjArr = this.blackjackTable.getPlayerInfoObjArr();
 
-    for (const player of players) {
-      const playerInfo = {
-        playerName: player.getPlayerName(),
-        playerStatus: player.getPlayerStatus(),
-        playerHands: {
-          hand1: player.getCurrentHands()[0].getCardInfoObj(),
-          hand2: player.getCurrentHands()[1].getCardInfoObj(),
-        },
-        playerChips: player.getCurrentChips(),
-        playerBets: player.getCurrentBet(),
-        playerScore: player.getCurrentScore(),
-      };
-
-      this.blackjackView.addPlayerElement(playerInfo);
+    for (const playerInfoObj of playerInfoObjArr) {
+      this.blackjackView.addPlayerElement(playerInfoObj);
     }
   }
 
@@ -356,16 +327,18 @@ class BlackjackController {
     this.surrenderBtnClick();
   }
 
-  skipBlackjackPlayer() {
+  skipBlackjackPlayers() {
     const players = this.blackjackTable.getCurrentPlayers();
 
     for (let i = this.currenPlayerIndex; i < players.length; i++) {
       const player = players[i];
       const playersHands = player.getCurrentHands();
 
-      if (player.isBlackjack(playersHands))
+      if (player.isBlackjack(playersHands)) {
         this.updatePlayerAndViewState(player);
-      else break;
+      } else {
+        break;
+      }
     }
   }
 
@@ -385,7 +358,7 @@ class BlackjackController {
           this.loadDataToView();
           this.togglePlayerNameColor();
           this.callBlackjackEventListener();
-          this.skipBlackjackPlayer();
+          this.skipBlackjackPlayers();
         }
       } else {
         this.alertUnbetPlayers();
