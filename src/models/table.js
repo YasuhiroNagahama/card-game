@@ -91,6 +91,12 @@ export class BlackjackTable extends Table {
     return "\n" + unbetPlayers.join("\n");
   }
 
+  getPlayerBet(index) {
+    const player = this.players[index];
+
+    return player.getCurrentBet();
+  }
+
   setPlayer(playerName, playerType) {
     this.players.push(new BlackjackPlayer(playerName, playerType));
   }

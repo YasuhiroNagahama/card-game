@@ -497,12 +497,15 @@ class BlackjackController {
     const betTotalEle = document.getElementById("betTotal");
 
     betTotalEle.addEventListener("change", () => {
-      const currentPlayer =
-        this.blackjackTable.getCurrentPlayers()[this.selectedPlayerIndex];
       const betTotal = Number(betTotalEle.value);
 
-      if (betTotal > 0 && currentPlayer.canBet(betTotal)) {
-        // playerのビジネスロジック側でのbet額が変わっている？
+      if (
+        betTotal > 0 &&
+        this.blackjackTable.canPlayerBetAtIndex(
+          this.selectedPlayerIndex,
+          betTotal
+        )
+      ) {
         this.changeBetAmount(betTotal);
       } else {
         alert("ベット不可能です。");
@@ -520,12 +523,11 @@ class BlackjackController {
 
     playerSelect.addEventListener("change", () => {
       const playerIndex = Number(playerSelect.value);
-
       this.selectedPlayerIndex = playerIndex;
 
-      const currentPlayer =
-        this.blackjackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-      const betData = currentPlayer.getCurrentBet();
+      const betData = this.blackjackTable.getPlayerBet(
+        this.selectedPlayerIndex
+      );
 
       this.changeBetAmount(betData);
       this.updateBetTotalElement();
