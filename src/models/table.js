@@ -204,6 +204,14 @@ export class BlackjackTable extends Table {
     return true;
   }
 
+  playersBetsCompleted() {
+    for (const player of this.players) {
+      if (!player.isBetCompleted()) return false;
+    }
+
+    return true;
+  }
+
   canPlayerBetAtIndex(index, betToAdd) {
     const player = this.players[index];
 

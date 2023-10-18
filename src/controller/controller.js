@@ -261,30 +261,16 @@ class BlackjackController {
   }
 
   updateCurrenPlayerIndex() {
-    if (this.currenPlayerIndex + 1 < this.playerCount) {
-      this.currenPlayerIndex++;
-    }
+    if (this.currenPlayerIndex + 1 < this.playerCount) this.currenPlayerIndex++;
   }
 
   togglePlayerNameColor() {
     this.blackjackView.togglePlayerNameColor(this.currenPlayerIndex);
   }
 
-  playersBetsCompleted() {
-    const players = this.blackjackTable.getCurrentPlayers();
-
-    for (const player of players) {
-      // AIの場合どうするか
-      if (!player.isBetCompleted()) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   getStartConfirmation() {
     const confirmText = this.blackjackTable.getConfirmText();
+
     return confirm(confirmText);
   }
 
@@ -352,7 +338,7 @@ class BlackjackController {
     const startBtn = document.getElementById("startBtn");
 
     startBtn.addEventListener("click", () => {
-      if (this.playersBetsCompleted()) {
+      if (this.blackjackTable.playersBetsCompleted()) {
         if (this.getStartConfirmation()) {
           this.displayGameScreen();
           this.loadDataToView();
