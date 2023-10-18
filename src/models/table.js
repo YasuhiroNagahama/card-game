@@ -77,6 +77,20 @@ export class BlackjackTable extends Table {
     return this.dealer;
   }
 
+  getUnbetPlayers() {
+    const unbetPlayers = [];
+
+    for (const player of this.players) {
+      const betData = player.getCurrentBet();
+
+      if (betData === 0) {
+        unbetPlayers.push(player.getPlayerName());
+      }
+    }
+
+    return "\n" + unbetPlayers.join("\n");
+  }
+
   setPlayer(playerName, playerType) {
     this.players.push(new BlackjackPlayer(playerName, playerType));
   }
@@ -139,8 +153,21 @@ export class BlackjackTable extends Table {
     return true;
   }
 
-  addPlayerBets(player, bets) {
-    player.addBets(bets);
+  canPlayerBetAtIndex(index, betToAdd) {
+    const player = this.players[index];
+
+    return player.canBet(betToAdd);
+  }
+
+  resetBetAmount(index) {
+    const player = this.players[index];
+    player.initializeBet();
+  }
+
+  addPlayerBetAtIndex(index, bet) {
+    const player = this.players[index];
+
+    player.addBet(bet);
   }
 
   removePlayerBets(player, bets) {
@@ -160,6 +187,18 @@ export class BlackjackTable extends Table {
     const currentPlayerChips = player.getCurrentChips();
 
     return currentPlayerBets < currentPlayerChips;
+  }
+
+  betAi() {
+    for (const player of this.players) {
+      const playerType = player.getPlayerType();
+
+      if (playerType === "ai") {
+        const aiBetAmount = player.getAiBet();
+
+        if (player.canBet(aiBetAmount)) player.addBet(aiBetAmount);
+      }
+    }
   }
 
   isVsAI() {

@@ -2,6 +2,7 @@ import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
 // Tableで行うべきことをControllerに書いてしまったので、書き換える
+// bet時にChipsからbet額を引く処理
 // dealer時のクリック制御
 // 多少リファクタリングする
 
@@ -137,7 +138,7 @@ class BlackjackController {
     const dealer = this.blackjackTable.getCurrentDealer();
     const dealerHand = dealer.getCurrentHands()[1].getCardInfoObj();
     const dealerScore = dealer.getCurrentScore();
-    
+
     this.blackjackView.removeDealerCardBack();
     this.blackjackView.addDealerCard(dealerHand);
     this.blackjackView.updateDealerScore(dealerScore);
@@ -369,16 +370,7 @@ class BlackjackController {
   }
 
   alertUnbetPlayers() {
-    const players = this.blackjackTable.getCurrentPlayers();
-    let unbetPlayers = "";
-
-    for (const player of players) {
-      const betData = player.getCurrentBet();
-
-      if (betData === 0) {
-        unbetPlayers += "\n" + player.getPlayerName();
-      }
-    }
+    const unbetPlayers = this.blackjackTable.getUnbetPlayers();
 
     alert("ベットが完了していないプレーヤーがいます。" + unbetPlayers);
   }
@@ -402,10 +394,14 @@ class BlackjackController {
   }
 
   addBetAmount(bet) {
-    const currentPlayer =
-      this.blackjackTable.getCurrentPlayers()[this.selectedPlayerIndex];
+    const betToAdd = this.betAmount + bet;
 
-    if (currentPlayer.canBet(this.betAmount + bet)) {
+    if (
+      this.blackjackTable.canPlayerBetAtIndex(
+        this.selectedPlayerIndex,
+        betToAdd
+      )
+    ) {
       this.betAmount += bet;
     } else {
       alert("ベット額が所持金を上回ります。");
@@ -457,14 +453,7 @@ class BlackjackController {
 
     resetBetBtn.addEventListener("click", () => {
       if (confirm("ベット額をリセットしますか？")) {
-        this.changeBetAmount(0);
-
-        const currentPlayer =
-          this.blackjackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-        currentPlayer.initializeBet();
-
-        this.updateBetTotalElement();
-
+        this.resetCurrentBet();
         alert("ベット額のリセットを完了しました。");
       } else {
         alert("ベット額のリセットを中止しました。");
@@ -474,11 +463,7 @@ class BlackjackController {
 
   resetCurrentBet() {
     this.changeBetAmount(0);
-
-    const currentPlayer =
-      this.blackjackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-    currentPlayer.initializeBet();
-
+    this.blackjackTable.resetBetAmount(this.selectedPlayerIndex);
     this.updateBetTotalElement();
   }
 
@@ -487,17 +472,22 @@ class BlackjackController {
 
     betConfirmBtn.addEventListener("click", () => {
       if (this.betAmount !== 0) {
-        const currentPlayer =
-          this.blackjackTable.getCurrentPlayers()[this.selectedPlayerIndex];
-
-        if (currentPlayer.canBet(this.betAmount)) {
-          currentPlayer.addBet(this.betAmount);
+        if (
+          this.blackjackTable.canPlayerBetAtIndex(
+            this.selectedPlayerIndex,
+            this.betAmount
+          )
+        ) {
+          this.blackjackTable.addPlayerBetAtIndex(
+            this.selectedPlayerIndex,
+            this.betAmount
+          );
 
           this.updateBetTotalElement();
           alert("ベット完了 : " + String(this.betAmount) + "bet");
         } else {
-          alert("ベット額がマイナス値か、ベット額が所持金を上回ります。");
           this.resetCurrentBet();
+          alert("ベット額がマイナス値か、ベット額が所持金を上回ります。");
         }
       }
     });
@@ -511,11 +501,8 @@ class BlackjackController {
         this.blackjackTable.getCurrentPlayers()[this.selectedPlayerIndex];
       const betTotal = Number(betTotalEle.value);
 
-      if (
-        betTotal > 0 &&
-        !Number.isInteger(betTotal) &&
-        currentPlayer.canBet(betTotal)
-      ) {
+      if (betTotal > 0 && currentPlayer.canBet(betTotal)) {
+        // playerのビジネスロジック側でのbet額が変わっている？
         this.changeBetAmount(betTotal);
       } else {
         alert("ベット不可能です。");
@@ -545,20 +532,6 @@ class BlackjackController {
     });
   }
 
-  betAi() {
-    const players = this.blackjackTable.getCurrentPlayers();
-
-    for (const player of players) {
-      const playerType = player.getPlayerType();
-
-      if (playerType === "ai") {
-        const aiBetAmount = player.getAiBet();
-
-        if (player.canBet(aiBetAmount)) player.addBet(aiBetAmount);
-      }
-    }
-  }
-
   callBetModalEventListeners() {
     this.startBtnClick();
     this.bet5BtnClick();
@@ -570,7 +543,7 @@ class BlackjackController {
     this.betConfirmBtnClick();
     this.updateSelectedPlayer();
 
-    if (this.gameMode === "ai") this.betAi();
+    if (this.gameMode === "ai") this.blackjackTable.betAi();
   }
 
   removeStartScreen() {

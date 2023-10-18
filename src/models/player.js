@@ -134,10 +134,6 @@ export class BlackjackPlayer extends Player {
     return Math.floor(Math.random() * (currentChips / 3 + 1));
   }
 
-  canBet(betToAdd) {
-    return betToAdd >= 0 && this.chips >= betToAdd;
-  }
-
   removeChips(chipsToRemove) {
     this.chips -= chipsToRemove;
   }
@@ -171,6 +167,10 @@ export class BlackjackPlayer extends Player {
   isBust() {
     const currentScore = this.getCurrentScore();
     return currentScore > 21;
+  }
+
+  canBet(betToAdd) {
+    return betToAdd >= 0 && this.chips >= betToAdd;
   }
 
   canHit() {
