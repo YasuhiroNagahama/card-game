@@ -85,9 +85,19 @@ export class View {
     playerStatus.innerHTML = status;
   }
 
+  updatePlayerBet(index, bet) {
+    const playerBet = document.querySelectorAll("#playerBet")[index];
+    playerBet.innerHTML = String(bet);
+  }
+
   updatePlayerScore(index, score) {
     const playerScore = document.querySelectorAll("#playerScore")[index];
     playerScore.innerHTML = String(score);
+  }
+
+  updatePlayerChips(index, chips) {
+    const playerChips = document.querySelectorAll("#playerChips")[index];
+    playerChips.innerHTML = String(chips);
   }
 
   updateDealerScore(score) {
@@ -269,7 +279,7 @@ export class BlackjackView extends View {
           SCORE : <span id="playerScore">${playerInfo.playerScore}</span>
         </li>
         <li class="game-player-details-item">
-          BETS : <span id="playerBets">${playerInfo.playerBets}</span>
+          BETS : <span id="playerBet">${playerInfo.playerBet}</span>
         </li>
         <li class="game-player-details-item">
           CHIPS : <span id="playerChips">${playerInfo.playerChips}</span>

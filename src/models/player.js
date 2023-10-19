@@ -35,7 +35,7 @@ export class Player {
     return this.hands;
   }
 
-  setPlayerStatus(currentStatus) {
+  setStatus(currentStatus) {
     this.status = currentStatus;
   }
 
@@ -62,14 +62,14 @@ export class BlackjackPlayer extends Player {
     this.chips = playerType === "dealer" ? 0 : 400;
     this.bet = 0;
     this.score = 0;
-    super.setPlayerStatus("waiting");
+    super.setStatus("waiting");
   }
 
   initializeBlackjackPlayer() {
     const currentPlayerType = super.getCurrentPlayerType();
     this.chips = currentPlayerType === "dealer" ? 0 : 400;
     this.initializeBet();
-    super.setPlayerStatus("waiting");
+    super.setStatus("waiting");
   }
 
   getCurrentChips() {
@@ -85,27 +85,27 @@ export class BlackjackPlayer extends Player {
   }
 
   setToStand() {
-    super.setPlayerStatus("stand");
+    super.setStatus("stand");
   }
 
   setToHit() {
-    super.setPlayerStatus("hit");
+    super.setStatus("hit");
   }
 
   setToDouble() {
-    super.setPlayerStatus("double");
+    super.setStatus("double");
   }
 
   setToSurrender() {
-    super.setPlayerStatus("surrender");
+    super.setStatus("surrender");
   }
 
   setToBust() {
-    super.setPlayerStatus("bust");
+    super.setStatus("bust");
   }
 
   setToBlackjack() {
-    super.setPlayerStatus("blackjack");
+    super.setStatus("blackjack");
   }
 
   initializeBet() {
@@ -124,16 +124,6 @@ export class BlackjackPlayer extends Player {
     this.score += scoreToAdd;
   }
 
-  getAiBet() {
-    const currentChips = this.getCurrentChips();
-
-    if (currentChips <= 50) {
-      return Math.floor(Math.random() * (currentChips + 1));
-    }
-
-    return Math.floor(Math.random() * (currentChips / 3 + 1));
-  }
-
   removeChips(chipsToRemove) {
     this.chips -= chipsToRemove;
   }
@@ -142,31 +132,27 @@ export class BlackjackPlayer extends Player {
     this.bet -= betToRemove;
   }
 
-  setHit(card) {
-    super.addHand(card);
-
-    if (this.isBust()) {
-      this.setBust();
-    }
+  removeBetFromChips() {
+    this.chips -= this.bet;
   }
 
-  setSurrender() {
+  surrenderProcess() {
     this.removeBet(Math.floor(this.bet / 2));
-    super.setPlayerStatus("surrender");
   }
 
-  setDouble() {
+  doubleProcess() {
+    this.removeChips(this.bet);
     this.addBet(this.bet);
-    super.setPlayerStatus("double");
   }
 
-  setBust() {
-    super.setPlayerStatus("bust");
-  }
+  getAiBet() {
+    const currentChips = this.getCurrentChips();
 
-  isBust() {
-    const currentScore = this.getCurrentScore();
-    return currentScore > 21;
+    if (currentChips <= 50) {
+      return Math.floor(Math.random() * (currentChips + 1));
+    }
+
+    return Math.floor(Math.random() * (currentChips / 3 + 1));
   }
 
   canBet(betToAdd) {
@@ -183,7 +169,13 @@ export class BlackjackPlayer extends Player {
   canDouble() {
     const currentBet = this.getCurrentBet() * 2;
     const currentChips = this.getCurrentChips();
+
     return currentBet * 2 < currentChips;
+  }
+
+  isBust() {
+    const currentScore = this.getCurrentScore();
+    return currentScore > 21;
   }
 
   isBetCompleted() {

@@ -77,9 +77,19 @@ export class BlackjackTable extends Table {
     return this.dealer;
   }
 
+  getPlayerBet(index) {
+    const player = this.players[index];
+    return player.getCurrentBet();
+  }
+
   getPlayerScore(index) {
     const player = this.players[index];
     return player.getCurrentScore();
+  }
+
+  getPlayerChips(index) {
+    const player = this.players[index];
+    return player.getCurrentChips();
   }
 
   getPlayerStatus(index) {
@@ -124,7 +134,7 @@ export class BlackjackTable extends Table {
           hand2: player.getHands()[1].getCardInfoObj(),
         },
         playerChips: player.getCurrentChips(),
-        playerBets: player.getCurrentBet(),
+        playerBet: player.getCurrentBet(),
         playerScore: player.getCurrentScore(),
       };
 
@@ -141,11 +151,7 @@ export class BlackjackTable extends Table {
       if (player.getType() === "ai") continue;
 
       confirmTextArr.push(
-        "\n" +
-          player.getName() +
-          " : " +
-          String(player.getCurrentBet()) +
-          " "
+        "\n" + player.getName() + " : " + String(player.getCurrentBet()) + " "
       );
     }
 
@@ -246,16 +252,18 @@ export class BlackjackTable extends Table {
     player.addBet(bet);
   }
 
-  removePlayerBets(player, bets) {
-    player.removeBets(bets);
+  removePlayerBetFromChips() {
+    for (const player of this.players) {
+      player.removeBetFromChips();
+    }
+  }
+
+  removePlayerBet(player, bet) {
+    player.removeBets(bet);
   }
 
   addPlayerChips(player, chips) {
     player.addChips(chips);
-  }
-
-  removePlayerChips(player, chips) {
-    player.removeChips(chips);
   }
 
   canUpdatePlayerBet(player) {
@@ -308,7 +316,12 @@ export class BlackjackTable extends Table {
 
   doublePlayerAtIndex(index) {
     const player = this.players[index];
-    player.setToDouble();
+
+    if (player.canDouble()) {
+      player.setToDouble();
+      player.doubleProcess();
+      this.updatePlayerHands(player);
+    }
   }
 
   surrenderPlayerAtIndex(index) {

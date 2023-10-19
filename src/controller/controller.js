@@ -185,6 +185,21 @@ class BlackjackController {
     }
   }
 
+  double() {
+    this.blackjackTable.doublePlayerAtIndex(this.currenPlayerIndex);
+    this.addPlayerCard();
+    this.updatePlayerBet();
+    this.updatePlayerScore();
+    this.updatePlayerChips();
+    this.skipBlackjackPlayers();
+
+    this.updatePlayerAndViewState();
+
+    if (this.blackjackTable.isBustPlayerAtIndex(this.currenPlayerIndex)) {
+      this.bust();
+    }
+  }
+
   standBtnClick() {
     const standBtn = document.getElementById("standBtn");
 
@@ -205,8 +220,7 @@ class BlackjackController {
     const doubleBtn = document.getElementById("doubleBtn");
 
     doubleBtn.addEventListener("click", () => {
-      this.blackjackTable.doublePlayerAtIndex(this.currenPlayerIndex);
-      this.updatePlayerAndViewState();
+      this.double();
     });
   }
 
@@ -230,6 +244,14 @@ class BlackjackController {
     this.blackjackView.addPlayerCard(this.currenPlayerIndex, playerLastHand);
   }
 
+  updatePlayerBet() {
+    const playerBet = this.blackjackTable.getPlayerBet(
+      this.currenPlayerIndex
+    );
+
+    this.blackjackView.updatePlayerBet(this.currenPlayerIndex, playerBet);
+  }
+
   updatePlayerScore() {
     const playerScore = this.blackjackTable.getPlayerScore(
       this.currenPlayerIndex
@@ -238,6 +260,14 @@ class BlackjackController {
     this.blackjackView.updatePlayerScore(this.currenPlayerIndex, playerScore);
 
     if (playerScore === 21) this.stand();
+  }
+
+  updatePlayerChips() {
+    const playerChips = this.blackjackTable.getPlayerChips(
+      this.currenPlayerIndex
+    );
+
+    this.blackjackView.updatePlayerChips(this.currenPlayerIndex, playerChips);
   }
 
   updatePlayerAndViewState() {
@@ -337,6 +367,8 @@ class BlackjackController {
     startBtn.addEventListener("click", () => {
       if (this.blackjackTable.playersBetsCompleted()) {
         if (this.getStartConfirmation()) {
+          // chipsからbetをremoveするメソッド
+          this.blackjackTable.removePlayerBetFromChips();
           this.displayGameScreen();
           this.loadDataToView();
           this.togglePlayerNameColor();
