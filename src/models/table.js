@@ -77,6 +77,16 @@ export class BlackjackTable extends Table {
     return this.dealer;
   }
 
+  getPlayerScore(index) {
+    const player = this.players[index];
+    return player.getCurrentScore();
+  }
+
+  getPlayerStatus(index) {
+    const player = this.players[index];
+    return player.getStatus();
+  }
+
   getUnbetPlayers() {
     const unbetPlayers = [];
 
@@ -84,7 +94,7 @@ export class BlackjackTable extends Table {
       const betData = player.getCurrentBet();
 
       if (betData === 0) {
-        unbetPlayers.push(player.getPlayerName());
+        unbetPlayers.push(player.getName());
       }
     }
 
@@ -98,7 +108,7 @@ export class BlackjackTable extends Table {
   }
 
   getDealerHands() {
-    const dealerHands = this.dealer.getCurrentHands()[0].getCardInfoObj();
+    const dealerHands = this.dealer.getHands()[0].getCardInfoObj();
     return dealerHands;
   }
 
@@ -107,11 +117,11 @@ export class BlackjackTable extends Table {
 
     for (const player of this.players) {
       const playerInfoObj = {
-        playerName: player.getPlayerName(),
-        playerStatus: player.getPlayerStatus(),
+        playerName: player.getName(),
+        playerStatus: player.getStatus(),
         playerHands: {
-          hand1: player.getCurrentHands()[0].getCardInfoObj(),
-          hand2: player.getCurrentHands()[1].getCardInfoObj(),
+          hand1: player.getHands()[0].getCardInfoObj(),
+          hand2: player.getHands()[1].getCardInfoObj(),
         },
         playerChips: player.getCurrentChips(),
         playerBets: player.getCurrentBet(),
@@ -128,11 +138,11 @@ export class BlackjackTable extends Table {
     const confirmTextArr = [];
 
     for (const player of this.players) {
-      if (player.getPlayerType() === "ai") continue;
+      if (player.getType() === "ai") continue;
 
       confirmTextArr.push(
         "\n" +
-          player.getPlayerName() +
+          player.getName() +
           " : " +
           String(player.getCurrentBet()) +
           " "
@@ -140,6 +150,13 @@ export class BlackjackTable extends Table {
     }
 
     return "ゲームを開始しますか？ " + confirmTextArr.join("");
+  }
+
+  getLastHand(index) {
+    const player = this.players[index];
+    const playerHands = player.getHands();
+
+    return playerHands.slice(-1)[0];
   }
 
   setPlayer(playerName, playerType) {
@@ -250,7 +267,7 @@ export class BlackjackTable extends Table {
 
   betAi() {
     for (const player of this.players) {
-      const playerType = player.getPlayerType();
+      const playerType = player.getType();
 
       if (playerType === "ai") {
         const aiBetAmount = player.getAiBet();
@@ -263,6 +280,40 @@ export class BlackjackTable extends Table {
   isVsAI() {
     const currentGameMode = this.getCurrentGameMode();
     return currentGameMode === "ai";
+  }
+
+  isBustPlayerAtIndex(index) {
+    const player = this.players[index];
+    return player.isBust();
+  }
+
+  bustPlayerAtIndex(index) {
+    const player = this.players[index];
+    player.setToBust();
+  }
+
+  standPlayerAtIndex(index) {
+    const player = this.players[index];
+    player.setToStand();
+  }
+
+  hitPlayerAtIndex(index) {
+    const player = this.players[index];
+
+    if (player.canHit()) {
+      player.setToHit();
+      this.updatePlayerHands(player);
+    }
+  }
+
+  doublePlayerAtIndex(index) {
+    const player = this.players[index];
+    player.setToDouble();
+  }
+
+  surrenderPlayerAtIndex(index) {
+    const player = this.players[index];
+    player.setToSurrender();
   }
 
   print() {

@@ -15,11 +15,11 @@ export class Player {
     this.status = "";
   }
 
-  getPlayerName() {
+  getName() {
     return this.playerName;
   }
 
-  getPlayerType() {
+  getType() {
     return this.playerType;
   }
 
@@ -27,11 +27,11 @@ export class Player {
     return this.winAmounts;
   }
 
-  getPlayerStatus() {
+  getStatus() {
     return this.status;
   }
 
-  getCurrentHands() {
+  getHands() {
     return this.hands;
   }
 
@@ -174,7 +174,7 @@ export class BlackjackPlayer extends Player {
   }
 
   canHit() {
-    const playerStatus = super.getPlayerStatus();
+    const playerStatus = super.getStatus();
     const playerScore = this.getCurrentScore();
 
     // hit以外の時どうする
@@ -203,7 +203,7 @@ export class BlackjackPlayer extends Player {
   }
 
   print() {
-    const hands = this.getCurrentHands();
+    const hands = this.getHands();
     console.log("\n");
     console.log("This player name : " + this.getCurrentPlayerName());
     console.log("This player type : " + this.getCurrentPlayerType());

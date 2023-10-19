@@ -136,7 +136,7 @@ class BlackjackController {
 
   updateDealerView() {
     const dealer = this.blackjackTable.getCurrentDealer();
-    const dealerHand = dealer.getCurrentHands()[1].getCardInfoObj();
+    const dealerHand = dealer.getHands()[1].getCardInfoObj();
     const dealerScore = dealer.getCurrentScore();
 
     this.blackjackView.removeDealerCardBack();
@@ -155,7 +155,7 @@ class BlackjackController {
 
   changeDealerTurn() {
     const dealer = this.blackjackTable.getCurrentDealer();
-    const dealerHand = dealer.getCurrentHands()[1].getCardInfoObj();
+    const dealerHand = dealer.getHands()[1].getCardInfoObj();
     const dealerScore = dealer.getCurrentScore();
 
     this.updateDealerView(dealerHand, dealerScore);
@@ -168,44 +168,39 @@ class BlackjackController {
     this.skipBlackjackPlayers();
   }
 
-  standAction() {
-    const player =
-      this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
-
-    player.setToStand();
+  stand() {
+    this.blackjackTable.standPlayerAtIndex(this.currenPlayerIndex);
     this.updatePlayerAndViewState(player);
     this.skipBlackjackPlayers();
   }
 
   hitAction() {
-    const player =
-      this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
+    this.blackjackTable.hitPlayerAtIndex(this.currenPlayerIndex);
 
-    if (player.canHit()) {
-      player.setToHit();
+    const playerLastHand = this.blackjackTable.getLastHand(
+      this.currenPlayerIndex
+    );
+    const playerScore = this.blackjackTable.getPlayerScore(
+      this.currenPlayerIndex
+    );
+    const playerStatus = this.blackjackTable.getPlayerStatus(
+      this.currenPlayerIndex
+    );
 
-      this.blackjackTable.updatePlayerHands(player);
+    this.blackjackView.addPlayerCard(this.currenPlayerIndex, playerLastHand);
+    this.blackjackView.updatePlayerScore(this.currenPlayerIndex, playerScore);
+    this.updatePlayerStatus(playerStatus);
 
-      const playerHands = player.getCurrentHands();
-      const playerScore = player.getCurrentScore();
-
-      this.blackjackView.addPlayerCard(
-        this.currenPlayerIndex,
-        playerHands.slice(-1)[0]
-      );
-      this.blackjackView.updatePlayerScore(this.currenPlayerIndex, playerScore);
-      this.updatePlayerStatus(player);
-
-      if (playerScore === 21) this.standAction();
-      else if (player.isBust()) this.handleBust(player);
-    }
+    if (playerScore === 21) this.stand();
+    else if (this.blackjackTable.isBustPlayerAtIndex(this.currenPlayerIndex))
+      this.blackjackTable.bustPlayerAtIndex(this.currenPlayerIndex);
   }
 
   standBtnClick() {
     const standBtn = document.getElementById("standBtn");
 
     standBtn.addEventListener("click", () => {
-      this.standAction();
+      this.stand();
     });
   }
 
@@ -222,10 +217,11 @@ class BlackjackController {
     const doubleBtn = document.getElementById("doubleBtn");
 
     doubleBtn.addEventListener("click", () => {
-      const player =
-        this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
+      this.blackjackTable.doublePlayerAtIndex(this.currenPlayerIndex);
 
-      player.setToDouble();
+      const playerStatus = this.blackjackTable.getPlayerStatus(
+        this.currenPlayerIndex
+      );
       this.updatePlayerAndViewState(player);
     });
   }
@@ -234,16 +230,17 @@ class BlackjackController {
     const surrenderBtn = document.getElementById("surrenderBtn");
 
     surrenderBtn.addEventListener("click", () => {
-      const player =
-        this.blackjackTable.getCurrentPlayers()[this.currenPlayerIndex];
+      this.blackjackTable.surrenderPlayerAtIndex(this.currenPlayerIndex);
 
-      player.setToSurrender();
-      this.updatePlayerAndViewState(player);
+      const playerStatus = this.blackjackTable.getPlayerStatus(
+        this.currenPlayerIndex
+      );
+      this.updatePlayerAndViewState(playerStatus);
     });
   }
 
-  updatePlayerAndViewState(player) {
-    this.updatePlayerStatus(player);
+  updatePlayerAndViewState(playerStatus) {
+    this.updatePlayerStatus(playerStatus);
     this.togglePlayerNameColor();
 
     if (this.currenPlayerIndex === this.playerCount - 1) {
@@ -254,9 +251,7 @@ class BlackjackController {
     }
   }
 
-  updatePlayerStatus(player) {
-    const playerStatus = player.getPlayerStatus();
-
+  updatePlayerStatus(playerStatus) {
     this.blackjackView.updatePlayerStatus(this.currenPlayerIndex, playerStatus);
   }
 
@@ -318,10 +313,13 @@ class BlackjackController {
 
     for (let i = this.currenPlayerIndex; i < players.length; i++) {
       const player = players[i];
-      const playersHands = player.getCurrentHands();
+      const playersHands = player.getHands();
 
       if (player.isBlackjack(playersHands)) {
-        this.updatePlayerAndViewState(player);
+        const playerStatus = this.blackjackTable.getPlayerStatus(
+          this.currenPlayerIndex
+        );
+        this.updatePlayerAndViewState(playerStatus);
       } else {
         break;
       }
