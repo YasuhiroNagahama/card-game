@@ -245,9 +245,7 @@ class BlackjackController {
   }
 
   updatePlayerBet() {
-    const playerBet = this.blackjackTable.getPlayerBet(
-      this.currenPlayerIndex
-    );
+    const playerBet = this.blackjackTable.getPlayerBet(this.currenPlayerIndex);
 
     this.blackjackView.updatePlayerBet(this.currenPlayerIndex, playerBet);
   }
@@ -481,7 +479,7 @@ class BlackjackController {
     });
   }
 
-  updatePlayerBet() {
+  updateSelectedPlayerBet() {
     const betTotalEle = document.getElementById("betTotal");
 
     betTotalEle.addEventListener("change", () => {
@@ -529,7 +527,7 @@ class BlackjackController {
     this.bet50BtnClick();
     this.bet100BtnClick();
     this.resetBtnClick();
-    this.updatePlayerBet();
+    this.updateSelectedPlayerBet();
     this.betConfirmBtnClick();
     this.updateSelectedPlayer();
 

@@ -111,12 +111,6 @@ export class BlackjackTable extends Table {
     return "\n" + unbetPlayers.join("\n");
   }
 
-  getPlayerBet(index) {
-    const player = this.players[index];
-
-    return player.getCurrentBet();
-  }
-
   getDealerHands() {
     const dealerHands = this.dealer.getHands()[0].getCardInfoObj();
     return dealerHands;
