@@ -200,6 +200,16 @@ class BlackjackController {
     }
   }
 
+  surrender() {
+    this.blackjackTable.surrenderPlayerAtIndex(this.currentPlayerIndex);
+
+    if (this.blackjackTable.isBustPlayerAtIndex(this.currentPlayerIndex)) {
+      this.bust();
+    } else {
+      this.updatePlayerAndViewState();
+    }
+  }
+
   standBtnClick() {
     const standBtn = document.getElementById("standBtn");
 
@@ -228,8 +238,7 @@ class BlackjackController {
     const surrenderBtn = document.getElementById("surrenderBtn");
 
     surrenderBtn.addEventListener("click", () => {
-      this.blackjackTable.surrenderPlayerAtIndex(this.currentPlayerIndex);
-      this.updatePlayerAndViewState();
+      this.surrender();
     });
   }
 
