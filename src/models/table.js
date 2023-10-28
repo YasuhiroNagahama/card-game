@@ -243,7 +243,7 @@ export class BlackjackTable extends Table {
   addPlayerBetAtIndex(index, bet) {
     const player = this.players[index];
 
-    player.addBet(bet);
+    player.changeBet(bet);
   }
 
   removePlayerBetFromChips() {
@@ -312,6 +312,7 @@ export class BlackjackTable extends Table {
     const player = this.players[index];
 
     if (player.canDouble()) {
+      console.log(1);
       player.setToDouble();
       player.doubleProcess();
       this.updatePlayerHands(player);

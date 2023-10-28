@@ -51,7 +51,7 @@ class Controller {
         this.setPlayerCount(3);
       } else {
         this.displayPlayerCount();
-        this.addPlayerCountCheckedElemment();
+        this.addPlayerCountCheckedElement();
       }
     });
   }
@@ -65,27 +65,27 @@ class Controller {
     });
   }
 
-  addPlayerCountCheckedElemment() {
-    const playerCountElemments = document.querySelectorAll(
+  addPlayerCountCheckedElement() {
+    const playerCountElements = document.querySelectorAll(
       ".game-player-count-input"
     );
 
-    playerCountElemments.forEach((playerCountElemment) => {
-      if (playerCountElemment.checked) {
-        const playerCount = Number(playerCountElemment.value);
+    playerCountElements.forEach((playerCountElement) => {
+      if (playerCountElement.checked) {
+        const playerCount = Number(playerCountElement.value);
         this.setPlayerCount(playerCount);
       }
     });
   }
 
   addPlayerCountChangeListeners() {
-    const playerCountElemments = document.querySelectorAll(
+    const playerCountElements = document.querySelectorAll(
       ".game-player-count-input"
     );
 
-    playerCountElemments.forEach((playerCountElemment) => {
-      playerCountElemment.addEventListener("change", () => {
-        const playerCount = Number(playerCountElemment.value);
+    playerCountElements.forEach((playerCountElement) => {
+      playerCountElement.addEventListener("change", () => {
+        const playerCount = Number(playerCountElement.value);
         this.setPlayerCount(playerCount);
       });
     });
@@ -124,7 +124,7 @@ class BlackjackController {
   constructor(gameMode, playerCount) {
     this.gameMode = gameMode;
     this.playerCount = playerCount;
-    this.currenPlayerIndex = 0;
+    this.currentPlayerIndex = 0;
     this.betAmount = 0;
     this.selectedPlayerIndex = 0;
     this.blackjackView = new BlackjackView();
@@ -163,40 +163,40 @@ class BlackjackController {
   }
 
   bust() {
-    this.blackjackTable.bustPlayerAtIndex(this.currenPlayerIndex);
+    this.blackjackTable.bustPlayerAtIndex(this.currentPlayerIndex);
     this.updatePlayerAndViewState();
     this.skipBlackjackPlayers();
   }
 
   stand() {
-    this.blackjackTable.standPlayerAtIndex(this.currenPlayerIndex);
+    this.blackjackTable.standPlayerAtIndex(this.currentPlayerIndex);
     this.updatePlayerAndViewState();
     this.skipBlackjackPlayers();
   }
 
   hit() {
-    this.blackjackTable.hitPlayerAtIndex(this.currenPlayerIndex);
+    this.blackjackTable.hitPlayerAtIndex(this.currentPlayerIndex);
     this.addPlayerCard();
     this.updatePlayerScore();
     this.updatePlayerStatus();
 
-    if (this.blackjackTable.isBustPlayerAtIndex(this.currenPlayerIndex)) {
+    if (this.blackjackTable.isBustPlayerAtIndex(this.currentPlayerIndex)) {
       this.bust();
     }
   }
 
   double() {
-    this.blackjackTable.doublePlayerAtIndex(this.currenPlayerIndex);
+    this.blackjackTable.doublePlayerAtIndex(this.currentPlayerIndex);
     this.addPlayerCard();
     this.updatePlayerBet();
     this.updatePlayerScore();
     this.updatePlayerChips();
     this.skipBlackjackPlayers();
 
-    this.updatePlayerAndViewState();
-
-    if (this.blackjackTable.isBustPlayerAtIndex(this.currenPlayerIndex)) {
+    if (this.blackjackTable.isBustPlayerAtIndex(this.currentPlayerIndex)) {
       this.bust();
+    } else {
+      this.updatePlayerAndViewState();
     }
   }
 
@@ -228,68 +228,72 @@ class BlackjackController {
     const surrenderBtn = document.getElementById("surrenderBtn");
 
     surrenderBtn.addEventListener("click", () => {
-      this.blackjackTable.surrenderPlayerAtIndex(this.currenPlayerIndex);
+      this.blackjackTable.surrenderPlayerAtIndex(this.currentPlayerIndex);
       this.updatePlayerAndViewState();
     });
   }
 
-  updateCurrenPlayerIndex() {
-    if (this.currenPlayerIndex + 1 < this.playerCount) this.currenPlayerIndex++;
+  updateCurrentPlayerIndex() {
+    if (this.currentPlayerIndex + 1 < this.playerCount)
+      this.currentPlayerIndex++;
   }
 
   addPlayerCard() {
     const playerLastHand = this.blackjackTable.getLastHand(
-      this.currenPlayerIndex
+      this.currentPlayerIndex
     );
-    this.blackjackView.addPlayerCard(this.currenPlayerIndex, playerLastHand);
+    this.blackjackView.addPlayerCard(this.currentPlayerIndex, playerLastHand);
   }
 
   updatePlayerBet() {
-    const playerBet = this.blackjackTable.getPlayerBet(this.currenPlayerIndex);
+    const playerBet = this.blackjackTable.getPlayerBet(this.currentPlayerIndex);
 
-    this.blackjackView.updatePlayerBet(this.currenPlayerIndex, playerBet);
+    this.blackjackView.updatePlayerBet(this.currentPlayerIndex, playerBet);
   }
 
   updatePlayerScore() {
     const playerScore = this.blackjackTable.getPlayerScore(
-      this.currenPlayerIndex
+      this.currentPlayerIndex
     );
 
-    this.blackjackView.updatePlayerScore(this.currenPlayerIndex, playerScore);
+    this.blackjackView.updatePlayerScore(this.currentPlayerIndex, playerScore);
 
     if (playerScore === 21) this.stand();
   }
 
   updatePlayerChips() {
     const playerChips = this.blackjackTable.getPlayerChips(
-      this.currenPlayerIndex
+      this.currentPlayerIndex
     );
 
-    this.blackjackView.updatePlayerChips(this.currenPlayerIndex, playerChips);
+    this.blackjackView.updatePlayerChips(this.currentPlayerIndex, playerChips);
   }
 
   updatePlayerAndViewState() {
     this.updatePlayerStatus();
     this.togglePlayerNameColor();
 
-    if (this.currenPlayerIndex === this.playerCount - 1) {
+    if (this.currentPlayerIndex + 1 === this.playerCount) {
       this.changeDealerTurn();
     } else {
-      this.updateCurrenPlayerIndex();
+      this.updateCurrentPlayerIndex();
       this.togglePlayerNameColor();
     }
   }
 
   updatePlayerStatus() {
     const playerStatus = this.blackjackTable.getPlayerStatus(
-      this.currenPlayerIndex
+      this.currentPlayerIndex
     );
 
-    this.blackjackView.updatePlayerStatus(this.currenPlayerIndex, playerStatus);
+    this.blackjackView.updatePlayerStatus(
+      this.currentPlayerIndex,
+      playerStatus
+    );
   }
 
   togglePlayerNameColor() {
-    this.blackjackView.togglePlayerNameColor(this.currenPlayerIndex);
+    this.blackjackView.togglePlayerNameColor(this.currentPlayerIndex);
   }
 
   getStartConfirmation() {
@@ -341,7 +345,7 @@ class BlackjackController {
   skipBlackjackPlayers() {
     const players = this.blackjackTable.getCurrentPlayers();
 
-    for (let i = this.currenPlayerIndex; i < players.length; i++) {
+    for (let i = this.currentPlayerIndex; i < players.length; i++) {
       const player = players[i];
       const playersHands = player.getHands();
 

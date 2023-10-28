@@ -117,11 +117,15 @@ export class BlackjackPlayer extends Player {
   }
 
   addBet(betToAdd) {
-    this.bet = betToAdd;
+    this.bet += betToAdd;
   }
 
   addScore(scoreToAdd) {
     this.score += scoreToAdd;
+  }
+
+  changeBet(bet) {
+    this.bet = bet;
   }
 
   removeChips(chipsToRemove) {
