@@ -152,11 +152,21 @@ export class BlackjackTable extends Table {
     return "ゲームを開始しますか？ " + confirmTextArr.join("");
   }
 
-  getLastHand(index) {
+  getPlayerLastHand(index) {
     const player = this.players[index];
     const playerHands = player.getHands();
 
-    return playerHands.slice(-1)[0];
+    return playerHands.slice(-1)[0].getCardInfoObj();
+  }
+
+  getDealerScore() {
+    const dealerScore = this.dealer.getCurrentScore();
+    return dealerScore;
+  }
+
+  getDealerHandAtIndex(index) {
+    const dealerHands = this.dealer.getHands();
+    return dealerHands[index].getCardInfoObj();
   }
 
   setPlayer(playerName, playerType) {
@@ -172,8 +182,8 @@ export class BlackjackTable extends Table {
   }
 
   setAIPlayers() {
-    this.setPlayer("AI", "ai");
-    this.setPlayer("AI", "ai");
+    this.setPlayer("AI_1", "ai");
+    this.setPlayer("AI_2", "ai");
   }
 
   initializePlayers() {

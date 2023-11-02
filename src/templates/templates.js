@@ -77,7 +77,7 @@ export const templates = {
 </div>`,
   playerDetails: ``,
   gameBtn: {
-    blackjack: `<div class="game-btn-list-wrapper">
+    blackjack: `<div id="gameBtnList" class="game-btn-list-wrapper">
     <ul class="game-btn-list">
       <li class="game-btn-item">
         <div id="doubleBtn" class="game-btn-wrapper">

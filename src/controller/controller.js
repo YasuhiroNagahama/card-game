@@ -1,11 +1,6 @@
 import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
-// Tableで行うべきことをControllerに書いてしまったので、書き換える
-// bet時にChipsからbet額を引く処理
-// dealer時のクリック制御
-// 多少リファクタリングする
-
 class Controller {
   constructor() {
     this.gameMode = "player";
@@ -135,31 +130,16 @@ class BlackjackController {
   }
 
   updateDealerView() {
-    const dealer = this.blackjackTable.getCurrentDealer();
-    const dealerHand = dealer.getHands()[1].getCardInfoObj();
-    const dealerScore = dealer.getCurrentScore();
+    const dealerHand = this.blackjackTable.getDealerHandAtIndex(1);
+    const dealerScore = this.blackjackTable.getDealerScore();
 
     this.blackjackView.removeDealerCardBack();
     this.blackjackView.addDealerCard(dealerHand);
     this.blackjackView.updateDealerScore(dealerScore);
   }
 
-  // dealerTurn(dealer, dealerScore) {
-  //   let score = dealerScore;
-
-  //   while(score < 18) {
-
-  //     break;
-  //   }
-  // }
-
   changeDealerTurn() {
-    const dealer = this.blackjackTable.getCurrentDealer();
-    const dealerHand = dealer.getHands()[1].getCardInfoObj();
-    const dealerScore = dealer.getCurrentScore();
-
-    this.updateDealerView(dealerHand, dealerScore);
-    // this.dealerTurn(dealer, dealerScore);
+    this.updateDealerView();
   }
 
   bust() {
@@ -258,13 +238,8 @@ class BlackjackController {
     });
   }
 
-  updateCurrentPlayerIndex() {
-    if (this.currentPlayerIndex + 1 < this.playerCount)
-      this.currentPlayerIndex++;
-  }
-
   addPlayerCard() {
-    const playerLastHand = this.blackjackTable.getLastHand(
+    const playerLastHand = this.blackjackTable.getPlayerLastHand(
       this.currentPlayerIndex
     );
     this.blackjackView.addPlayerCard(this.currentPlayerIndex, playerLastHand);
@@ -294,18 +269,6 @@ class BlackjackController {
     this.blackjackView.updatePlayerChips(this.currentPlayerIndex, playerChips);
   }
 
-  updatePlayerAndViewState() {
-    this.updatePlayerStatus();
-    this.togglePlayerNameColor();
-
-    if (this.currentPlayerIndex + 1 === this.playerCount) {
-      this.changeDealerTurn();
-    } else {
-      this.updateCurrentPlayerIndex();
-      this.togglePlayerNameColor();
-    }
-  }
-
   updatePlayerStatus() {
     const playerStatus = this.blackjackTable.getPlayerStatus(
       this.currentPlayerIndex
@@ -319,6 +282,24 @@ class BlackjackController {
 
   togglePlayerNameColor() {
     this.blackjackView.togglePlayerNameColor(this.currentPlayerIndex);
+  }
+
+  updateCurrentPlayerIndex() {
+    // 下の条件分岐いるのか
+    if (this.currentPlayerIndex + 1 < this.playerCount)
+      this.currentPlayerIndex++;
+  }
+
+  updatePlayerAndViewState() {
+    this.updatePlayerStatus();
+    this.togglePlayerNameColor();
+
+    if (this.currentPlayerIndex + 1 === this.playerCount) {
+      this.changeDealerTurn();
+    } else {
+      this.updateCurrentPlayerIndex();
+      this.togglePlayerNameColor();
+    }
   }
 
   getStartConfirmation() {
@@ -366,7 +347,7 @@ class BlackjackController {
     this.surrenderBtnClick();
   }
 
-  // 変更必要
+  // 変更必要かも
   skipBlackjackPlayers() {
     const players = this.blackjackTable.getCurrentPlayers();
 
