@@ -252,14 +252,6 @@ export class BlackjackTable extends Table {
     }
   }
 
-  removePlayerBet(player, bet) {
-    player.removeBets(bet);
-  }
-
-  addPlayerChips(player, chips) {
-    player.addChips(chips);
-  }
-
   canUpdatePlayerBet(player) {
     const currentPlayerBets = player.getCurrentBets();
     const currentPlayerChips = player.getCurrentChips();
@@ -289,6 +281,18 @@ export class BlackjackTable extends Table {
     return player.isBust();
   }
 
+  canHitAtIndex(index) {
+    const player = this.players[index];
+
+    return player.canHit();
+  }
+
+  canDoubleAtIndex(index) {
+    const player = this.players[index];
+
+    return player.canDouble();
+  }
+
   bustPlayerAtIndex(index) {
     const player = this.players[index];
     player.setToBust();
@@ -302,26 +306,22 @@ export class BlackjackTable extends Table {
   hitPlayerAtIndex(index) {
     const player = this.players[index];
 
-    if (player.canHit()) {
-      player.setToHit();
-      this.updatePlayerHands(player);
-    }
+    player.setToHit();
+    this.updatePlayerHands(player);
   }
 
   doublePlayerAtIndex(index) {
     const player = this.players[index];
 
-    if (player.canDouble()) {
-      console.log(1);
-      player.setToDouble();
-      player.doubleProcess();
-      this.updatePlayerHands(player);
-    }
+    player.setToDouble();
+    player.doubleProcess();
+    this.updatePlayerHands(player);
   }
 
   surrenderPlayerAtIndex(index) {
     const player = this.players[index];
     player.setToSurrender();
+    player.surrenderProcess();
   }
 
   print() {

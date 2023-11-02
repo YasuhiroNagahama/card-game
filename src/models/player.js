@@ -141,7 +141,10 @@ export class BlackjackPlayer extends Player {
   }
 
   surrenderProcess() {
-    this.removeBet(Math.floor(this.bet / 2));
+    const currentBet = this.bet;
+
+    this.removeBet(Math.floor(currentBet / 2));
+    this.addChips(Math.floor(currentBet / 2));
   }
 
   doubleProcess() {
@@ -174,7 +177,7 @@ export class BlackjackPlayer extends Player {
     const doubleBet = this.getCurrentBet() * 2;
     const currentChips = this.getCurrentChips();
 
-    return doubleBet < currentChips;
+    return doubleBet <= currentChips;
   }
 
   isBust() {

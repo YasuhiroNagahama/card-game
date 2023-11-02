@@ -186,7 +186,6 @@ class BlackjackController {
   }
 
   double() {
-    // doubleできないときのalert
     this.blackjackTable.doublePlayerAtIndex(this.currentPlayerIndex);
     this.addPlayerCard();
     this.updatePlayerBet();
@@ -203,12 +202,14 @@ class BlackjackController {
 
   surrender() {
     this.blackjackTable.surrenderPlayerAtIndex(this.currentPlayerIndex);
+    this.updatePlayerBet();
+    this.updatePlayerChips();
+    this.skipBlackjackPlayers();
+    this.updatePlayerAndViewState();
+  }
 
-    if (this.blackjackTable.isBustPlayerAtIndex(this.currentPlayerIndex)) {
-      this.bust();
-    } else {
-      this.updatePlayerAndViewState();
-    }
+  alertInvalidAction(action) {
+    alert("現在の状態では" + action + "することはできません。");
   }
 
   standBtnClick() {
@@ -223,7 +224,11 @@ class BlackjackController {
     const hitBtn = document.getElementById("hitBtn");
 
     hitBtn.addEventListener("click", () => {
-      this.hit();
+      if (this.blackjackTable.canHitAtIndex(this.currentPlayerIndex)) {
+        this.hit();
+      } else {
+        this.alertInvalidAction("HIT");
+      }
     });
   }
 
@@ -231,7 +236,11 @@ class BlackjackController {
     const doubleBtn = document.getElementById("doubleBtn");
 
     doubleBtn.addEventListener("click", () => {
-      this.double();
+      if (this.blackjackTable.canDoubleAtIndex(this.currentPlayerIndex)) {
+        this.double();
+      } else {
+        this.alertInvalidAction("DOUBLE");
+      }
     });
   }
 
@@ -239,7 +248,13 @@ class BlackjackController {
     const surrenderBtn = document.getElementById("surrenderBtn");
 
     surrenderBtn.addEventListener("click", () => {
-      this.surrender();
+      if (
+        confirm(
+          "今回のゲームを降りますか？賭け金の半分が手元にかえってきます。"
+        )
+      ) {
+        this.surrender();
+      }
     });
   }
 
@@ -265,8 +280,6 @@ class BlackjackController {
     const playerScore = this.blackjackTable.getPlayerScore(
       this.currentPlayerIndex
     );
-
-    console.log(playerScore);
 
     this.blackjackView.updatePlayerScore(this.currentPlayerIndex, playerScore);
 
@@ -362,6 +375,7 @@ class BlackjackController {
       const playersHands = player.getHands();
 
       if (player.isBlackjack(playersHands)) {
+        player.setToBlackjack();
         this.updatePlayerAndViewState();
       } else {
         break;
