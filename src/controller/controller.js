@@ -186,6 +186,7 @@ class BlackjackController {
   }
 
   double() {
+    // doubleできないときのalert
     this.blackjackTable.doublePlayerAtIndex(this.currentPlayerIndex);
     this.addPlayerCard();
     this.updatePlayerBet();
@@ -264,6 +265,8 @@ class BlackjackController {
     const playerScore = this.blackjackTable.getPlayerScore(
       this.currentPlayerIndex
     );
+
+    console.log(playerScore);
 
     this.blackjackView.updatePlayerScore(this.currentPlayerIndex, playerScore);
 

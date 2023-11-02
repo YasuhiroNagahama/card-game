@@ -171,10 +171,10 @@ export class BlackjackPlayer extends Player {
   }
 
   canDouble() {
-    const currentBet = this.getCurrentBet() * 2;
+    const doubleBet = this.getCurrentBet() * 2;
     const currentChips = this.getCurrentChips();
 
-    return currentBet * 2 < currentChips;
+    return doubleBet < currentChips;
   }
 
   isBust() {
