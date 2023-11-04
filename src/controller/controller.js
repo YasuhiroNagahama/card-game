@@ -365,7 +365,7 @@ class BlackjackController {
 
     this.blackjackView.updateDealerScore(dealerScore);
 
-    if (playerScore === 21) this.blackjackTable.standDealer();
+    if (dealerScore === 21) this.blackjackTable.standDealer();
   }
 
   removeDealerCardBack() {
@@ -421,16 +421,13 @@ class BlackjackController {
     this.surrenderBtnClick();
   }
 
-  // 変更必要かも
+  // 変更必要
   skipBlackjackPlayers() {
-    const players = this.blackjackTable.getPlayers();
+    // 1人目なら良いが、2人目以降は一度した処理を二度することになる
+    for (let i = this.currentPlayerIndex; i < this.playerCount; i++) {
+      const playerStatus = this.blackjackTable.getPlayerStatusAtIndex(i);
 
-    // 1人目なら良いが、2人目以降は一度下処理を二度したことになる
-    for (let i = this.currentPlayerIndex; i < players.length; i++) {
-      const player = players[i];
-
-      if (player.isBlackjack()) {
-        player.setToBlackjack();
+      if (playerStatus == "blackjack") {
         this.updatePlayerAndViewState();
       } else {
         break;

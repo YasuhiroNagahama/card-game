@@ -55,6 +55,7 @@ export class BlackjackTable extends Table {
     this.initializePlayers();
     this.setDealer();
     this.initializePlayersHands();
+    this.initializeBlackjackPlayer();
   }
 
   getGameMode() {
@@ -79,6 +80,11 @@ export class BlackjackTable extends Table {
 
   // getNextPlayerIndex(currentPlayerIndex) {
   // }
+
+  getPlayerStatusAtIndex(index) {
+    const player = this.players[index];
+    return player.getStatus();
+  }
 
   getPlayerBetAtIndex(index) {
     const player = this.players[index];
@@ -224,6 +230,7 @@ export class BlackjackTable extends Table {
     player.addScore(score);
   }
 
+  // blackjackのplayerの状態をblackjackにする
   initializePlayersHands() {
     for (const player of this.players) {
       for (let i = 0; i < 2; i++) {
@@ -233,6 +240,12 @@ export class BlackjackTable extends Table {
 
     for (let i = 0; i < 2; i++) {
       this.updatePlayerHands(this.dealer);
+    }
+  }
+
+  initializeBlackjackPlayer() {
+    for (const player of this.players) {
+      if (player.isBlackjack()) player.setToBlackjack();
     }
   }
 
