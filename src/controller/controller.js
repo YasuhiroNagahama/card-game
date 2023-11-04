@@ -211,12 +211,13 @@ class BlackjackController {
     const hitBtn = document.getElementById("hitBtn");
 
     hitBtn.addEventListener("click", () => {
-      if (!this.isTurnOver) {
-        if (this.blackjackTable.canHitAtIndex(this.currentPlayerIndex)) {
-          this.hit();
-        } else {
-          this.alertInvalidAction("HIT");
-        }
+      if (
+        !this.isTurnOver &&
+        this.blackjackTable.canHitAtIndex(this.currentPlayerIndex)
+      ) {
+        this.hit();
+      } else {
+        this.alertInvalidAction("HIT");
       }
     });
   }
@@ -225,12 +226,13 @@ class BlackjackController {
     const doubleBtn = document.getElementById("doubleBtn");
 
     doubleBtn.addEventListener("click", () => {
-      if (!this.isTurnOver) {
-        if (this.blackjackTable.canDoubleAtIndex(this.currentPlayerIndex)) {
-          this.double();
-        } else {
-          this.alertInvalidAction("DOUBLE");
-        }
+      if (
+        !this.isTurnOver &&
+        this.blackjackTable.canDoubleAtIndex(this.currentPlayerIndex)
+      ) {
+        this.double();
+      } else {
+        this.alertInvalidAction("DOUBLE");
       }
     });
   }
@@ -239,13 +241,13 @@ class BlackjackController {
     const surrenderBtn = document.getElementById("surrenderBtn");
 
     surrenderBtn.addEventListener("click", () => {
-      if (!this.isTurnOver) {
-        const confirmSurrenderText =
-          "今回のゲームを降りますか？賭け金の半分が手元にかえってきます。";
-
-        if (confirm(confirmSurrenderText)) {
-          this.surrender();
-        }
+      if (
+        !this.isTurnOver &&
+        confirm(
+          "今回のゲームを降りますか？賭け金の半分が手元にかえってきます。"
+        )
+      ) {
+        this.surrender();
       }
     });
   }

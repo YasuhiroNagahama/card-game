@@ -179,7 +179,7 @@ export class BlackjackPlayer extends Player {
     const doubleBet = this.getCurrentBet() * 2;
     const currentChips = this.getCurrentChips();
 
-    return doubleBet <= currentChips;
+    return this.isFirstTurn() && doubleBet <= currentChips;
   }
 
   isBust() {

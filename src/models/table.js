@@ -291,12 +291,6 @@ export class BlackjackTable extends Table {
     return player.isBust();
   }
 
-  isFirstTurnAtIndex(index) {
-    const player = this.players[index];
-
-    return player.isFirstTurn();
-  }
-
   canHitAtIndex(index) {
     const player = this.players[index];
 
