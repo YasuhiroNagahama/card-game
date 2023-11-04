@@ -13,6 +13,7 @@ export class Player {
   initializePlayer() {
     this.winAmounts = 0;
     this.status = "";
+    this.hands = [];
   }
 
   getName() {
@@ -35,20 +36,20 @@ export class Player {
     return this.hands;
   }
 
-  setStatus(currentStatus) {
-    this.status = currentStatus;
-  }
-
-  updateWinAmounts() {
-    this.winAmounts++;
+  setStatus(status) {
+    this.status = status;
   }
 
   addHand(card) {
     this.hands.push(card);
   }
 
-  clearWinAmounts() {
-    this.winAmounts = 0;
+  updateWinAmounts() {
+    this.winAmounts++;
+  }
+
+  clearStatus() {
+    this.status = "";
   }
 
   clearHands() {
@@ -62,26 +63,48 @@ export class BlackjackPlayer extends Player {
     this.chips = playerType === "dealer" ? 0 : 400;
     this.bet = 0;
     this.score = 0;
-    this.setStatus("waiting");
+    this.setToWaiting();
   }
 
   initializeBlackjackPlayer() {
-    const currentPlayerType = this.getCurrentPlayerType();
-    this.chips = currentPlayerType === "dealer" ? 0 : 400;
-    this.initializeBet();
-    this.setStatus("waiting");
+    this.chips = this.getType() === "dealer" ? 0 : 400;
+    this.bet = 0;
+    this.score = 0;
+    this.setToWaiting();
   }
 
-  getCurrentChips() {
+  getChips() {
     return this.chips;
   }
 
-  getCurrentBet() {
+  getBet() {
     return this.bet;
   }
 
-  getCurrentScore() {
+  getScore() {
     return this.score;
+  }
+
+  getAiBet() {
+    const currentChips = this.getChips();
+
+    if (currentChips <= 50) {
+      return Math.floor(Math.random() * (currentChips + 1));
+    }
+
+    return Math.floor(Math.random() * (currentChips / 3 + 1));
+  }
+
+  getFirstHandObj() {
+    return this.hands[0].getCardInfoObj();
+  }
+
+  getLastHandObj() {
+    return this.hands.slice(-1)[0].getCardInfoObj();
+  }
+
+  setToWaiting() {
+    this.setStatus("waiting");
   }
 
   setToStand() {
@@ -106,10 +129,6 @@ export class BlackjackPlayer extends Player {
 
   setToBlackjack() {
     this.setStatus("blackjack");
-  }
-
-  initializeBet() {
-    this.bet = 0;
   }
 
   addChips(chipsToAdd) {
@@ -140,6 +159,52 @@ export class BlackjackPlayer extends Player {
     this.chips -= this.bet;
   }
 
+  canBet(betToAdd) {
+    return (
+      Number.isInteger(betToAdd) && betToAdd >= 0 && this.chips >= betToAdd
+    );
+  }
+
+  canHit() {
+    const playerStatus = this.getStatus();
+    const playerScore = this.getScore();
+
+    return playerStatus !== "blackjack" && playerScore < 21;
+  }
+
+  canDouble() {
+    const doubleBet = this.getBet() * 2;
+    const currentChips = this.getChips();
+
+    return this.isFirstTurn() && doubleBet <= currentChips;
+  }
+
+  isBust() {
+    const currentScore = this.getScore();
+    return currentScore > 21;
+  }
+
+  isBetCompleted() {
+    return this.bet <= this.chips && this.bet > 0;
+  }
+
+  isBlackjack() {
+    const rankArr = [];
+
+    for (const hand of this.hands) rankArr.push(hand.getCardRank());
+
+    return rankArr.includes("A") && /(10|J|Q|K)/.test(rankArr.join(" "));
+  }
+
+  isPlayer() {
+    const currentPlayer = this.getType();
+    return currentPlayer === "player";
+  }
+
+  isFirstTurn() {
+    return this.hands.length === 2;
+  }
+
   surrenderProcess() {
     const currentBet = this.bet;
 
@@ -152,74 +217,19 @@ export class BlackjackPlayer extends Player {
     this.addBet(this.bet);
   }
 
-  getAiBet() {
-    const currentChips = this.getCurrentChips();
-
-    if (currentChips <= 50) {
-      return Math.floor(Math.random() * (currentChips + 1));
-    }
-
-    return Math.floor(Math.random() * (currentChips / 3 + 1));
-  }
-
-  canBet(betToAdd) {
-    return (
-      Number.isInteger(betToAdd) && betToAdd >= 0 && this.chips >= betToAdd
-    );
-  }
-
-  canHit() {
-    const playerStatus = this.getStatus();
-    const playerScore = this.getCurrentScore();
-
-    return playerStatus !== "blackjack" && playerScore < 21;
-  }
-
-  canDouble() {
-    const doubleBet = this.getCurrentBet() * 2;
-    const currentChips = this.getCurrentChips();
-
-    return this.isFirstTurn() && doubleBet <= currentChips;
-  }
-
-  isBust() {
-    const currentScore = this.getCurrentScore();
-    return currentScore > 21;
-  }
-
-  isBetCompleted() {
-    return this.bet > 0;
-  }
-
-  isBlackjack(playerHands) {
-    return (
-      playerHands.includes("A") && /(10|J|Q|K)/.test(playerHands.join(" "))
-    );
-  }
-
-  isPlayer() {
-    const currentPlayer = this.getCurrentPlayerType();
-    return currentPlayer === "player";
-  }
-
-  isFirstTurn() {
-    return this.hands.length === 2;
-  }
-
   print() {
     const hands = this.getHands();
     console.log("\n");
-    console.log("This player name : " + this.getCurrentPlayerName());
-    console.log("This player type : " + this.getCurrentPlayerType());
-    console.log("This player win amounts : " + this.getCurrentWinAmounts());
-    console.log("This player status : " + this.getCurrentStatus());
-    console.log("This player hands");
+    console.log("プレイヤーの名前 : " + this.getName());
+    console.log("プレイヤーの種類 : " + this.getType());
+    console.log("プレイヤーの勝利数 : " + this.getWinAmounts());
+    console.log("プレイヤーの状態 : " + this.getStatus());
+    console.log("プレイヤーの手札");
     hands.forEach((hand) => {
-      console.log(hand);
+      console.log(hand.print());
     });
-    console.log("This player chips : " + this.getCurrentChips());
-    console.log("This player bet : " + this.getCurrentBet());
-    console.log("This player total score : " + this.getCurrentScore());
-    console.log("This player is blackjack : " + this.isBlackjack());
+    console.log("プレイヤーのチップス数 : " + this.getChips());
+    console.log("プレイヤーのベット数 : " + this.getBet());
+    console.log("プレイヤーの合計スコア : " + this.getScore());
   }
 }

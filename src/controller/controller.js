@@ -1,6 +1,8 @@
 import { Table, BlackjackTable } from "../models/table.js";
 import { View, BlackjackView } from "../view/view.js";
 
+// nextPlayerIndexをtableから取得する
+
 class Controller {
   constructor() {
     this.gameMode = "player";
@@ -163,7 +165,9 @@ class BlackjackController {
           self.toggleDealerNameColor();
           clearInterval(intervalId);
         }
-      }, 3000);
+      }, 2000);
+    } else {
+      this.toggleDealerNameColor();
     }
   }
 
@@ -278,20 +282,22 @@ class BlackjackController {
   }
 
   addPlayerCard() {
-    const playerLastHand = this.blackjackTable.getPlayerLastHand(
+    const playerLastHand = this.blackjackTable.getPlayerLastHandObj(
       this.currentPlayerIndex
     );
     this.blackjackView.addPlayerCard(this.currentPlayerIndex, playerLastHand);
   }
 
   updatePlayerBet() {
-    const playerBet = this.blackjackTable.getPlayerBet(this.currentPlayerIndex);
+    const playerBet = this.blackjackTable.getPlayerBetAtIndex(
+      this.currentPlayerIndex
+    );
 
     this.blackjackView.updatePlayerBet(this.currentPlayerIndex, playerBet);
   }
 
   updatePlayerScore() {
-    const playerScore = this.blackjackTable.getPlayerScore(
+    const playerScore = this.blackjackTable.getPlayerScoreAtIndex(
       this.currentPlayerIndex
     );
 
@@ -301,7 +307,7 @@ class BlackjackController {
   }
 
   updatePlayerChips() {
-    const playerChips = this.blackjackTable.getPlayerChips(
+    const playerChips = this.blackjackTable.getPlayerChipsAtIndex(
       this.currentPlayerIndex
     );
 
@@ -309,7 +315,7 @@ class BlackjackController {
   }
 
   updatePlayerStatus() {
-    const playerStatus = this.blackjackTable.getPlayerStatus(
+    const playerStatus = this.blackjackTable.getPlayerStatusAtIndex(
       this.currentPlayerIndex
     );
 
@@ -343,9 +349,9 @@ class BlackjackController {
   }
 
   addDealerCard() {
-    const dealerLastHand = this.blackjackTable.getDealerLastHand();
+    const lastHand = this.blackjackTable.getDealerLastHandObj();
 
-    this.blackjackView.addDealerCard(dealerLastHand);
+    this.blackjackView.addDealerCard(lastHand);
   }
 
   updateDealerStatus() {
@@ -370,7 +376,7 @@ class BlackjackController {
   }
 
   getStartConfirmation() {
-    const confirmText = this.blackjackTable.getConfirmText();
+    const confirmText = this.blackjackTable.getStartConfirmation();
 
     return confirm(confirmText);
   }
@@ -390,8 +396,8 @@ class BlackjackController {
   }
 
   loadDealerDataToView() {
-    const dealerHands = this.blackjackTable.getDealerFirstHand();
-    this.blackjackView.addDealerElement(dealerHands);
+    const firstHandObj = this.blackjackTable.getDealerFirstHandObj();
+    this.blackjackView.addDealerElement(firstHandObj);
   }
 
   loadPlayerDataToView() {
@@ -416,13 +422,12 @@ class BlackjackController {
 
   // 変更必要かも
   skipBlackjackPlayers() {
-    const players = this.blackjackTable.getCurrentPlayers();
+    const players = this.blackjackTable.getPlayers();
 
     for (let i = this.currentPlayerIndex; i < players.length; i++) {
       const player = players[i];
-      const playersHands = player.getHands();
 
-      if (player.isBlackjack(playersHands)) {
+      if (player.isBlackjack()) {
         player.setToBlackjack();
         this.updatePlayerAndViewState();
       } else {
@@ -432,9 +437,9 @@ class BlackjackController {
   }
 
   alertUnbetPlayers() {
-    const unbetPlayers = this.blackjackTable.getUnbetPlayers();
+    const unbetPlayersText = this.blackjackTable.getUnbetPlayersText();
 
-    alert("ベットが完了していないプレーヤーがいます。" + unbetPlayers);
+    alert("ベットが完了していないプレーヤーがいます。" + unbetPlayersText);
   }
 
   startBtnClick() {
@@ -589,7 +594,7 @@ class BlackjackController {
       const playerIndex = Number(playerSelect.value);
       this.selectedPlayerIndex = playerIndex;
 
-      const betData = this.blackjackTable.getPlayerBet(
+      const betData = this.blackjackTable.getPlayerBetAtIndex(
         this.selectedPlayerIndex
       );
 

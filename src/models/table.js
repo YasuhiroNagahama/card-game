@@ -18,23 +18,23 @@ export class Table {
     this.gamePhase = "";
   }
 
-  getCurrentGameType() {
+  getGameType() {
     return this.gameType;
   }
 
-  getCurrentDeck() {
+  getDeck() {
     return this.deck;
   }
 
-  getCurrentTurn() {
+  getTurn() {
     return this.turnCounter;
   }
 
-  getCurrentGamePhase() {
+  getGamePause() {
     return this.gamePhase;
   }
 
-  getCurrentResultLog() {
+  getResultLog() {
     return this.resultLog;
   }
 }
@@ -57,51 +57,51 @@ export class BlackjackTable extends Table {
     this.initializePlayersHands();
   }
 
-  getCurrentGameMode() {
+  getGameMode() {
     return this.gameMode;
   }
 
-  getCurrentPlayerNumber() {
+  getPlayerNumber() {
     return this.playerNumber;
   }
 
-  getCurrentBetDenominations() {
+  getBetDenominations() {
     return this.betDenominations;
   }
 
-  getCurrentPlayers() {
+  getPlayers() {
     return this.players;
   }
 
-  getCurrentDealer() {
+  getDealer() {
     return this.dealer;
   }
 
-  getPlayerBet(index) {
+  getPlayerBetAtIndex(index) {
     const player = this.players[index];
-    return player.getCurrentBet();
+    return player.getBet();
   }
 
-  getPlayerScore(index) {
+  getPlayerScoreAtIndex(index) {
     const player = this.players[index];
-    return player.getCurrentScore();
+    return player.getScore();
   }
 
-  getPlayerChips(index) {
+  getPlayerChipsAtIndex(index) {
     const player = this.players[index];
-    return player.getCurrentChips();
+    return player.getChips();
   }
 
-  getPlayerStatus(index) {
+  getPlayerStatusAtIndex(index) {
     const player = this.players[index];
     return player.getStatus();
   }
 
-  getUnbetPlayers() {
+  getUnbetPlayersText() {
     const unbetPlayers = [];
 
     for (const player of this.players) {
-      const betData = player.getCurrentBet();
+      const betData = player.getBet();
 
       if (betData === 0) {
         unbetPlayers.push(player.getName());
@@ -122,9 +122,9 @@ export class BlackjackTable extends Table {
           hand1: player.getHands()[0].getCardInfoObj(),
           hand2: player.getHands()[1].getCardInfoObj(),
         },
-        playerChips: player.getCurrentChips(),
-        playerBet: player.getCurrentBet(),
-        playerScore: player.getCurrentScore(),
+        playerChips: player.getChips(),
+        playerBet: player.getBet(),
+        playerScore: player.getScore(),
       };
 
       playerInfoObjArr.push(playerInfoObj);
@@ -133,41 +133,29 @@ export class BlackjackTable extends Table {
     return playerInfoObjArr;
   }
 
-  getConfirmText() {
+  getStartConfirmation() {
     const confirmTextArr = [];
 
     for (const player of this.players) {
       if (player.getType() === "ai") continue;
 
       confirmTextArr.push(
-        "\n" + player.getName() + " : " + String(player.getCurrentBet()) + " "
+        "\n" + player.getName() + " : " + String(player.getBet()) + " "
       );
     }
 
     return "ゲームを開始しますか？ " + confirmTextArr.join("");
   }
 
-  getPlayerLastHand(index) {
+  getPlayerLastHandObj(index) {
     const player = this.players[index];
-    const playerHands = player.getHands();
+    const lastHand = player.getLastHandObj();
 
-    return playerHands.slice(-1)[0].getCardInfoObj();
-  }
-
-  getDealerFirstHand() {
-    const dealerHands = this.dealer.getHands();
-
-    return dealerHands[0].getCardInfoObj();
-  }
-
-  getDealerLastHand() {
-    const dealerHands = this.dealer.getHands();
-
-    return dealerHands.slice(-1)[0].getCardInfoObj();
+    return lastHand;
   }
 
   getDealerScore() {
-    const dealerScore = this.dealer.getCurrentScore();
+    const dealerScore = this.dealer.getScore();
     return dealerScore;
   }
 
@@ -182,6 +170,16 @@ export class BlackjackTable extends Table {
 
   bustDealer() {
     this.dealer.setToBust();
+  }
+
+  getDealerFirstHandObj() {
+    const firstHandObj = this.dealer.getFirstHandObj();
+    return firstHandObj;
+  }
+
+  getDealerLastHandObj() {
+    const lastHandObj = this.dealer.getLastHandObj();
+    return lastHandObj;
   }
 
   setPlayer(playerName, playerType) {
@@ -207,12 +205,12 @@ export class BlackjackTable extends Table {
   }
 
   setDealer() {
-    const gameType = this.getCurrentGameType();
+    const gameType = this.getGameType();
     this.dealer = new BlackjackPlayer("Dealer", "dealer", gameType);
   }
 
   updatePlayerHands(player) {
-    const newCard = this.getCurrentDeck().drawOne();
+    const newCard = this.getDeck().drawOne();
     const score = newCard.getCardRankNumberBlackjack();
 
     player.addHand(newCard);
@@ -277,13 +275,6 @@ export class BlackjackTable extends Table {
     }
   }
 
-  canUpdatePlayerBet(player) {
-    const currentPlayerBets = player.getCurrentBets();
-    const currentPlayerChips = player.getCurrentChips();
-
-    return currentPlayerBets < currentPlayerChips;
-  }
-
   betAi() {
     for (const player of this.players) {
       const playerType = player.getType();
@@ -297,7 +288,7 @@ export class BlackjackTable extends Table {
   }
 
   isVsAI() {
-    const currentGameMode = this.getCurrentGameMode();
+    const currentGameMode = this.getGameMode();
     return currentGameMode === "ai";
   }
 
@@ -357,14 +348,12 @@ export class BlackjackTable extends Table {
     console.log("\n");
     console.log("----- Start Game -----");
     console.log("\n");
-    console.log("This game type : " + this.getCurrentGameType());
-    console.log("This game deck : " + this.getCurrentDeck());
-    console.log("This game turn : " + this.getCurrentTurn());
-    console.log("This game mode : " + this.getCurrentGameMode());
-    console.log("This game player number : " + this.getCurrentPlayerNumber());
-    console.log(
-      "This game bet denominations : " + this.getCurrentBetDenominations()
-    );
+    console.log("This game type : " + this.getGameType());
+    console.log("This game deck : " + this.getDeck());
+    console.log("This game turn : " + this.getTurn());
+    console.log("This game mode : " + this.getGameMode());
+    console.log("This game player number : " + this.getPlayerNumber());
+    console.log("This game bet denominations : " + this.getBetDenominations());
     console.log("\n");
     console.log("----- Players -----");
     console.log("\n");

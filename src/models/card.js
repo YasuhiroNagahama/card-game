@@ -13,10 +13,11 @@ export class Card {
   }
 
   getCardInfoObj() {
-    return {suit: this.suit, rank: this.rank};
+    return { suit: this.suit, rank: this.rank };
   }
 
   getCardRankNumber() {
+    // jokerは仮の0
     switch (this.getCardRank()) {
       case "A":
         return 1;
@@ -48,8 +49,11 @@ export class Card {
 
   print() {
     console.log("\n");
-    console.log("This suit : " + this.suit);
-    console.log("This rank : " + this.rank);
-    console.log("This card rank number : " + this.getCardRankNumber());
+    console.log("記号 : " + this.suit);
+    console.log("ランク : " + this.rank);
+    console.log("ランクの数字 : " + this.getCardRankNumber());
+    console.log(
+      "ブラックジャックでのランクの数字 : " + this.getCardRankNumberBlackjack()
+    );
   }
 }

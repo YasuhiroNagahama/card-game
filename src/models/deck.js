@@ -31,11 +31,17 @@ export class Deck {
   }
 
   setJokerToDeck() {
-    // 条件が後に増える
     if (this.gameType === "blackjack") {
       this.joker = false;
     } else {
       this.cards.push(new Card("Joker", "Joker"));
+    }
+  }
+
+  shuffle() {
+    for (let i = this.cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
     }
   }
 
@@ -50,13 +56,7 @@ export class Deck {
     this.shuffle();
   }
 
-  shuffle() {
-    for (let i = this.cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
-    }
-  }
-
+  // ゲームの種類を変更せずに、遊び続ける場合用
   resetDeck() {
     this.cards = [];
     this.setDeck();
@@ -69,21 +69,22 @@ export class Deck {
     return this.cards.pop();
   }
 
-  getCurrentDeckLength() {
+  getDeckLength() {
     return this.cards.length;
   }
 
-  isEmpty() {
+  isDeckEmpty() {
     return this.cards.length <= 0;
   }
 
   print() {
     console.log("\n");
-    console.log("This game type : " + this.gameType);
-    console.log("This cards : ");
-    this.cards.forEach((card) => console.log(card));
-    console.log("This suits : " + this.suits);
-    console.log("This ranks  : " + this.ranks);
-    console.log("This joker  : " + this.joker);
+    console.log("ゲームの種類 : " + this.gameType);
+    console.log("カード一覧 : ");
+    this.cards.forEach((card) => console.log(card.print()));
+    console.log("\n");
+    console.log("記号一覧 : " + this.suits);
+    console.log("ランク一覧  : " + this.ranks);
+    console.log("ジョーカーを含むか  : " + this.joker);
   }
 }
