@@ -77,6 +77,9 @@ export class BlackjackTable extends Table {
     return this.dealer;
   }
 
+  // getNextPlayerIndex(currentPlayerIndex) {
+  // }
+
   getPlayerBetAtIndex(index) {
     const player = this.players[index];
     return player.getBet();
@@ -172,6 +175,10 @@ export class BlackjackTable extends Table {
     this.dealer.setToBust();
   }
 
+  standDealer() {
+    this.dealer.setToStand();
+  }
+
   getDealerFirstHandObj() {
     const firstHandObj = this.dealer.getFirstHandObj();
     return firstHandObj;
@@ -252,12 +259,6 @@ export class BlackjackTable extends Table {
     return true;
   }
 
-  canPlayerBetAtIndex(index, betToAdd) {
-    const player = this.players[index];
-
-    return player.canBet(betToAdd);
-  }
-
   resetBetAmount(index) {
     const player = this.players[index];
     player.initializeBet();
@@ -309,6 +310,12 @@ export class BlackjackTable extends Table {
     return player.canDouble();
   }
 
+  canPlayerBetAtIndex(index, betToAdd) {
+    const player = this.players[index];
+
+    return player.canBet(betToAdd);
+  }
+
   bustPlayerAtIndex(index) {
     const player = this.players[index];
     player.setToBust();
@@ -338,10 +345,6 @@ export class BlackjackTable extends Table {
     const player = this.players[index];
     player.setToSurrender();
     player.surrenderProcess();
-  }
-
-  canAddCardToHand(score) {
-    return score < 18;
   }
 
   print() {

@@ -360,11 +360,12 @@ class BlackjackController {
     this.blackjackView.updateDealerStatus(dealerStatus);
   }
 
-  // stand処理
   updateDealerScore() {
     const dealerScore = this.blackjackTable.getDealerScore();
 
     this.blackjackView.updateDealerScore(dealerScore);
+
+    if (playerScore === 21) this.blackjackTable.standDealer();
   }
 
   removeDealerCardBack() {
@@ -424,6 +425,7 @@ class BlackjackController {
   skipBlackjackPlayers() {
     const players = this.blackjackTable.getPlayers();
 
+    // 1人目なら良いが、2人目以降は一度下処理を二度したことになる
     for (let i = this.currentPlayerIndex; i < players.length; i++) {
       const player = players[i];
 
