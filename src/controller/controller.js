@@ -130,12 +130,18 @@ class BlackjackController {
   }
 
   updateDealerView() {
+    // 非表示になっていた2番目のカードを取得
     const dealerHand = this.blackjackTable.getDealerHandAtIndex(1);
     const dealerScore = this.blackjackTable.getDealerScore();
 
     this.blackjackView.removeDealerCardBack();
     this.blackjackView.addDealerCard(dealerHand);
     this.blackjackView.updateDealerScore(dealerScore);
+    this.blackjackView.toggleDealerNameColor();
+  }
+
+  dealerProcess() {
+    
   }
 
   changeDealerTurn() {

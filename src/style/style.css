@@ -108,21 +108,18 @@ body {
 }
 
 .game-start-btn-wrapper {
-  width: 160px;
-  height: 64px;
+  width: 240px;
+  height: 80px;
   border: 2px solid var(--white-color);
   display: flex;
   justify-content: center;
   align-items: center;
 }
-@media screen and (min-width: 768px) {
-  .game-start-btn-wrapper {
-    height: 80px;
-  }
-}
 
 .game-start-btn-wrapper:hover {
   transform: translate(4px, -4px);
+  color: var(--dark-color);
+  background-color: var(--white-color);
 }
 
 .game-start-btn {

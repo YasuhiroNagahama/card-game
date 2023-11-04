@@ -79,6 +79,12 @@ export class View {
     playerNameEle.classList.toggle("current-turn-player");
   }
 
+  toggleDealerNameColor() {
+    const dealerNameEle = document.getElementById("dealerName");
+
+    dealerNameEle.classList.toggle("current-turn-player");
+  }
+
   updatePlayerStatus(index, status) {
     const playerStatus = document.querySelectorAll("#playerStatus")[index];
 
