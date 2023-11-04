@@ -131,20 +131,44 @@ class BlackjackController {
   }
 
   updateDealerView() {
-    // 非表示になっていた2番目のカードを取得
-    const dealerHand = this.blackjackTable.getDealerHandAtIndex(1);
-    const dealerScore = this.blackjackTable.getDealerScore();
-
-    this.blackjackView.removeDealerCardBack();
-    this.blackjackView.addDealerCard(dealerHand);
-    this.blackjackView.updateDealerScore(dealerScore);
-    this.blackjackView.toggleDealerNameColor();
+    this.removeDealerCardBack();
+    this.addDealerCard();
+    this.updateDealerScore();
+    this.toggleDealerNameColor();
   }
 
-  dealerProcess() {}
+  dealerTurn() {
+    let currentScore = this.blackjackTable.getDealerScore();
+
+    if (currentScore < 18) {
+      this.blackjackTable.hitDealer();
+
+      let intervalId;
+      const self = this;
+
+      intervalId = setInterval(function () {
+        self.blackjackTable.updateDealerHands();
+        currentScore = self.blackjackTable.getDealerScore();
+
+        self.addDealerCard();
+        self.updateDealerScore();
+        self.updateDealerStatus();
+
+        if(currentScore > 21) {
+          self.blackjackTable.bustDealer();
+          self.updateDealerStatus();
+          clearInterval(intervalId);
+        } else if (currentScore >= 18) {
+          clearInterval(intervalId);
+          console.log("終了");
+        }
+      }, 3000);
+    }
+  }
 
   changeDealerTurn() {
     this.updateDealerView();
+    this.dealerTurn();
   }
 
   bust() {
@@ -317,6 +341,33 @@ class BlackjackController {
     }
   }
 
+  addDealerCard() {
+    const dealerLastHand = this.blackjackTable.getDealerLastHand();
+
+    this.blackjackView.addDealerCard(dealerLastHand);
+  }
+
+  updateDealerStatus() {
+    const dealerStatus = this.blackjackTable.getDealerStatus();
+
+    this.blackjackView.updateDealerStatus(dealerStatus);
+  }
+
+  // stand処理
+  updateDealerScore() {
+    const dealerScore = this.blackjackTable.getDealerScore();
+
+    this.blackjackView.updateDealerScore(dealerScore);
+  }
+
+  removeDealerCardBack() {
+    this.blackjackView.removeDealerCardBack();
+  }
+
+  toggleDealerNameColor() {
+    this.blackjackView.toggleDealerNameColor();
+  }
+
   getStartConfirmation() {
     const confirmText = this.blackjackTable.getConfirmText();
 
@@ -338,7 +389,7 @@ class BlackjackController {
   }
 
   loadDealerDataToView() {
-    const dealerHands = this.blackjackTable.getDealerHands();
+    const dealerHands = this.blackjackTable.getDealerFirstHand();
     this.blackjackView.addDealerElement(dealerHands);
   }
 

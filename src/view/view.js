@@ -106,6 +106,12 @@ export class View {
     playerChips.innerHTML = String(chips);
   }
 
+  updateDealerStatus(status) {
+    const dealerStatus = document.getElementById("dealerStatus");
+
+    dealerStatus.innerHTML = status;
+  }
+
   updateDealerScore(score) {
     const dealerScore = document.getElementById("dealerScore");
     dealerScore.innerHTML = String(score);

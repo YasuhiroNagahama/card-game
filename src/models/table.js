@@ -111,11 +111,6 @@ export class BlackjackTable extends Table {
     return "\n" + unbetPlayers.join("\n");
   }
 
-  getDealerHands() {
-    const dealerHands = this.dealer.getHands()[0].getCardInfoObj();
-    return dealerHands;
-  }
-
   getPlayerInfoObjArr() {
     const playerInfoObjArr = [];
 
@@ -159,14 +154,34 @@ export class BlackjackTable extends Table {
     return playerHands.slice(-1)[0].getCardInfoObj();
   }
 
+  getDealerFirstHand() {
+    const dealerHands = this.dealer.getHands();
+
+    return dealerHands[0].getCardInfoObj();
+  }
+
+  getDealerLastHand() {
+    const dealerHands = this.dealer.getHands();
+
+    return dealerHands.slice(-1)[0].getCardInfoObj();
+  }
+
   getDealerScore() {
     const dealerScore = this.dealer.getCurrentScore();
     return dealerScore;
   }
 
-  getDealerHandAtIndex(index) {
-    const dealerHands = this.dealer.getHands();
-    return dealerHands[index].getCardInfoObj();
+  getDealerStatus() {
+    const dealerStatus = this.dealer.getStatus();
+    return dealerStatus;
+  }
+
+  hitDealer() {
+    this.dealer.setToHit();
+  }
+
+  bustDealer() {
+    this.dealer.setToBust();
   }
 
   setPlayer(playerName, playerType) {
@@ -332,6 +347,10 @@ export class BlackjackTable extends Table {
     const player = this.players[index];
     player.setToSurrender();
     player.surrenderProcess();
+  }
+
+  canAddCardToHand(score) {
+    return score < 18;
   }
 
   print() {
