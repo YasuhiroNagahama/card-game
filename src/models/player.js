@@ -163,7 +163,7 @@ export class BlackjackPlayer extends Player {
   }
 
   canBet(betToAdd) {
-    return betToAdd >= 0 && this.chips >= betToAdd;
+    return Number.isInteger(betToAdd) && betToAdd >= 0 && this.chips >= betToAdd;
   }
 
   canHit() {

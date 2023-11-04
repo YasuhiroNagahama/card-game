@@ -140,9 +140,7 @@ class BlackjackController {
     this.blackjackView.toggleDealerNameColor();
   }
 
-  dealerProcess() {
-    
-  }
+  dealerProcess() {}
 
   changeDealerTurn() {
     this.updateDealerView();
@@ -509,7 +507,7 @@ class BlackjackController {
           betTotal
         )
       ) {
-        this.changeBetAmount(betTotal);
+        this.changeBetAmount(Math.floor(betTotal));
       } else {
         alert("ベット不可能です。");
         this.resetCurrentBet();
