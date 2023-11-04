@@ -154,13 +154,14 @@ class BlackjackController {
         self.updateDealerScore();
         self.updateDealerStatus();
 
-        if(currentScore > 21) {
+        if (currentScore > 21) {
           self.blackjackTable.bustDealer();
           self.updateDealerStatus();
+          self.toggleDealerNameColor();
           clearInterval(intervalId);
         } else if (currentScore >= 18) {
+          self.toggleDealerNameColor();
           clearInterval(intervalId);
-          console.log("終了");
         }
       }, 3000);
     }
@@ -240,7 +241,7 @@ class BlackjackController {
         this.blackjackTable.canHitAtIndex(this.currentPlayerIndex)
       ) {
         this.hit();
-      } else {
+      } else if (!this.isTurnOver) {
         this.alertInvalidAction("HIT");
       }
     });
@@ -255,7 +256,7 @@ class BlackjackController {
         this.blackjackTable.canDoubleAtIndex(this.currentPlayerIndex)
       ) {
         this.double();
-      } else {
+      } else if (!this.isTurnOver) {
         this.alertInvalidAction("DOUBLE");
       }
     });
