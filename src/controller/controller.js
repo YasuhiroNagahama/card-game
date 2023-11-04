@@ -120,8 +120,9 @@ class BlackjackController {
     this.gameMode = gameMode;
     this.playerCount = playerCount;
     this.currentPlayerIndex = 0;
-    this.betAmount = 0;
     this.selectedPlayerIndex = 0;
+    this.betAmount = 0;
+    this.isTurnOver = false;
     this.blackjackView = new BlackjackView();
     this.blackjackTable = new BlackjackTable(this.gameMode, this.playerCount);
 
@@ -200,7 +201,9 @@ class BlackjackController {
     const standBtn = document.getElementById("standBtn");
 
     standBtn.addEventListener("click", () => {
-      this.stand();
+      if (!this.isTurnOver) {
+        this.stand();
+      }
     });
   }
 
@@ -208,10 +211,12 @@ class BlackjackController {
     const hitBtn = document.getElementById("hitBtn");
 
     hitBtn.addEventListener("click", () => {
-      if (this.blackjackTable.canHitAtIndex(this.currentPlayerIndex)) {
-        this.hit();
-      } else {
-        this.alertInvalidAction("HIT");
+      if (!this.isTurnOver) {
+        if (this.blackjackTable.canHitAtIndex(this.currentPlayerIndex)) {
+          this.hit();
+        } else {
+          this.alertInvalidAction("HIT");
+        }
       }
     });
   }
@@ -220,10 +225,12 @@ class BlackjackController {
     const doubleBtn = document.getElementById("doubleBtn");
 
     doubleBtn.addEventListener("click", () => {
-      if (this.blackjackTable.canDoubleAtIndex(this.currentPlayerIndex)) {
-        this.double();
-      } else {
-        this.alertInvalidAction("DOUBLE");
+      if (!this.isTurnOver) {
+        if (this.blackjackTable.canDoubleAtIndex(this.currentPlayerIndex)) {
+          this.double();
+        } else {
+          this.alertInvalidAction("DOUBLE");
+        }
       }
     });
   }
@@ -232,12 +239,14 @@ class BlackjackController {
     const surrenderBtn = document.getElementById("surrenderBtn");
 
     surrenderBtn.addEventListener("click", () => {
-      if (
-        confirm(
-          "今回のゲームを降りますか？賭け金の半分が手元にかえってきます。"
-        )
-      ) {
-        this.surrender();
+      if (!this.isTurnOver) {
+        if (
+          confirm(
+            "今回のゲームを降りますか？賭け金の半分が手元にかえってきます。"
+          )
+        ) {
+          this.surrender();
+        }
       }
     });
   }
@@ -299,6 +308,7 @@ class BlackjackController {
     this.togglePlayerNameColor();
 
     if (this.currentPlayerIndex + 1 === this.playerCount) {
+      this.isTurnOver = true;
       this.changeDealerTurn();
     } else {
       this.updateCurrentPlayerIndex();
