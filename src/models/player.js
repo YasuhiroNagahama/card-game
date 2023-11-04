@@ -62,14 +62,14 @@ export class BlackjackPlayer extends Player {
     this.chips = playerType === "dealer" ? 0 : 400;
     this.bet = 0;
     this.score = 0;
-    super.setStatus("waiting");
+    this.setStatus("waiting");
   }
 
   initializeBlackjackPlayer() {
-    const currentPlayerType = super.getCurrentPlayerType();
+    const currentPlayerType = this.getCurrentPlayerType();
     this.chips = currentPlayerType === "dealer" ? 0 : 400;
     this.initializeBet();
-    super.setStatus("waiting");
+    this.setStatus("waiting");
   }
 
   getCurrentChips() {
@@ -85,27 +85,27 @@ export class BlackjackPlayer extends Player {
   }
 
   setToStand() {
-    super.setStatus("stand");
+    this.setStatus("stand");
   }
 
   setToHit() {
-    super.setStatus("hit");
+    this.setStatus("hit");
   }
 
   setToDouble() {
-    super.setStatus("double");
+    this.setStatus("double");
   }
 
   setToSurrender() {
-    super.setStatus("surrender");
+    this.setStatus("surrender");
   }
 
   setToBust() {
-    super.setStatus("bust");
+    this.setStatus("bust");
   }
 
   setToBlackjack() {
-    super.setStatus("blackjack");
+    this.setStatus("blackjack");
   }
 
   initializeBet() {
@@ -163,11 +163,13 @@ export class BlackjackPlayer extends Player {
   }
 
   canBet(betToAdd) {
-    return Number.isInteger(betToAdd) && betToAdd >= 0 && this.chips >= betToAdd;
+    return (
+      Number.isInteger(betToAdd) && betToAdd >= 0 && this.chips >= betToAdd
+    );
   }
 
   canHit() {
-    const playerStatus = super.getStatus();
+    const playerStatus = this.getStatus();
     const playerScore = this.getCurrentScore();
 
     return playerStatus !== "blackjack" && playerScore < 21;
@@ -198,6 +200,10 @@ export class BlackjackPlayer extends Player {
   isPlayer() {
     const currentPlayer = this.getCurrentPlayerType();
     return currentPlayer === "player";
+  }
+
+  isFirstTurn() {
+    return this.hands.length === 2;
   }
 
   print() {

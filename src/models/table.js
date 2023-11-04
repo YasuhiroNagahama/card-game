@@ -192,12 +192,12 @@ export class BlackjackTable extends Table {
   }
 
   setDealer() {
-    const gameType = super.getCurrentGameType();
+    const gameType = this.getCurrentGameType();
     this.dealer = new BlackjackPlayer("Dealer", "dealer", gameType);
   }
 
   updatePlayerHands(player) {
-    const newCard = super.getCurrentDeck().drawOne();
+    const newCard = this.getCurrentDeck().drawOne();
     const score = newCard.getCardRankNumberBlackjack();
 
     player.addHand(newCard);
@@ -291,6 +291,12 @@ export class BlackjackTable extends Table {
     return player.isBust();
   }
 
+  isFirstTurnAtIndex(index) {
+    const player = this.players[index];
+
+    return player.isFirstTurn();
+  }
+
   canHitAtIndex(index) {
     const player = this.players[index];
 
@@ -338,9 +344,9 @@ export class BlackjackTable extends Table {
     console.log("\n");
     console.log("----- Start Game -----");
     console.log("\n");
-    console.log("This game type : " + super.getCurrentGameType());
-    console.log("This game deck : " + super.getCurrentDeck());
-    console.log("This game turn : " + super.getCurrentTurn());
+    console.log("This game type : " + this.getCurrentGameType());
+    console.log("This game deck : " + this.getCurrentDeck());
+    console.log("This game turn : " + this.getCurrentTurn());
     console.log("This game mode : " + this.getCurrentGameMode());
     console.log("This game player number : " + this.getCurrentPlayerNumber());
     console.log(

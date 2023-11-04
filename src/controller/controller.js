@@ -240,11 +240,10 @@ class BlackjackController {
 
     surrenderBtn.addEventListener("click", () => {
       if (!this.isTurnOver) {
-        if (
-          confirm(
-            "今回のゲームを降りますか？賭け金の半分が手元にかえってきます。"
-          )
-        ) {
+        const confirmSurrenderText =
+          "今回のゲームを降りますか？賭け金の半分が手元にかえってきます。";
+
+        if (confirm(confirmSurrenderText)) {
           this.surrender();
         }
       }
