@@ -162,11 +162,15 @@ class BlackjackController {
           self.toggleDealerNameColor();
           clearInterval(intervalId);
         } else if (currentScore >= 18) {
+          self.blackjackTable.standDealer();
+          self.updateDealerStatus();
           self.toggleDealerNameColor();
           clearInterval(intervalId);
         }
       }, 2000);
     } else {
+      this.blackjackTable.standDealer();
+      this.updateDealerStatus();
       this.toggleDealerNameColor();
     }
   }
@@ -205,12 +209,12 @@ class BlackjackController {
     this.updatePlayerBet();
     this.updatePlayerScore();
     this.updatePlayerChips();
-    this.skipBlackjackPlayers();
 
     if (this.blackjackTable.isBustPlayerAtIndex(this.currentPlayerIndex)) {
       this.bust();
     } else {
       this.updatePlayerAndViewState();
+      this.skipBlackjackPlayers();
     }
   }
 
@@ -218,8 +222,8 @@ class BlackjackController {
     this.blackjackTable.surrenderPlayerAtIndex(this.currentPlayerIndex);
     this.updatePlayerBet();
     this.updatePlayerChips();
-    this.skipBlackjackPlayers();
     this.updatePlayerAndViewState();
+    this.skipBlackjackPlayers();
   }
 
   alertInvalidAction(action) {
@@ -364,8 +368,6 @@ class BlackjackController {
     const dealerScore = this.blackjackTable.getDealerScore();
 
     this.blackjackView.updateDealerScore(dealerScore);
-
-    if (dealerScore === 21) this.blackjackTable.standDealer();
   }
 
   removeDealerCardBack() {
@@ -421,13 +423,11 @@ class BlackjackController {
     this.surrenderBtnClick();
   }
 
-  // 変更必要
   skipBlackjackPlayers() {
-    // 1人目なら良いが、2人目以降は一度した処理を二度することになる
     for (let i = this.currentPlayerIndex; i < this.playerCount; i++) {
       const playerStatus = this.blackjackTable.getPlayerStatusAtIndex(i);
 
-      if (playerStatus == "blackjack") {
+      if (playerStatus === "blackjack") {
         this.updatePlayerAndViewState();
       } else {
         break;
@@ -435,10 +435,10 @@ class BlackjackController {
     }
   }
 
-  alertUnbetPlayers() {
-    const unbetPlayersText = this.blackjackTable.getUnbetPlayersText();
+  alertNotBetPlayers() {
+    const notBetPlayersText = this.blackjackTable.getNotBetPlayersText();
 
-    alert("ベットが完了していないプレーヤーがいます。" + unbetPlayersText);
+    alert("ベットが完了していないプレーヤーがいます。" + notBetPlayersText);
   }
 
   startBtnClick() {
@@ -447,7 +447,6 @@ class BlackjackController {
     startBtn.addEventListener("click", () => {
       if (this.blackjackTable.playersBetsCompleted()) {
         if (this.getStartConfirmation()) {
-          // chipsからbetをremoveするメソッド
           this.blackjackTable.removePlayerBetFromChips();
           this.displayGameScreen();
           this.loadDataToView();
@@ -456,7 +455,7 @@ class BlackjackController {
           this.skipBlackjackPlayers();
         }
       } else {
-        this.alertUnbetPlayers();
+        this.alertNotBetPlayers();
       }
     });
   }

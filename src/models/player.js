@@ -147,6 +147,10 @@ export class BlackjackPlayer extends Player {
     this.bet = bet;
   }
 
+  changeScore(score) {
+    this.score = score;
+  }
+
   removeChips(chipsToRemove) {
     this.chips -= chipsToRemove;
   }
@@ -179,13 +183,13 @@ export class BlackjackPlayer extends Player {
     return this.isFirstTurn() && doubleBet <= currentChips;
   }
 
+  isBetCompleted() {
+    return this.bet <= this.chips && this.bet > 0;
+  }
+
   isBust() {
     const currentScore = this.getScore();
     return currentScore > 21;
-  }
-
-  isBetCompleted() {
-    return this.bet <= this.chips && this.bet > 0;
   }
 
   isBlackjack() {

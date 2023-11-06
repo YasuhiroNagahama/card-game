@@ -55,7 +55,7 @@ export class BlackjackTable extends Table {
     this.initializePlayers();
     this.setDealer();
     this.initializePlayersHands();
-    this.initializeBlackjackPlayer();
+    this.initializeBlackjackPlayers();
   }
 
   getGameMode() {
@@ -106,18 +106,18 @@ export class BlackjackTable extends Table {
     return player.getStatus();
   }
 
-  getUnbetPlayersText() {
-    const unbetPlayers = [];
+  getNotBetPlayersText() {
+    const notBetPlayers = [];
 
     for (const player of this.players) {
       const betData = player.getBet();
 
       if (betData === 0) {
-        unbetPlayers.push(player.getName());
+        notBetPlayers.push(player.getName());
       }
     }
 
-    return "\n" + unbetPlayers.join("\n");
+    return "\n" + notBetPlayers.join("\n");
   }
 
   getPlayerInfoObjArr() {
@@ -243,9 +243,17 @@ export class BlackjackTable extends Table {
     }
   }
 
-  initializeBlackjackPlayer() {
+  initializeBlackjackPlayers() {
     for (const player of this.players) {
-      if (player.isBlackjack()) player.setToBlackjack();
+      if (player.isBlackjack()) {
+        player.setToBlackjack();
+        player.changeScore(21);
+      }
+    }
+
+    if (this.dealer.isBlackjack()) {
+      this.dealer.setToBlackjack();
+      this.dealer.changeScore(21);
     }
   }
 
