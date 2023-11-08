@@ -180,6 +180,8 @@ class BlackjackController {
     this.dealerTurn();
   }
 
+  changeAiTurn() {}
+
   bust() {
     this.blackjackTable.bustPlayerAtIndex(this.currentPlayerIndex);
     this.updatePlayerAndViewState();
@@ -339,11 +341,22 @@ class BlackjackController {
       this.currentPlayerIndex++;
   }
 
+  isAiTurn() {
+    return this.gameMode === "ai" && this.currentPlayerIndex + 1 >= 1;
+  }
+
+  isDealerTurn() {
+    return this.currentPlayerIndex + 1 >= this.playerCount;
+  }
+
   updatePlayerAndViewState() {
     this.updatePlayerStatus();
     this.togglePlayerNameColor();
 
-    if (this.currentPlayerIndex + 1 === this.playerCount) {
+    if (this.isAiTurn()) {
+      this.isTurnOver = true;
+      this.changeAiTurn();
+    } else if (this.isDealerTurn()) {
       this.isTurnOver = true;
       this.changeDealerTurn();
     } else {
